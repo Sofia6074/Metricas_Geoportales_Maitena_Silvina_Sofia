@@ -1,9 +1,4 @@
-#
-# NOTAS:
-# Hacer un archivo .csv para poder usar polars?
-#
-
-import polars as pl
+import polars as pl;
 
 # Abro el archivo
 with open('access.log', 'r') as file:
