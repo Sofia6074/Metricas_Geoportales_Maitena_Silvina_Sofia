@@ -1,0 +1,29 @@
+name: Link PR to Issue
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  link_pr_to_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Link Pull Request to Issue
+      run: |
+        ISSUE_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oP '#\K\d+')
+        if [ -z "$ISSUE_NUMBER" ]; then
+          echo "No issue number found in PR description"
+          exit 1
+        fi
+
+        gh issue comment $ISSUE_NUMBER --body "This PR is linked to issue #$ISSUE_NUMBER."
+        gh pr edit ${{ github.event.pull_request.number }} --add-assignee ${{ github.actor }}
