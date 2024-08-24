@@ -143,6 +143,43 @@ Icon
 # macOS - Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+# JetBrains specific template is already listed above, but uncomment any of the following if needed
+# .idea/**/workspace.xml
+# .idea/**/tasks.xml
+# .idea/**/usage.statistics.xml
+# .idea/**/dictionaries
+# .idea/**/shelf
+# .idea/**/contentModel.xml
+# .idea/**/modules.xml
+# .idea/**/encodings.xml
+# .idea/**/libraryDependencies.xml
+# .idea/**/moduleSettings.xml
+# .idea/**/moduleName.xml
+# .idea/**/compiler.xml
+# .idea/**/completions.xml
+# .idea/**/codeStyleSettings.xml
+# .idea/**/inspectionProfiles
+# .idea/**/styleguide.xml
+# .idea/**/codeStyles/
+# .idea/**/scope_settings.xml
+# .idea/**/vcs.xml
+# .idea/**/inspectionProfiles/profiles_settings.xml
+
+# Environments
+.env/
+.venv/
+ENV/
+env/
+venv/
+ENV.bak/
+env.bak/
+venv.bak/
+
+# VS Code settings
+.vscode/
+
+# macOS
+.DS_Store
 
 # Windows
 Thumbs.db
@@ -190,6 +227,7 @@ coverage.xml
 # Compiled files
 *.pyc
 __pycache__/
+
 
 # Additional Ignored Files
 access.log
