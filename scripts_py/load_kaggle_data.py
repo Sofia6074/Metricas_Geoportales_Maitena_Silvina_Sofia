@@ -7,7 +7,8 @@ def download_data(csv_file_path):
     print("kaggle_json_path: " + kaggle_json_path)
 
     if not os.path.exists(kaggle_json_path):
-        raise FileNotFoundError(f'El archivo kaggle.json no se encuentra en: {kaggle_json_path}.')
+        raise FileNotFoundError(f'El archivo kaggle.json no se \ 
+                                encuentra en: {kaggle_json_path}.')
 
     # Permisos para Mac
     os.chmod(kaggle_json_path, 0o600)
@@ -19,12 +20,14 @@ def download_data(csv_file_path):
     api.authenticate()
     api.dataset_download_files(dataset_name, path=csv_file_path, unzip=True)
 
-    downloaded_files = [f for f in os.listdir(csv_file_path) if f.endswith('.csv')]
+    downloaded_files = [f for f in os.listdir(csv_file_path) 
+                        if f.endswith('.csv')]
     if downloaded_files:
         print(f"Archivos descargados correctamente en {csv_file_path}:")
         for file in downloaded_files:
             print(f"- {file}")
         return True
     else:
-        print(f"No se encontraron archivos CSV en {csv_file_path} después de la descarga.")
+        print(f"No se encontraron archivos CSV en {csv_file_path} \
+               después de la descarga.")
         return False

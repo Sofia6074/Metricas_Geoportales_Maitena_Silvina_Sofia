@@ -25,8 +25,10 @@ def main():
     print("Normalizando los datos...")
     df_normalized = normalizar_datos(df)
 
-    df_normalized.write_csv(csv_cleaned_normalized_file_path + 'cleaned_normalized_local_data.csv')
+    df_normalized.write_csv(
+        csv_cleaned_normalized_file_path + 'cleaned_normalized_local_data.csv')
     print("cleaned_normalized_local_data.csv creado")
+
 
 if __name__ == "__main__":
     main()
