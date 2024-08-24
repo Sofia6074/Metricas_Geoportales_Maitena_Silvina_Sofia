@@ -31,5 +31,7 @@ jobs:
     - name: Add branch to the issue
       run: |
         ISSUE_NUMBER=${{ github.event.issue.number }}
+        ISSUE_TITLE="${{ github.event.issue.title }}"
+        CAMEL_CASE_TITLE=$(echo $ISSUE_TITLE | sed -E 's/(^|-)([a-z])/\U\2/g' | sed -E 's/[ -]//g')
         BRANCH_NAME="feature/$ISSUE_NUMBER/$CAMEL_CASE_TITLE"
         gh issue comment $ISSUE_NUMBER --body "Branch created: $BRANCH_NAME"
