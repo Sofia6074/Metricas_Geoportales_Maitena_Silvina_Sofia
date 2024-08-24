@@ -101,6 +101,48 @@ venv.bak/
 /site
 
 # PyCharm
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/contentModel.xml
+.idea/**/modules.xml
+.idea/**/encodings.xml
+.idea/**/libraryDependencies.xml
+.idea/**/moduleSettings.xml
+.idea/**/moduleName.xml
+.idea/**/compiler.xml
+.idea/**/completions.xml
+.idea/**/codeStyleSettings.xml
+.idea/**/inspectionProfiles
+.idea/**/styleguide.xml
+.idea/**/codeStyles/
+.idea/**/scope_settings.xml
+.idea/**/vcs.xml
+.idea/**/inspectionProfiles/profiles_settings.xml
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS - Icon files
+Icon
+.icon?
+# macOS - Thumbnails
+._*
+
+# macOS - Files that might appear on external disk
+.Spotlight-V100
+.Trashes
 # JetBrains specific template is already listed above, but uncomment any of the following if needed
 # .idea/**/workspace.xml
 # .idea/**/tasks.xml
@@ -187,5 +229,6 @@ coverage.xml
 __pycache__/
 
 
+# Additional Ignored Files
 access.log
 archivo.csv
