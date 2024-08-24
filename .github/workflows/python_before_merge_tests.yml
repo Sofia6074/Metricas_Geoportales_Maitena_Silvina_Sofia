@@ -1,4 +1,4 @@
-name: Python Metrics, Linting, and Dependency Analysis
+name: Github before merge checks
 
 on:
   pull_request:
