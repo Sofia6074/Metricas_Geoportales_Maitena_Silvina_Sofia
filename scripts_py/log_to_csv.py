@@ -49,4 +49,3 @@ def convert_log_to_csv(log_file_path, csv_file_path):
                 print(f"Error processing line: {line.strip()} - Error: {e}")
                 csvwriter.writerow([ip, timestamp,
                                     None, None, None, None, None, None])
-
