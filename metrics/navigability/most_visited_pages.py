@@ -1,3 +1,5 @@
+from polars import pl
+
 def filtrar_URLs_vacias(df):
     return df.filter(pl.col("url").is_not_null())
 
