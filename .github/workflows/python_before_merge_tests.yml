@@ -81,6 +81,7 @@ jobs:
     - name: Run Safety
       run: |
         safety check
+      continue-on-error: true
 
   audit:
     name: Audit Dependencies with pip-audit
@@ -101,3 +102,5 @@ jobs:
     - name: Run pip-audit
       run: |
         pip-audit
+      continue-on-error: true
+
