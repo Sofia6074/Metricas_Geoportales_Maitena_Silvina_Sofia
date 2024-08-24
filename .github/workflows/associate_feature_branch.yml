@@ -1,0 +1,42 @@
+name: Associate Branch with Issue
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+
+jobs:
+  associate_branch:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Extract issue number from branch
+      id: extract_issue
+      run: |
+        BRANCH_NAME=${{ github.ref_name }}
+        ISSUE_NUMBER=$(echo $BRANCH_NAME | grep -oP 'feature/\K\d+')
+        echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+    - name: Get issue details
+      if: env.ISSUE_NUMBER != ''
+      run: |
+        ISSUE_NUMBER=${{ env.ISSUE_NUMBER }}
+        gh issue view $ISSUE_NUMBER --json title,state -q .state > issue_state.txt
+        ISSUE_STATE=$(cat issue_state.txt)
+
+        if [ "$ISSUE_STATE" != "open" ]; then
+          echo "Issue #$ISSUE_NUMBER is not open. Skipping association."
+          exit 0
+        fi
+
+    - name: Associate branch with issue
+      if: env.ISSUE_NUMBER != ''
+      run: |
+        ISSUE_NUMBER=${{ env.ISSUE_NUMBER }}
+        BRANCH_NAME=${{ github.ref_name }}
+        gh issue comment $ISSUE_NUMBER --body "Branch $BRANCH_NAME has been created and associated with this issue."
+
+    - name: Mark issue as in progress
+      if: env.ISSUE_NUMBER != ''
+      run: |
+        ISSUE_NUMBER=${{ env.ISSUE_NUMBER }}
+        gh issue edit $ISSUE_NUMBER --add-label "in progress"
