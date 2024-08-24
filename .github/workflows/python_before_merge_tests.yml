@@ -7,9 +7,9 @@ on:
       - main
 
 jobs:
-  analyze:
+  lint:
+    name: Lint with flake8
     runs-on: ubuntu-latest
-
     steps:
     - name: Check out the code
       uses: actions/checkout@v3
@@ -19,29 +19,85 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install dependencies
+    - name: Install flake8
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install flake8 radon safety pip-audit
+        pip install flake8
 
-    - name: Lint with flake8
+    - name: Run flake8
       run: |
         flake8 .
 
-    - name: Calculate Cyclomatic Complexity
+  complexity:
+    name: Calculate Cyclomatic Complexity
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install radon
+      run: |
+        pip install radon
+
+    - name: Run radon
       run: |
         radon cc . -s -a
 
-    - name: Calculate Lines of Code
+  cloc:
+    name: Calculate Lines of Code
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Install cloc
       run: |
-        pip install cloc
+        sudo apt-get install -y cloc
+
+    - name: Run cloc
+      run: |
         cloc .
 
-    - name: Analyze Dependencies with Safety
+  safety:
+    name: Analyze Dependencies with Safety
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Safety
+      run: |
+        pip install safety
+
+    - name: Run Safety
       run: |
         safety check
 
-    - name: Audit Dependencies with pip-audit
+  audit:
+    name: Audit Dependencies with pip-audit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install pip-audit
+      run: |
+        pip install pip-audit
+
+    - name: Run pip-audit
       run: |
         pip-audit
