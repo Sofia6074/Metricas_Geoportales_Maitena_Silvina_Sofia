@@ -19,3 +19,4 @@ Para instalar las bibliotecas necesarias para correr este proyecto, pueden usar:
 
 ```bash
 pip install polars
+pip install kaggle

@@ -1,7 +1,7 @@
 
 import csv
 
-def load_data(log_file_path, csv_file_path):
+def convert_log_to_csv(log_file_path, csv_file_path):
     # Load the log data
     with open(log_file_path, 'r') as file:
         log_data = file.readlines()
