@@ -1,0 +1,106 @@
+name: Github before merge checks
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  lint:
+    name: Lint with flake8
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install flake8
+      run: |
+        pip install flake8
+
+    - name: Run flake8
+      run: |
+        flake8 .
+
+  complexity:
+    name: Calculate Cyclomatic Complexity
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install radon
+      run: |
+        pip install radon
+
+    - name: Run radon
+      run: |
+        radon cc . -s -a
+
+  cloc:
+    name: Calculate Lines of Code
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Install cloc
+      run: |
+        sudo apt-get install -y cloc
+
+    - name: Run cloc
+      run: |
+        cloc .
+
+  safety:
+    name: Analyze Dependencies with Safety
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Safety
+      run: |
+        pip install safety
+
+    - name: Run Safety
+      run: |
+        safety check
+      continue-on-error: true
+
+  audit:
+    name: Audit Dependencies with pip-audit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install pip-audit
+      run: |
+        pip install pip-audit
+
+    - name: Run pip-audit
+      run: |
+        pip-audit
+      continue-on-error: true
+
