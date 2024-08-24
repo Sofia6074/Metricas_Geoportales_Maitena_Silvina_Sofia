@@ -1,9 +1,7 @@
-
-from load_data import load_data
-from clean_data import formatear_fecha, eliminar_nulos, eliminar_peticiones_internas
-from filter_data import filtrar_robots_y_crawlers, inicializar_total_registros
-from normalize_data import normalizar_datos
 import polars as pl
+from scripts_py.log_to_csv import convert_log_to_csv
+from scripts_py.clean_data import filtrar_datos, inicializar_total_registros
+from scripts_py.normalize_data import normalizar_datos
 
 
 def main():
@@ -14,22 +12,22 @@ def main():
 
     # Load data
     print("Cargando los datos locales...")
-    load_data(log_file_path, csv_file_path)
+    convert_log_to_csv(log_file_path, csv_file_path)
+
     df = pl.read_csv(csv_file_path)
 
     # Clean data
     print("Limpiando los datos...")
     inicializar_total_registros(df)
-    df = formatear_fecha(df)
-    df = eliminar_nulos(df)
-    df = eliminar_peticiones_internas(df)
-    df = filtrar_robots_y_crawlers(df)
+    df = filtrar_datos(df)
 
     # Normalize data
     print("Normalizando los datos...")
     df_normalized = normalizar_datos(df)
 
-    df_normalized.write_csv(csv_cleaned_normalized_file_path + 'cleaned_normalized_data.csv')
+    df_normalized.write_csv(
+        csv_cleaned_normalized_file_path + 'cleaned_normalized_local_data.csv')
+    print("cleaned_normalized_local_data.csv creado")
 
 
 if __name__ == "__main__":
