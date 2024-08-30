@@ -67,5 +67,4 @@ jobs:
         # Create a draft pull request targeting 'develop' branch
         gh pr create --draft --base develop --head "$BRANCH_NAME" --title "$ISSUE_TITLE" --body "$PR_BODY"
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed for the gh command
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Use your PAT instead of GITHUB_TOKEN

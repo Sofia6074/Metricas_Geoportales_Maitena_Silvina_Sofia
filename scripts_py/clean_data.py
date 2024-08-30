@@ -1,92 +1,189 @@
-"""#### Limpieza de nulos
-Vemos que hay una gran cantidad de celdas con valores en nulo, por lo que vamos a filtrar las filas que tienen valores vacíos en al menos una columna para poder visualizar algunos casos
-"""
+# Funciones auxiliares - Limpieza de datos
+import polars as pl
 
-from functools import reduce
+total_registros_inicial = None
 
-mask = reduce(lambda a, b: a | b, [df[col].is_null() for col in df.columns])
-rows_con_nulos = df.filter(mask)
-rows_con_nulos.head(10)
 
-"""Encontramos algo que nos llama la atención y es que están apareciendo algunos status code dentro de la columna de urls, lo podemos verificar con la siguiente consulta:"""
+def inicializar_total_registros(df):
+    global total_registros_inicial
+    total_registros_inicial = df.height
 
-unique_status = df.select("url").unique()
-print(unique_status.sort("url", descending=True))
 
-"""Vamos a filtrar las filas que contienen códigos de estado en la columna `url` para que que valores tienen esas filas"""
+def obtener_total_registros():
+    global total_registros_inicial
+    return total_registros_inicial
 
-status_codes = ["200","408"]
-urls_with_status_codes = df.filter(pl.col("url").is_in(status_codes))
 
-print(urls_with_status_codes)
+def contar_registros_url(df, regex):
+    return df.filter(pl.col("url").str.contains(regex)).height
 
-"""Investigando los casos null en profundidad nos encontramos con que son casos borde. Los de status 200 son casos con datos no legibles o anómalos y los de status 408 parecen ser una solicitud incompleta o malformada debido a un timeout en la solicitud, problemas de parte del cliente o error de red o conexión.
 
-Este tipo de entradas en los logs a menudo se descartan en análisis de tráfico web ya que no proporcionan datos útiles sobre las solicitudes válidas. Sin embargo, pueden ser útiles para detectar problemas de red o errores en los clientes.
+def contar_registros_user_agent(df, regex):
+    return df.filter(pl.col("user_agent").str.contains(regex)).height
 
-Por lo que vamos a filtrar las filas donde la columna `url` contenga los valores `200` o `408`
-"""
 
-df_sin_nulos = df.filter(
-    ~pl.col("url").str.contains('200') & ~pl.col("url").str.contains('408')
-)
+# Robos y Crawlers
+def contar_filtros_robots(df):
+    total_registros = obtener_total_registros()
 
-print(df_sin_nulos)
-df_sin_nulos.write_csv("log_sin_nulos.csv")
+    registros_googlebot = contar_registros_user_agent(df, 'Googlebot')
+    registros_baiduspider = contar_registros_user_agent(df, 'Baiduspider')
+    registros_agesic_crawler = contar_registros_user_agent(
+        df, 'agesic-crawler')
 
-"""Verificamos que ya no hayan más casos de datos nulos"""
+    porcentaje_googlebot = (registros_googlebot / total_registros) * 100
+    porcentaje_baiduspider = (registros_baiduspider / total_registros) * 100
+    porcentaje_agesic_crawler = (
+        registros_agesic_crawler / total_registros
+        ) * 100
 
-cantidad_nulos = df_sin_nulos.null_count()
-cantidad_nulos
+    print(f"Registros 'Googlebot': {registros_googlebot} \
+          ({porcentaje_googlebot:.2f}%)")
+    print(f"Registros 'Baiduspider': {registros_baiduspider} \
+          ({porcentaje_baiduspider:.2f}%)")
+    print(f"Registros 'agesic-crawler': {registros_agesic_crawler} \
+          ({porcentaje_agesic_crawler:.2f}%)")
 
-"""#### Limpieza de peticiones internas
 
-Es común que el servidor web realice solicitudes internas a sí mismo para verificar su configuración, comprobar capacidades o realizar tareas de mantenimiento. El uso de * en las solicitudes OPTIONS puede estar asociado con estas operaciones internas.
+def filtrar_googlebot(df):
+    return df.filter(~pl.col("user_agent").str.contains('Googlebot'))
 
-La URL * en este contexto se refiere a una solicitud genérica que no está dirigida a una URL específica. En el caso de los métodos OPTIONS, * puede estar siendo usado para indicar que la solicitud no está dirigida a un recurso específico o es un marcador de posición para una solicitud interna del servidor.
 
-Dado que las solicitudes provienen de 127.0.0.1 (localhost), parece que estas solicitudes son internas, probablemente generadas por el propio servidor para comprobar su configuración o para otros fines administrativos
+def filtrar_baiduspider(df):
+    return df.filter(~pl.col("user_agent").str.contains('Baiduspider'))
 
-Antes de eliminar esos registros, veamos cuántas peticiones internas hay en el dataset y qué porcentaje representan sobre la cantidad total de peticiones con los registros nulos ya filtrados.
-"""
 
-peticiones_internas = df_sin_nulos.filter(
-    (pl.col("ip") == "127.0.0.1") &
-    (pl.col("request_method") == "OPTIONS") &
-    (pl.col("url") == "*")
-)
+def filtrar_agesic_crawler(df):
+    return df.filter(~pl.col("user_agent").str.contains('agesic-crawler'))
 
-cantidad_peticiones_internas = peticiones_internas.shape[0]
-total_registros = df_sin_nulos.shape[0]
-porcentaje_peticiones_internas = (cantidad_peticiones_internas / total_registros) * 100
 
-print(f"Cantidad de peticiones internas: {cantidad_peticiones_internas}")
-print(f"Cantidad de registros (sin nulos): {total_registros}")
-print(f"Porcentaje de peticiones internas: {porcentaje_peticiones_internas:.2f}%")
+def filtrar_robots_y_crawlers(df):
+    contar_filtros_robots(df)
+    df = filtrar_googlebot(df)
+    df = filtrar_baiduspider(df)
+    df = filtrar_agesic_crawler(df)
+    return df
 
-df_sin_nulos
 
-df_no_peticiones_internas = df_sin_nulos.filter(
-    ~((pl.col("ip") == "127.0.0.1") & (pl.col("request_method") == "OPTIONS") & (pl.col("url") == "*"))
-)
+# Servicios de mapas
+def contar_filtros_servicios_mapas(df):
+    total_registros = obtener_total_registros()
 
-df_no_peticiones_internas.head(10)
+    registros_map_server = contar_registros_url(df, '/wfsPCN1000.cgi')
+    registros_wms = contar_registros_url(df, 'SERVICE=WMS')
 
-"""#### Limpieza de datos estáticos
-Los archivos estáticos como .css o .png a menudo no contienen información crítica para el análisis de tráfico web o para la detección de problemas específicos en el comportamiento del usuario. Además muchas veces, los archivos estáticos son solicitados por bots o sistemas automatizados.
+    porcentaje_map_server = (
+        registros_map_server / total_registros
+        ) * 100 if total_registros > 0 else 0
+    porcentaje_wms = (
+        registros_wms / total_registros
+        ) * 100 if total_registros > 0 else 0
 
-Datos innecesarios o erróneos pueden aumentar el tamaño de los datasets, haciendo que el procesamiento sea más lento. Limpiar los datos reduce el tamaño y mejora la eficiencia del procesamiento.
-"""
+    print(f"Registros '/wfsPCN1000.cgi': {registros_map_server} \
+          ({porcentaje_map_server:.2f}%)")
+    print(f"Registros 'SERVICE=WMS': {registros_wms} ({porcentaje_wms:.2f}%)")
 
-df_filtrado_datos_estaticos = filtrar_datos(df_no_peticiones_internas)
 
-"""#### Limpieza de robots"""
+def filtrar_map_server(df):
+    return df.filter(~pl.col("url").str.contains('/wfsPCN1000.cgi'))
 
-df_filtrado_robots = filtrar_robots_y_crawlers(df_filtrado_datos_estaticos)
 
-"""#### Limpieza de servicios de mapas"""
+def filtrar_wms(df):
+    return df.filter(~pl.col("url").str.contains('SERVICE=WMS'))
 
-df_filtrado = filtrar_solicitudes_servicios_mapas(df_filtrado_robots)
 
-cantidad_registros = df_filtrado.select(pl.all().count())
-cantidad_registros
+def filtrar_solicitudes_servicios_mapas(df):
+    contar_filtros_servicios_mapas(df)
+    df = filtrar_map_server(df)
+    df = filtrar_wms(df)
+    return df
+
+
+# Archivos estáticos
+def contar_filtros_archivos_estaticos(df):
+    total_registros = obtener_total_registros()
+
+    registros_jcemediabox = contar_registros_url(
+        df, '/plugins/system/jcemediabox/'
+        )
+    registros_css = contar_registros_url(df, r'\.css$')
+    registros_js = contar_registros_url(df, r'\.js$')
+    registros_png = contar_registros_url(df, r'\.png$')
+    registros_jpg = contar_registros_url(df, r'\.jpg$')
+    registros_gif = contar_registros_url(df, r'\.gif$')
+    registros_favicon = contar_registros_url(df, r'favicon\.ico$')
+
+    porcentaje_jcemediabox = (registros_jcemediabox / total_registros) * 100
+    porcentaje_css = (registros_css / total_registros) * 100
+    porcentaje_js = (registros_js / total_registros) * 100
+    porcentaje_png = (registros_png / total_registros) * 100
+    porcentaje_jpg = (registros_jpg / total_registros) * 100
+    porcentaje_gif = (registros_gif / total_registros) * 100
+    porcentaje_favicon = (registros_favicon / total_registros) * 100
+
+    print(f"Registros 'jcemediabox': {registros_jcemediabox} \
+      ({porcentaje_jcemediabox:.2f}%)")
+
+    print(f"Registros '.css': {registros_css} ({porcentaje_css:.2f}%)")
+    print(f"Registros '.js': {registros_js} ({porcentaje_js:.2f}%)")
+    print(f"Registros '.png': {registros_png} ({porcentaje_png:.2f}%)")
+    print(f"Registros '.jpg': {registros_jpg} ({porcentaje_jpg:.2f}%)")
+    print(f"Registros '.gif': {registros_gif} ({porcentaje_gif:.2f}%)")
+    print(f"Registros 'favicon.ico': {registros_favicon} \
+          ({porcentaje_favicon:.2f}%)")
+
+
+def filtar_jcemediabox(df):
+    return df.filter(~pl.col("url").str
+                     .contains('/plugins/system/jcemediabox/'))
+
+
+def filtrar_css(df):
+    regex = r'\.css$'
+    return df.filter(~pl.col("url").str.contains(regex))
+
+
+def filtrar_js(df):
+    regex = r'\.js$'
+    return df.filter(~pl.col("url").str.contains(regex))
+
+
+def filtrar_png(df):
+    regex = r'\.png$'
+    return df.filter(~pl.col("url").str.contains(regex))
+
+
+def filtrar_jpg(df):
+    regex = r'\.jpg$'
+    return df.filter(~pl.col("url").str.contains(regex))
+
+
+def filtrar_gif(df):
+    regex = r'\.gif$'
+    return df.filter(~pl.col("url").str.contains(regex))
+
+
+def filtrar_favicon(df):
+    regex = r'favicon\.ico$'
+    return df.filter(~pl.col("url").str.contains(regex))
+
+
+def eliminar_peticiones_internas(df):
+    return df.filter(~((pl.col("ip") == "127.0.0.1") &
+                       (pl.col("request_method") == "OPTIONS") &
+                       (pl.col("url") == "*")))
+
+
+def filtrar_datos(df):
+    contar_filtros_archivos_estaticos(df)
+    df = filtrar_robots_y_crawlers(df)
+    df = filtrar_solicitudes_servicios_mapas(df)
+    df = filtar_jcemediabox(df)
+    df = filtrar_css(df)
+    df = filtrar_js(df)
+    df = filtrar_png(df)
+    df = filtrar_jpg(df)
+    df = filtrar_gif(df)
+    df = filtrar_favicon(df)
+    df = eliminar_peticiones_internas(df)
+    return df
