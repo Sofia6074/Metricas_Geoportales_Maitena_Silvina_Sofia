@@ -3,6 +3,7 @@ import sys
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, regexp_extract
 from scripts_py.classes.logger import Logger
+from scripts_py.common.clean_data import inicializar_total_registros, filtrar_datos
 from scripts_py.kaggle_data.create_kaggle_df import csv_to_df
 from scripts_py.kaggle_data.load_kaggle_data import download_data
 
@@ -25,12 +26,13 @@ def create_spark_session(app_name: str, host: str) -> SparkSession:
 def parse_logs(df):
     return df.withColumn("ip", regexp_extract(col("_c0"), LOG_PATTERN, 1)) \
         .withColumn("timestamp", regexp_extract(col("_c0"), LOG_PATTERN, 2)) \
-        .withColumn("request", regexp_extract(col("_c0"), LOG_PATTERN, 3)) \
+        .withColumn("request_method", regexp_extract(col("_c0"), LOG_PATTERN, 3)) \
         .withColumn("status_code", regexp_extract(col("_c0"), LOG_PATTERN, 4).cast("integer")) \
         .withColumn("response_size", regexp_extract(col("_c0"), LOG_PATTERN, 5).cast("integer")) \
-        .withColumn("referrer", regexp_extract(col("_c0"), LOG_PATTERN, 6)) \
+        .withColumn("url", regexp_extract(col("_c0"), LOG_PATTERN, 6)) \
         .withColumn("user_agent", regexp_extract(col("_c0"), LOG_PATTERN, 7)) \
         .withColumn("response_time", regexp_extract(col("_c0"), LOG_PATTERN, 8).cast("integer"))
+    # TODO: Falta columna http-version
 
 
 def main():
@@ -46,13 +48,11 @@ def main():
     parsed_logs_df = parse_logs(logs_df)
 
     parsed_logs_df.show(10)
-    spark.stop()
 
     # TODO:
-    # Clean data
-    # print("Limpiando los datos...")
-    # inicializar_total_registros(df)
-    # df = filtrar_datos(df)
+    print("Limpiando los datos de kaggle...")
+    inicializar_total_registros(parsed_logs_df)
+    parsed_logs_df = filtrar_datos(parsed_logs_df)
 
     # Normalize data
     # print("Normalizando los datos...")
@@ -60,6 +60,7 @@ def main():
 
     # df_normalized.write_csv(csv_file_path +
     # 'cleaned_normalized_kaggle_data.csv')
+    spark.stop()
 
 
 if __name__ == "__main__":

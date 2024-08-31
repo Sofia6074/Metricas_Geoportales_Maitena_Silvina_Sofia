@@ -1,12 +1,14 @@
-# Funciones auxiliares - Limpieza de datos
 import polars as pl
+from scripts_py.classes.logger import Logger
 
+logger = Logger(__name__).get_logger()
 total_registros_inicial = None
 
 
 def inicializar_total_registros(df):
     global total_registros_inicial
     total_registros_inicial = df.height
+    logger.info(f"Total registros inicializados: {total_registros_inicial}")
 
 
 def obtener_total_registros():
@@ -37,12 +39,9 @@ def contar_filtros_robots(df):
         registros_agesic_crawler / total_registros
         ) * 100
 
-    print(f"Registros 'Googlebot': {registros_googlebot} \
-          ({porcentaje_googlebot:.2f}%)")
-    print(f"Registros 'Baiduspider': {registros_baiduspider} \
-          ({porcentaje_baiduspider:.2f}%)")
-    print(f"Registros 'agesic-crawler': {registros_agesic_crawler} \
-          ({porcentaje_agesic_crawler:.2f}%)")
+    logger.info(f"Registros 'Googlebot': {registros_googlebot} ({porcentaje_googlebot:.2f}%)")
+    logger.info(f"Registros 'Baiduspider': {registros_baiduspider} ({porcentaje_baiduspider:.2f}%)")
+    logger.info(f"Registros 'agesic-crawler': {registros_agesic_crawler} ({porcentaje_agesic_crawler:.2f}%)")
 
 
 def filtrar_googlebot(df):
@@ -79,9 +78,8 @@ def contar_filtros_servicios_mapas(df):
         registros_wms / total_registros
         ) * 100 if total_registros > 0 else 0
 
-    print(f"Registros '/wfsPCN1000.cgi': {registros_map_server} \
-          ({porcentaje_map_server:.2f}%)")
-    print(f"Registros 'SERVICE=WMS': {registros_wms} ({porcentaje_wms:.2f}%)")
+    logger.info(f"Registros '/wfsPCN1000.cgi': {registros_map_server} ({porcentaje_map_server:.2f}%)")
+    logger.info(f"Registros 'SERVICE=WMS': {registros_wms} ({porcentaje_wms:.2f}%)")
 
 
 def filtrar_map_server(df):
@@ -129,15 +127,13 @@ def contar_filtros_archivos_estaticos(df):
     porcentaje_favicon = ((registros_favicon / total_registros) *
                           100 if registros_favicon else 0)
 
-    print(f"Registros 'jcemediabox': \
-          {registros_jcemediabox} ({porcentaje_jcemediabox:.2f}%)")
-    print(f"Registros '.css': {registros_css} ({porcentaje_css:.2f}%)")
-    print(f"Registros '.js': {registros_js} ({porcentaje_js:.2f}%)")
-    print(f"Registros '.png': {registros_png} ({porcentaje_png:.2f}%)")
-    print(f"Registros '.jpg': {registros_jpg} ({porcentaje_jpg:.2f}%)")
-    print(f"Registros '.gif': {registros_gif} ({porcentaje_gif:.2f}%)")
-    print(f"Registros 'favicon.ico': \
-          {registros_favicon} ({porcentaje_favicon:.2f}%)")
+    logger.info(f"Registros 'jcemediabox': {registros_jcemediabox} ({porcentaje_jcemediabox:.2f}%)")
+    logger.info(f"Registros '.css': {registros_css} ({porcentaje_css:.2f}%)")
+    logger.info(f"Registros '.js': {registros_js} ({porcentaje_js:.2f}%)")
+    logger.info(f"Registros '.png': {registros_png} ({porcentaje_png:.2f}%)")
+    logger.info(f"Registros '.jpg': {registros_jpg} ({porcentaje_jpg:.2f}%)")
+    logger.info(f"Registros '.gif': {registros_gif} ({porcentaje_gif:.2f}%)")
+    logger.info(f"Registros 'favicon.ico': {registros_favicon} ({porcentaje_favicon:.2f}%)")
 
 
 def filtar_jcemediabox(df):
@@ -182,15 +178,19 @@ def eliminar_peticiones_internas(df):
 
 
 def filtrar_datos(df):
-    contar_filtros_archivos_estaticos(df)
-    df = filtrar_robots_y_crawlers(df)
-    df = filtrar_solicitudes_servicios_mapas(df)
-    df = filtar_jcemediabox(df)
-    df = filtrar_css(df)
-    df = filtrar_js(df)
-    df = filtrar_png(df)
-    df = filtrar_jpg(df)
-    df = filtrar_gif(df)
-    df = filtrar_favicon(df)
-    df = eliminar_peticiones_internas(df)
+    try:
+        contar_filtros_archivos_estaticos(df)
+        df = filtrar_robots_y_crawlers(df)
+        df = filtrar_solicitudes_servicios_mapas(df)
+        df = filtar_jcemediabox(df)
+        df = filtrar_css(df)
+        df = filtrar_js(df)
+        df = filtrar_png(df)
+        df = filtrar_jpg(df)
+        df = filtrar_gif(df)
+        df = filtrar_favicon(df)
+        df = eliminar_peticiones_internas(df)
+    except Exception as e:
+        logger.error(f"Error al limpiar los datos: {e}")
+        raise
     return df
