@@ -21,7 +21,7 @@ jobs:
 
     - name: Install black
       run: |
-        pip install black
+        pip install "black[jupyter]"
 
     - name: Run black
       run: |
