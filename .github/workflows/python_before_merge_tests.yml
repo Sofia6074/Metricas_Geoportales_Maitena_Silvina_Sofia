@@ -7,8 +7,8 @@ on:
       - main
 
 jobs:
-  format:
-    name: Check code formatting with black
+  lint:
+    name: Lint with pylint
     runs-on: ubuntu-latest
     steps:
     - name: Check out the code
@@ -19,13 +19,13 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install black
+    - name: Install pylint
       run: |
-        pip install "black[jupyter]"
+        pip install pylint
 
-    - name: Run black with diff
+    - name: Run pylint
       run: |
-        black --check --diff .
+        pylint **/*.py
 
   complexity:
     name: Calculate Cyclomatic Complexity
