@@ -23,9 +23,9 @@ jobs:
       run: |
         pip install "black[jupyter]"
 
-    - name: Run black
+    - name: Run black with diff
       run: |
-        black --check .
+        black --check --diff .
 
   complexity:
     name: Calculate Cyclomatic Complexity
