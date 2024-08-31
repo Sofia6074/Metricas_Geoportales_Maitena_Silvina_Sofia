@@ -103,9 +103,9 @@ def filtrar_solicitudes_servicios_mapas(df):
 def contar_filtros_archivos_estaticos(df):
     total_registros = obtener_total_registros()
 
-    registros_jcemediabox = contar_registros_url(
-        df, '/plugins/system/jcemediabox/'
-        )
+    registros_jcemediabox = contar_registros_url(df,
+                                                 '/plugins/system/jcemediabox/'
+                                                 )
     registros_css = contar_registros_url(df, r'\.css$')
     registros_js = contar_registros_url(df, r'\.js$')
     registros_png = contar_registros_url(df, r'\.png$')
@@ -113,24 +113,31 @@ def contar_filtros_archivos_estaticos(df):
     registros_gif = contar_registros_url(df, r'\.gif$')
     registros_favicon = contar_registros_url(df, r'favicon\.ico$')
 
-    porcentaje_jcemediabox = (registros_jcemediabox / total_registros) * 100
-    porcentaje_css = (registros_css / total_registros) * 100
-    porcentaje_js = (registros_js / total_registros) * 100
-    porcentaje_png = (registros_png / total_registros) * 100
-    porcentaje_jpg = (registros_jpg / total_registros) * 100
-    porcentaje_gif = (registros_gif / total_registros) * 100
-    porcentaje_favicon = (registros_favicon / total_registros) * 100
+    # Manejo de casos donde no se encuentran registros
+    porcentaje_jcemediabox = ((registros_jcemediabox / total_registros) *
+                              100 if registros_jcemediabox else 0)
+    porcentaje_css = ((registros_css / total_registros) *
+                      100 if registros_css else 0)
+    porcentaje_js = ((registros_js / total_registros) *
+                     100 if registros_js else 0)
+    porcentaje_png = ((registros_png / total_registros) *
+                      100 if registros_png else 0)
+    porcentaje_jpg = ((registros_jpg / total_registros) *
+                      100 if registros_jpg else 0)
+    porcentaje_gif = ((registros_gif / total_registros) *
+                      100 if registros_gif else 0)
+    porcentaje_favicon = ((registros_favicon / total_registros) *
+                          100 if registros_favicon else 0)
 
-    print(f"Registros 'jcemediabox': {registros_jcemediabox} \
-      ({porcentaje_jcemediabox:.2f}%)")
-
+    print(f"Registros 'jcemediabox': \
+          {registros_jcemediabox} ({porcentaje_jcemediabox:.2f}%)")
     print(f"Registros '.css': {registros_css} ({porcentaje_css:.2f}%)")
     print(f"Registros '.js': {registros_js} ({porcentaje_js:.2f}%)")
     print(f"Registros '.png': {registros_png} ({porcentaje_png:.2f}%)")
     print(f"Registros '.jpg': {registros_jpg} ({porcentaje_jpg:.2f}%)")
     print(f"Registros '.gif': {registros_gif} ({porcentaje_gif:.2f}%)")
-    print(f"Registros 'favicon.ico': {registros_favicon} \
-          ({porcentaje_favicon:.2f}%)")
+    print(f"Registros 'favicon.ico': \
+          {registros_favicon} ({porcentaje_favicon:.2f}%)")
 
 
 def filtar_jcemediabox(df):
