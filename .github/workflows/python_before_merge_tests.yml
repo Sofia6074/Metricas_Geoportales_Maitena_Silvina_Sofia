@@ -7,8 +7,8 @@ on:
       - main
 
 jobs:
-  lint:
-    name: Lint with flake8
+  format:
+    name: Check code formatting with black
     runs-on: ubuntu-latest
     steps:
     - name: Check out the code
@@ -19,13 +19,13 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install flake8
+    - name: Install black
       run: |
-        pip install flake8
+        pip install black
 
-    - name: Run flake8
+    - name: Run black
       run: |
-        flake8 . --ignore=E501
+        black --check .
 
   complexity:
     name: Calculate Cyclomatic Complexity
@@ -103,4 +103,3 @@ jobs:
       run: |
         pip-audit
       continue-on-error: true
-
