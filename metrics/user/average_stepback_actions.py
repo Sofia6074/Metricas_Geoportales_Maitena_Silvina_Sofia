@@ -49,5 +49,8 @@ parsed_logs_df = parsed_logs_df.withColumn(
     when(col("request_url") == col("previous_request_url"), 1).otherwise(0)
 )
 
+average_returns_per_user = parsed_logs_df.groupBy("ip").agg(avg("returned_to_previous_page").alias("average_returns")).orderBy(desc("average_returns"))
+average_returns_per_user.show(10, truncate=False)
+
 average_return_all_users = parsed_logs_df.agg(avg("returned_to_previous_page").alias("average_return_all_users"))
 average_return_all_users.show(truncate=False)
