@@ -1,35 +1,70 @@
-name: Create Feature Branch
+name: Create Branch and Draft PR for Issue
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened]
+
+permissions:
+  contents: write 
+  issues: write
+  pull-requests: write
 
 jobs:
-  create_branch:
+  create_and_associate_branch:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - name: Check out the repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
-
+    - name: Set up Git user
+      run: |
+        git config --global user.email "Sofijm6074@gmail.com"
+        git config --global user.name "Sofia6074"
+        
     - name: Create a branch
       run: |
         ISSUE_NUMBER=${{ github.event.issue.number }}
         ISSUE_TITLE="${{ github.event.issue.title }}"
-        CAMEL_CASE_TITLE=$(echo $ISSUE_TITLE | sed -E 's/(^|-)([a-z])/\U\2/g' | sed -E 's/[ -]//g')
-        BRANCH_NAME="feature/$ISSUE_NUMBER/$CAMEL_CASE_TITLE"
+        # Convert ISSUE_TITLE to kebab-case (hyphen-separated)
+        KEBAB_CASE_TITLE=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed 's/^-//;s/-$//')
+        BRANCH_NAME="feature/$ISSUE_NUMBER/$KEBAB_CASE_TITLE"
         
         echo "Creating branch $BRANCH_NAME"
         
         git checkout -b "$BRANCH_NAME"
+        
+        # Add an empty commit to ensure the branch has at least one commit
+        git commit --allow-empty -m "chore: initialize branch for issue #$ISSUE_NUMBER"
+        
         git push origin "$BRANCH_NAME"
-
-    - name: Add branch to the issue
+        echo "Branch $BRANCH_NAME created and pushed."
+        
+    - name: Comment on Issue with Branch Info
       run: |
         ISSUE_NUMBER=${{ github.event.issue.number }}
-        BRANCH_NAME="feature/$ISSUE_NUMBER/$CAMEL_CASE_TITLE"
-        gh issue comment $ISSUE_NUMBER --body "Branch created: $BRANCH_NAME"
+        ISSUE_TITLE="${{ github.event.issue.title }}"
+        KEBAB_CASE_TITLE=$(echo "${{ github.event.issue.title }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed 's/^-//;s/-$//')
+        BRANCH_NAME="feature/$ISSUE_NUMBER/$KEBAB_CASE_TITLE"
+        COMMENT="The branch \`$BRANCH_NAME\` has been created. You can check it out with the following commands: <br> \` git checkout $BRANCH_NAME \` "
+        gh issue comment $ISSUE_NUMBER --body "$COMMENT"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed for the gh command
+        
+    - name: Create Draft Pull Request
+      run: |
+        ISSUE_NUMBER=${{ github.event.issue.number }}
+        ISSUE_TITLE="${{ github.event.issue.title }}"
+        KEBAB_CASE_TITLE=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed 's/^-//;s/-$//')
+        BRANCH_NAME="feature/$ISSUE_NUMBER/$KEBAB_CASE_TITLE"
+
+        # Confirm the body of the PR is correctly set
+        PR_BODY="closes #$ISSUE_NUMBER"
+        echo "PR body: $PR_BODY"
+
+        # Create a draft pull request targeting 'develop' branch
+        gh pr create --draft --base develop --head "$BRANCH_NAME" --title "$ISSUE_TITLE" --body "$PR_BODY"
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Use your PAT instead of GITHUB_TOKEN
