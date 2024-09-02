@@ -1,4 +1,3 @@
-# Funciones auxiliares - Limpieza de datos
 import polars as pl
 
 total_registros_inicial = None
