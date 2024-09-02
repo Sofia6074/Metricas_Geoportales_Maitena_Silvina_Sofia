@@ -25,7 +25,7 @@ jobs:
 
     - name: Run pylint
       run: |
-        pylint **/*.py --errors-only --rcfile=.pylintrc
+        pylint **/*.py --rcfile=.pylintrc
 
   complexity:
     name: Calculate Cyclomatic Complexity
