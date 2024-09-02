@@ -3,4 +3,3 @@ repos:
     rev: v2.14.0
     hooks:
       - id: pylint
-        args: ["--errors-only"]
