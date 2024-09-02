@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+disable=import-error,no-member
+
+[TYPECHECK]
+ignored-modules=polars,pyspark.sql,pyspark.sql.functions,kaggle.api.kaggle_api_extended
