@@ -1,31 +1,29 @@
 """
-Este módulo proporciona funciones para calcular las páginas más visitadas en los logs.
+Este módulo calcula las páginas más visitadas en los logs de navegación.
 """
 
-# from polars import pl
+from pyspark.sql.functions import col, count
 
-# def filtrar_urls_vacias(df):
-#     """
-#     Filtra las URLs vacías en el DataFrame.
-#     """
-#     return df.filter(pl.col("url").is_not_null())
+def filtrar_urls_vacias(logs_df):
+    """
+    Filtra las URLs vacías en el DataFrame.
+    """
+    return logs_df.filter(col("request_url").isNotNull())
 
-# def contar_frecuencia_url(df):
-#     """
-#     Cuenta la frecuencia de visitas por URL.
-#     """
-#     return df.group_by("url").agg(pl.col("url").count().alias("visit_count"))
+def contar_frecuencia_url(logs_df):
+    """
+    Cuenta la frecuencia de visitas por URL.
+    """
+    return logs_df.groupBy("request_url").agg(
+        count("request_url").alias("visit_count")
+    )
 
-# if __name__ == "__main__":
-#     try:
-#         df_frecuencia_url_ordenado = contar_frecuencia_url(
-#             filtrar_urls_vacias(df_limpio)).sort("visit_count", descending=True)
-#         df_frecuencia_url_ordenado.head(10)
+def calculate_nav_most_visited_pages(logs_df):
+    """
+    Calcula las páginas más visitadas en los logs de navegación.
+    """
+    df_frecuencia_url_ordenado = contar_frecuencia_url(
+        filtrar_urls_vacias(logs_df)
+    ).orderBy(col("visit_count").desc())
 
-#         # Guardar el resultado en un archivo CSV
-#         df_frecuencia_url_ordenado.write_csv("frecuencia_paginas_visitadas.csv")
-#     except Exception as exc:  # pylint: disable=W0703
-#         # Manejo de excepciones generales
-#         print(f"Se produjo un error: {exc}")
-
-#     # df_frecuencia_url_ordenado.top_k(10, by="visit_count")
+    df_frecuencia_url_ordenado.show(10)
