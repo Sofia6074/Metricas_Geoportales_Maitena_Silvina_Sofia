@@ -1,56 +1,65 @@
 """
-Este módulo realiza el procesamiento de logs usando PySpark.
-Incluye la creación de una sesión de Spark, la lectura de archivos
-CSV, la limpieza de datos y el cálculo de métricas.
+Este módulo realiza el procesamiento de logs usando Polars.
+Incluye la descarga de archivos CSV desde AWS S3, limpieza de datos y cálculo de métricas.
 """
 
-import sys
-from pyspark.sql import SparkSession
+import boto3
+import polars as pl
 from scripts_py.classes.logger import Logger
 from scripts_py.common.log_cleaner import log_cleaner
-from metrics.metrics_init import run_all_metrics
+# from metrics.metrics_init import run_all_metrics
 
-def create_spark_session(app_name: str, host: str) -> SparkSession:
+def download_file_from_s3(
+    bucket_name: str, object_key: str, file_path: str,
+    aws_access_key_id: str, aws_secret_access_key: str
+):
     """
-    Crea y devuelve una sesión de Spark con la configuración especificada.
+    Descarga un archivo desde un bucket de S3 y lo guarda en la ubicación especificada.
+    """
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key
+    )
+
+    s3_client.download_file(bucket_name, object_key, file_path)
+
+def read_logs(file_path: str) -> pl.DataFrame:
+    """
+    Lee un archivo CSV usando Polars y lo devuelve como un DataFrame.
     """
     logger_instance = Logger(__name__).get_logger()
 
     try:
-        # spark_session = SparkSession.builder \
-        #     .appName(app_name) \
-        #     .config("spark.driver.host", host) \
-        #     .getOrCreate()
-        # spark_session.sparkContext.setLogLevel("ERROR")
-        # return spark_session
-        return SparkSession.builder \
-            .appName("Leer desde S3") \
-            .config("spark.jars.packages",
-                    "org.apache.hadoop:hadoop-aws:3.2.0,com.amazonaws:aws-java-sdk-bundle:1.11.199") \
-            .config("spark.hadoop.fs.s3a.access.key", "") \
-            .config("spark.hadoop.fs.s3a.secret.key", "") \
-            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-            .config("spark.hadoop.fs.s3a.endpoint", "s3.amazonaws.com") \
-            .config("spark.hadoop.fs.s3a.aws.credentials.provider",
-                    "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
-            .getOrCreate()
-    except Exception as exc:  # pylint: disable=W0703, W0612
+        logs_dataframe = pl.read_csv(file_path, has_header=False, separator=',', quote_char='"')
+        return logs_dataframe
+    except Exception:
         logger_instance.error(
-            "Ocurrió un error al crear la sesión de Spark",
+            "Ocurrió un error al leer el archivo CSV con Polars",
             exc_info=True
         )
-        sys.exit(1)
+        raise
 
 if __name__ == "__main__":
-    #LOG_PATH = '/Users/admin/Documents/TesisArchivo/filtered_logs.csv'
+    # Parámetros de AWS S3
+    BUCKET_NAME = 'file-bucket-container'
+    OBJECT_KEY = 'filebeat-geoportal-access100MB.csv'
+    FILE_PATH = '/tmp/filebeat-geoportal-access100MB.csv'
+    AWS_ACCESS_KEY = ''
+    AWS_SECRET_KEY = ''
 
-    LOG_PATH = f's3a://file-bucket-container/filebeat-geoportal-noviembre.csv'
+    # Descargar el archivo desde S3
+    download_file_from_s3(
+        BUCKET_NAME, OBJECT_KEY, FILE_PATH, AWS_ACCESS_KEY, AWS_SECRET_KEY
+    )
 
-    spark = create_spark_session("Geoportales", "127.0.0.1")
-    logs_df = spark.read.csv(LOG_PATH, header=False, sep=',', quote='"', escape='"')
+    # Leer el archivo CSV usando Polars
+    logs_df = read_logs(FILE_PATH)
 
+    # Limpiar los datos
     logs_df = log_cleaner(logs_df)
 
-    run_all_metrics(logs_df)
+    # Calcular las métricas
+    # run_all_metrics(logs_df)
 
-    spark.stop()
+    print("Procesamiento finalizado")
