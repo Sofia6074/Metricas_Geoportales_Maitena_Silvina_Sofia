@@ -17,12 +17,23 @@ def create_spark_session(app_name: str, host: str) -> SparkSession:
     logger_instance = Logger(__name__).get_logger()
 
     try:
-        spark_session = SparkSession.builder \
-            .appName(app_name) \
-            .config("spark.driver.host", host) \
+        # spark_session = SparkSession.builder \
+        #     .appName(app_name) \
+        #     .config("spark.driver.host", host) \
+        #     .getOrCreate()
+        # spark_session.sparkContext.setLogLevel("ERROR")
+        # return spark_session
+        return SparkSession.builder \
+            .appName("Leer desde S3") \
+            .config("spark.jars.packages",
+                    "org.apache.hadoop:hadoop-aws:3.2.0,com.amazonaws:aws-java-sdk-bundle:1.11.199") \
+            .config("spark.hadoop.fs.s3a.access.key", "") \
+            .config("spark.hadoop.fs.s3a.secret.key", "") \
+            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+            .config("spark.hadoop.fs.s3a.endpoint", "s3.amazonaws.com") \
+            .config("spark.hadoop.fs.s3a.aws.credentials.provider",
+                    "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
             .getOrCreate()
-        spark_session.sparkContext.setLogLevel("ERROR")
-        return spark_session
     except Exception as exc:  # pylint: disable=W0703, W0612
         logger_instance.error(
             "Ocurrió un error al crear la sesión de Spark",
@@ -31,7 +42,9 @@ def create_spark_session(app_name: str, host: str) -> SparkSession:
         sys.exit(1)
 
 if __name__ == "__main__":
-    LOG_PATH = '/Users/admin/Documents/TesisArchivo/filtered_logs.csv'
+    #LOG_PATH = '/Users/admin/Documents/TesisArchivo/filtered_logs.csv'
+
+    LOG_PATH = f's3a://file-bucket-container/filebeat-geoportal-noviembre.csv'
 
     spark = create_spark_session("Geoportales", "127.0.0.1")
     logs_df = spark.read.csv(LOG_PATH, header=False, sep=',', quote='"', escape='"')

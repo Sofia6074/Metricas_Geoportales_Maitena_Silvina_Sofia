@@ -24,8 +24,7 @@ def format_logs(data_frame):
     logger.info("Formateando los logs")
 
     log_pattern = (
-        r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] "(GET|POST|PUT|DELETE) (.*?) (HTTP/\d\.\d)" '
-        r'(\d+) (\d+) "(.*?)" "(.*?)" Time (\d+)"'
+        r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] "(\S+)\s(\S+)\s(HTTP/\d\.\d)" (\d+) (\d+) "(.*?)" "(.*?)" Time (\d+)'
     )
 
     data_frame = data_frame.withColumn("_c0", regexp_replace(col("_c0"), '""', '"')) \
@@ -124,7 +123,7 @@ def filter_robots_and_crawlers(data_frame):
     Filters out known bots and crawlers from the dataframe.
     """
     logger.info("Eliminando los siguientes registros de bots y crawlers:")
-    count_filters_robots(data_frame)
+    #count_filters_robots(data_frame)
     data_frame = filter_googlebot(data_frame)
     data_frame = filter_baiduspider(data_frame)
     data_frame = filter_agesic_crawler(data_frame)
@@ -210,7 +209,7 @@ def filter_static_files(data_frame):
     Filters out static files (e.g., CSS, JS, images) from the dataframe.
     """
     logger.info("Eliminando los siguientes archivos estaticos:")
-    count_static_files(data_frame)
+    #count_static_files(data_frame)
     data_frame = filter_jcemediabox(data_frame)
     data_frame = filter_css(data_frame)
     data_frame = filter_js(data_frame)
@@ -234,7 +233,7 @@ def preview_logs(data_frame, num=5):
     Displays a preview of the first few rows of the dataframe.
     """
     logger.info("Revisando los primeros registros del DataFrame")
-    data_frame.show(num, truncate=True)
+    data_frame.show(num)
 
 def log_cleaner(data_frame):
     """
@@ -249,6 +248,7 @@ def log_cleaner(data_frame):
         data_frame = remove_internal_requests(data_frame)
         data_frame = normalize_urls(data_frame)
         data_frame = convert_timestamp(data_frame)
+        data_frame = data_frame.cache()
         preview_logs(data_frame)
         logger.info("Se han limpiado los datos correctamente")
     except (ValueError, TypeError) as exc:
