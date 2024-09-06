@@ -29,7 +29,6 @@ def run_all_metrics(logs_df):
     calculate_average_time_spent_on_site(logs_df)
     calculate_average_response_time(logs_df)
 
-
     print("Métricas de tiempo:")
     # calculate_maximum_stable_value_zoom(logs_df)
 
@@ -38,6 +37,6 @@ def run_all_metrics(logs_df):
 
     print("Métricas de usuarios:")
     calculate_average_pages_viewed_per_visitor(logs_df)
-    # calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
+    calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
 
     print("Todas las métricas han sido ejecutadas.")
