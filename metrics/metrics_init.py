@@ -25,8 +25,8 @@ def run_all_metrics(logs_df):
     print("Ejecutando todas las métricas...")
 
     print("Métricas generales:")
+    calculate_average_time_spent_on_site(logs_df)
     calculate_average_response_time(logs_df)
-    # calculate_average_time_spent_on_site(logs_df)
     # calculate_error_rate_success_rate(logs_df)
 
     print("Métricas de tiempo:")
