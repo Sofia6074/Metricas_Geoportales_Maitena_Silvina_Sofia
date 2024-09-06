@@ -23,3 +23,4 @@ Para instalar las bibliotecas necesarias para correr este proyecto, pueden usar:
 pip install polars
 pip install kaggle
 pip install pyspark
+pip install boto3
