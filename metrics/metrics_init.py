@@ -30,10 +30,10 @@ def run_all_metrics(logs_df):
     calculate_average_response_time(logs_df)
 
     print("Métricas de tiempo:")
-    # calculate_maximum_stable_value_zoom(logs_df)
+    calculate_maximum_stable_value_zoom(logs_df)
 
     print("Métricas de navegación:")
-    # calculate_nav_most_visited_pages(logs_df)
+    calculate_nav_most_visited_pages(logs_df)
 
     print("Métricas de usuarios:")
     calculate_average_pages_viewed_per_visitor(logs_df)
