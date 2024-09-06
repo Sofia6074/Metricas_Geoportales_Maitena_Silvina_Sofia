@@ -37,7 +37,7 @@ def run_all_metrics(logs_df):
     # calculate_nav_most_visited_pages(logs_df)
 
     print("Métricas de usuarios:")
-    # calculate_average_pages_viewed_per_visitor(logs_df)
+    calculate_average_pages_viewed_per_visitor(logs_df)
     # calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
 
     print("Todas las métricas han sido ejecutadas.")
