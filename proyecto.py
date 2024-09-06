@@ -7,7 +7,7 @@ import boto3
 import polars as pl
 from scripts_py.classes.logger import Logger
 from scripts_py.common.log_cleaner import log_cleaner
-# from metrics.metrics_init import run_all_metrics
+from metrics.metrics_init import run_all_metrics
 
 def download_file_from_s3(
     bucket_name: str, object_key: str, file_path: str,
@@ -60,6 +60,6 @@ if __name__ == "__main__":
     logs_df = log_cleaner(logs_df)
 
     # Calcular las métricas
-    # run_all_metrics(logs_df)
+    run_all_metrics(logs_df)
 
     print("Procesamiento finalizado")
