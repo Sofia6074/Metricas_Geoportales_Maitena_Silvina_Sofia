@@ -29,6 +29,7 @@ def run_all_metrics(logs_df):
     calculate_average_time_spent_on_site(logs_df)
     calculate_average_response_time(logs_df)
 
+
     print("Métricas de tiempo:")
     # calculate_maximum_stable_value_zoom(logs_df)
 
