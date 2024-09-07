@@ -5,6 +5,7 @@ Este módulo calcula el valor máximo estable del zoom en los logs de mapas.
 import polars as pl
 from metrics.metrics_utils import calculate_sessions
 
+
 def calculate_zoom_levels(map_requests_df):
     """
     Calcula los niveles de zoom a partir de las solicitudes del mapa.
@@ -15,28 +16,31 @@ def calculate_zoom_levels(map_requests_df):
     )
 
     map_requests_df = map_requests_df.with_columns(
-        pl.when(pl.col("request_decoded").str.contains(r"TileMatrix=EPSG:\d+:\d+"))
-        .then(pl.col("request_decoded").str.extract(r"TileMatrix=EPSG:\d+:(\d+)", 1).cast(pl.Float64))
+        pl.when(pl.col("request_decoded").str.contains(r"(?i)TileMatrix=EPSG"))
+        .then(pl.col("request_decoded").str.extract(r"(?i)TileMatrix=EPSG:\d+:(\d+)", 1).cast(pl.Float64))
         .otherwise(None).alias("zoom_level")
     )
-
     return map_requests_df
+
 
 def find_stable_zoom(map_requests_df):
     """
-    Encuentra el nivel de zoom estable para cada sesión.
+    Encuentra el nivel de zoom estable basado en la lógica de subir el zoom y volver a uno inferior.
     """
 
     map_requests_df = map_requests_df.with_columns([
         pl.col("zoom_level").shift(1).alias("prev_zoom_level"),
         pl.col("zoom_level").shift(-1).alias("next_zoom_level")
     ])
+
+    # Identificar cuando el zoom aumenta y luego vuelve a un nivel anterior
     stable_zoom_df = map_requests_df.filter(
-        (pl.col("zoom_level") == pl.col("prev_zoom_level")) &
-        (pl.col("zoom_level") > pl.col("next_zoom_level"))
+        (pl.col("zoom_level") < pl.col("prev_zoom_level")) &
+        (pl.col("prev_zoom_level") > pl.col("next_zoom_level"))
     )
 
     return stable_zoom_df
+
 
 def calculate_maximum_stable_value_zoom(logs_df):
     """
