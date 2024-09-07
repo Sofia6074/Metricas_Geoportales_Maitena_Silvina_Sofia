@@ -9,7 +9,7 @@ def convert_log_to_csv(log_file_path, csv_file_path):
     # Define headers for the CSV
     headers = [
         "ip", "timestamp", "request_method", "url",
-        "http_version", "status_code", "size", "user_agent"
+        "http_version", "status_code", "response_size", "user_agent"
     ]
 
     # Write log data to CSV
@@ -31,7 +31,7 @@ def convert_log_to_csv(log_file_path, csv_file_path):
                     int(parts[8]) if len(parts) > 8
                     and parts[8].isdigit() else None
                 )
-                size = (
+                response_size = (
                     int(parts[9]) if len(parts) > 9
                     and parts[9].isdigit() else None
                 )
@@ -42,7 +42,7 @@ def convert_log_to_csv(log_file_path, csv_file_path):
 
                 csvwriter.writerow([
                     ip, timestamp, request_method, url, 
-                    http_version, status_code, size, user_agent
+                    http_version, status_code, response_size, user_agent
                 ])
 
             except (IndexError, ValueError) as e:
