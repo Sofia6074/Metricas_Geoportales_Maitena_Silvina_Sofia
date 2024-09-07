@@ -3,12 +3,38 @@ Este módulo realiza el procesamiento de logs usando Polars.
 Incluye la descarga de archivos CSV desde AWS S3, limpieza de datos y cálculo de métricas.
 """
 
+import json
 import boto3
 import polars as pl
-
+from botocore.exceptions import ClientError
 from scripts_py.classes.logger import Logger
 from scripts_py.common.log_cleaner import log_cleaner
 from metrics.metrics_init import run_all_metrics
+
+def get_aws_credentials():
+    """
+    Obtiene las credenciales de AWS desde AWS Secrets Manager.
+    """
+    secret_name = "prod/AppBeta/AWS_Credentials"
+    region_name = "us-east-2"
+
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as client_error:
+        raise client_error
+
+    secret = get_secret_value_response['SecretString']
+    secret_dict = json.loads(secret)
+
+    return secret_dict
 
 def download_file_from_s3(
     bucket_name: str, object_key: str, file_path: str,
@@ -42,25 +68,21 @@ def read_logs(file_path: str) -> pl.DataFrame:
         raise
 
 if __name__ == "__main__":
-    # Parámetros de AWS S3
+    aws_secrets = get_aws_credentials()
+    AWS_ACCESS_KEY = aws_secrets["AWS_ACCESS_KEY_ID"]
+    AWS_SECRET_KEY = aws_secrets["AWS_SECRET_ACCESS_KEY"]
     BUCKET_NAME = 'file-bucket-container'
     OBJECT_KEY = 'filebeat-geoportal-access100MB.csv'
-    FILE_PATH = 'filebeat-geoportal-access100MB.csv'
-    AWS_ACCESS_KEY = ''
-    AWS_SECRET_KEY = ''
+    FILE_PATH = '/tmp/filebeat-geoportal-access100MB.csv'
 
-    # Descargar el archivo desde S3
     download_file_from_s3(
         BUCKET_NAME, OBJECT_KEY, FILE_PATH, AWS_ACCESS_KEY, AWS_SECRET_KEY
     )
 
-    # Leer el archivo CSV usando Polars
     logs_df = read_logs(FILE_PATH)
 
-    # Limpiar los datos
     logs_df = log_cleaner(logs_df)
 
-    # Calcular las métricas
     run_all_metrics(logs_df)
 
     print("Procesamiento finalizado")
