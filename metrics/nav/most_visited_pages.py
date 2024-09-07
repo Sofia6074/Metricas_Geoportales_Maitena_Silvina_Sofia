@@ -4,11 +4,8 @@ Este módulo calcula las páginas más visitadas en los logs de navegación.
 
 import polars as pl
 
-def filtrar_urls_vacias(logs_df):
-    """
-    Filtra las URLs vacías en el DataFrame.
-    """
-    return logs_df.filter(pl.col("request_url").is_not_null())
+from metrics.metrics_utils import filtrar_urls_vacias
+
 
 def contar_frecuencia_url(logs_df):
     """
