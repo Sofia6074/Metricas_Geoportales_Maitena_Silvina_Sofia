@@ -13,6 +13,8 @@ def calculate_sessions(map_requests_df):
         (pl.col("ip") + "_" + pl.col("user_agent")).alias("session_id")
     ])
 
+    map_requests_df = map_requests_df.sort(by=["session_id", "timestamp"])
+
     map_requests_df = map_requests_df.with_columns([
         pl.col("timestamp").shift(1).over("session_id").alias("prev_timestamp")
     ])
@@ -31,7 +33,8 @@ def calculate_sessions(map_requests_df):
     ])
 
     map_requests_df = map_requests_df.with_columns([
-        (pl.col("ip") + "_" + pl.col("user_agent") + "_" + pl.col("session_number").cast(pl.Utf8)).alias("unique_session_id")
+        (pl.col("ip") + "_" + pl.col("user_agent") + "_" + pl.col("session_number").cast(pl.Utf8)).alias(
+            "unique_session_id")
     ])
 
     return map_requests_df
