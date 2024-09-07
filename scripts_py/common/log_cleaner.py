@@ -50,6 +50,8 @@ def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
         pl.col("column_1").str.extract(log_pattern, 10).cast(pl.Int64).alias("response_time")
     ])
 
+    data_frame = data_frame.drop("column_1")
+
     return data_frame
 
 def remove_duplicates(data_frame: pl.DataFrame) -> pl.DataFrame:
@@ -101,12 +103,16 @@ def count_filters_robots(data_frame: pl.DataFrame):
     entries_baiduspider = (data_frame.filter(
         pl.col("user_agent").str.contains('Baiduspider')
     ).height)
+    entries_semrushbot = (data_frame.filter(
+        pl.col("user_agent").str.contains('SemrushBot')
+    ).height)
     entries_agesic_crawler = data_frame.filter(
         pl.col("user_agent").str.contains('agesic-crawler')
     ).height
 
     percentile_googlebot = (entries_googlebot / total_entries) * 100
     percentile_baiduspider = (entries_baiduspider / total_entries) * 100
+    percentile_semrushbot = (entries_semrushbot / total_entries) * 100
     percentile_agesic_crawler = (entries_agesic_crawler / total_entries) * 100
 
     logger.info(
@@ -114,6 +120,9 @@ def count_filters_robots(data_frame: pl.DataFrame):
     )
     logger.info(
         "Registros 'Baiduspider': %d (%.2f%%)", entries_baiduspider, percentile_baiduspider
+    )
+    logger.info(
+        "Registros 'SemrushBot': %d (%.2f%%)", entries_semrushbot, percentile_semrushbot
     )
     logger.info(
         "Registros 'agesic-crawler': %d (%.2f%%)", entries_agesic_crawler, percentile_agesic_crawler
@@ -127,7 +136,8 @@ def filter_robots_and_crawlers(data_frame: pl.DataFrame) -> pl.DataFrame:
     return data_frame.filter(
         ~pl.col("user_agent").str.contains('Googlebot') &
         ~pl.col("user_agent").str.contains('Baiduspider') &
-        ~pl.col("user_agent").str.contains('agesic-crawler')
+        ~pl.col("user_agent").str.contains('agesic-crawler') &
+        ~pl.col("user_agent").str.contains('SemrushBot')
     )
 
 def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
