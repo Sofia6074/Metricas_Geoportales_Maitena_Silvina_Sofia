@@ -8,6 +8,7 @@ from scripts_py.classes.logger import Logger
 
 logger = Logger(__name__).get_logger()
 
+
 def initialize_total_entries(data_frame):
     """
     Initializes and returns the total number of entries in the dataframe.
@@ -15,6 +16,7 @@ def initialize_total_entries(data_frame):
     initial_total_entries = data_frame.height
     logger.info("Total registros inicializados: %d", initial_total_entries)
     return initial_total_entries
+
 
 def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
@@ -54,12 +56,14 @@ def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
 
     return data_frame
 
+
 def remove_duplicates(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Removes duplicate rows from the dataframe.
     """
     logger.info("Eliminando entradas duplicadas")
     return data_frame.unique()
+
 
 def handle_null_values(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
@@ -75,12 +79,14 @@ def handle_null_values(data_frame: pl.DataFrame) -> pl.DataFrame:
 
     return data_frame.drop_nulls(subset=["ip", "timestamp", "request_method", "request_url"])
 
+
 def normalize_urls(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Normalizes the URLs by converting them to lowercase.
     """
     logger.info("Normalizando URLs")
     return data_frame.with_columns(pl.col("request_url").str.to_lowercase())
+
 
 def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
@@ -90,6 +96,7 @@ def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     return data_frame.with_columns(
         pl.col("timestamp").str.strptime(pl.Datetime, format="%d/%b/%Y:%H:%M:%S %z", strict=False)
     )
+
 
 def count_filters_robots(data_frame: pl.DataFrame):
     """
@@ -128,6 +135,7 @@ def count_filters_robots(data_frame: pl.DataFrame):
         "Registros 'agesic-crawler': %d (%.2f%%)", entries_agesic_crawler, percentile_agesic_crawler
     )
 
+
 def filter_robots_and_crawlers(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Filters out known bots and crawlers from the dataframe.
@@ -139,6 +147,7 @@ def filter_robots_and_crawlers(data_frame: pl.DataFrame) -> pl.DataFrame:
         ~pl.col("user_agent").str.contains('agesic-crawler') &
         ~pl.col("user_agent").str.contains('SemrushBot')
     )
+
 
 def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
@@ -155,6 +164,7 @@ def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
 
     return data_frame
 
+
 def remove_internal_requests(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Removes internal requests (e.g., from localhost)
@@ -166,12 +176,14 @@ def remove_internal_requests(data_frame: pl.DataFrame) -> pl.DataFrame:
           ((pl.col("request_method") == "OPTIONS") & (pl.col("request_url") == "*")))
     )
 
+
 def preview_logs(data_frame: pl.DataFrame, num=5):
     """
     Displays a preview of the first few rows of the dataframe.
     """
     logger.info("Revisando los primeros registros del DataFrame")
     print(data_frame.head(num))
+
 
 def log_cleaner(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
