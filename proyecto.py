@@ -73,7 +73,7 @@ if __name__ == "__main__":
     AWS_SECRET_KEY = aws_secrets["AWS_SECRET_ACCESS_KEY"]
     BUCKET_NAME = 'file-bucket-container'
     OBJECT_KEY = 'filebeat-geoportal-access100MB.csv'
-    FILE_PATH = '/tmp/filebeat-geoportal-access100MB.csv'
+    FILE_PATH = 'filebeat-geoportal-access100MB.csv'
 
     download_file_from_s3(
         BUCKET_NAME, OBJECT_KEY, FILE_PATH, AWS_ACCESS_KEY, AWS_SECRET_KEY
