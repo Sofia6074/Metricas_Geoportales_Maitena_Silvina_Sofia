@@ -1,56 +1,36 @@
-import os
-import sys
-from pyspark.sql import SparkSession, Window
-from pyspark.sql.functions import col, split, trim, desc, lag, when, avg
+import polars as pl
+from metrics.metrics_utils import calculate_sessions
+from scripts_py.classes.logger import Logger
 
+# Crear una instancia de Logger
+logger_instance = Logger(__name__).get_logger()
 
-def create_spark_session(app_name: str, host: str) -> SparkSession:
-    try:
-        spark = SparkSession.builder \
-            .appName(app_name) \
-            .config("spark.driver.host", host) \
-            .getOrCreate()
-        spark.sparkContext.setLogLevel("ERROR")
-        return spark
-    except Exception as e:
-        print("Ocurrió un error al crear la sesión de Spark")
-        sys.exit(1)
+def calculate_average_stepback_actions(logs_df):
+    """
+    Calcula el promedio de veces que los usuarios vuelven hacia atrás por sesión
+    detectando si un usuario regresa a una URL que ya visitó y considerando 3 segundos de tiempo entre solicitudes.
+    """
 
+    session_df = calculate_sessions(logs_df)
+    session_df = session_df.with_columns([
+        pl.col("timestamp").cast(pl.Datetime).alias("timestamp"),
+        pl.col("request_url").shift(1).over("session_id").alias("previous_url"),
+        (pl.col("timestamp") - pl.col("timestamp").shift(1).over("session_id")).alias("time_diff")
+    ])
+    session_df = session_df.with_columns(
+        (pl.col("time_diff").cast(pl.Float64) / 1_000_000).alias("time_diff_seconds")
+    )
 
-# Ruta del archivo CSV
-csv_directory = 'C:/WebServerLogs/'
-csv_file_name = 'parsed_logs_with_headers.csv'
-csv_file_path = os.path.join(csv_directory, csv_file_name)
+    # Filtrar retrocesos considerando solo los que tienen 3 seg de diferencia de tiempo
+    retrocesos = session_df.filter(
+        (pl.col("request_url") == pl.col("previous_url")) &
+        (pl.col("time_diff_seconds") > 3)
+    ).group_by("session_id").agg([
+        pl.count().alias("stepback_count")
+    ])
 
-spark = create_spark_session("Geoportales", "127.0.0.1")
-df = spark.read.csv(csv_file_path, header=True, sep=',', quote='"', escape='"')
+    average_stepback = retrocesos.select(
+        pl.col("stepback_count").mean().alias("average_stepback_actions")
+    )[0, "average_stepback_actions"]
 
-parsed_logs_df = df.withColumn("request_method", split(trim(col("request")), " ")[0]) \
-                   .withColumn("request_url", split(trim(col("request")), " ")[1]) \
-                   .withColumn("http_version", split(trim(col("request")), " ")[2]) \
-                   .select(
-                       col("ip"),
-                       col("timestamp"),
-                       col("request_method"),
-                       col("request_url"),
-                       col("http_version"),
-                       col("status_code").cast("integer"),
-                       col("response_size").cast("integer"),
-                       col("referrer"),
-                       col("user_agent"),
-                       col("response_time").cast("integer")
-                   )
-
-
-window_spec = Window.partitionBy("ip").orderBy("timestamp")
-parsed_logs_df = parsed_logs_df.withColumn("previous_request_url", lag("request_url", 1).over(window_spec))
-parsed_logs_df = parsed_logs_df.withColumn(
-    "returned_to_previous_page",
-    when(col("request_url") == col("previous_request_url"), 1).otherwise(0)
-)
-
-average_returns_per_user = parsed_logs_df.groupBy("ip").agg(avg("returned_to_previous_page").alias("average_returns")).orderBy(desc("average_returns"))
-average_returns_per_user.show(10, truncate=False)
-
-average_return_all_users = parsed_logs_df.agg(avg("returned_to_previous_page").alias("average_return_all_users"))
-average_return_all_users.show(truncate=False)
+    logger_instance.info(f"Average Stepback Actions per Session: {average_stepback}")
