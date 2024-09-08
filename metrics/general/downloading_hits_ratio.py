@@ -24,12 +24,18 @@ def downloadable_resources_hits_ratio(logs_df):
 
     exclusion_condition = pl.lit(False)
     for pattern in exclusion_patterns:
-        exclusion_condition = exclusion_condition | pl.col("request_url").str.contains(pattern)
+        exclusion_condition = (
+                exclusion_condition |
+                pl.col("request_url").str.contains(pattern)
+        )
     logs_df = logs_df.filter(~exclusion_condition)
 
     combined_condition = pl.lit(False)
     for pattern in downloadable_patterns:
-        combined_condition = combined_condition | pl.col("request_url").str.contains(pattern)
+        combined_condition = (
+                combined_condition |
+                pl.col("request_url").str.contains(pattern)
+        )
     downloads_df = logs_df.filter(combined_condition)
 
     download_counts = downloads_df.group_by("request_url").agg([
@@ -37,4 +43,4 @@ def downloadable_resources_hits_ratio(logs_df):
     ])
 
     total_downloads = download_counts["download_count"].sum()
-    logger_instance.info(f"Descargas totales: {total_downloads}")
+    logger_instance.info(f"Total downloads: {total_downloads}")
