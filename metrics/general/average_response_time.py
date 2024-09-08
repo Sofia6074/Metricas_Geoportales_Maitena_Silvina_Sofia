@@ -1,13 +1,13 @@
 """
-Este módulo contiene la función para calcular el tiempo de respuesta promedio,
-máximo y mínimo a partir de un DataFrame de logs.
+This module contains the function to calculate the average, maximum, and minimum
+response time from a DataFrame of logs.
 """
 
 import polars as pl
 
 def calculate_average_response_time(logs_df):
     """
-    Calcula el tiempo de respuesta promedio, máximo y mínimo utilizando Polars.
+    Calculates the average, maximum, and minimum response time using Polars.
     """
     avg_response_time = logs_df.select(
         pl.col("response_time").mean().alias("avg_response_time")
