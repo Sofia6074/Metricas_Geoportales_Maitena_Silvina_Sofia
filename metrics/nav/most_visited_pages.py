@@ -1,26 +1,26 @@
 """
-Este módulo calcula las páginas más visitadas en los logs de navegación.
+This module calculates the most visited pages in navigation logs.
 """
 
 import polars as pl
+from metrics.metrics_utils import filter_empty_urls
 
-from metrics.metrics_utils import filtrar_urls_vacias
 
-
-def contar_frecuencia_url(logs_df):
+def count_url_frequency(logs_df):
     """
-    Cuenta la frecuencia de visitas por URL.
+    Counts the visit frequency per URL.
     """
     return logs_df.group_by("request_url").agg(
         pl.col("request_url").count().alias("visit_count")
     )
 
+
 def calculate_nav_most_visited_pages(logs_df):
     """
-    Calcula las páginas más visitadas en los logs de navegación.
+    Calculates the most visited pages in navigation logs.
     """
-    df_frecuencia_url_ordenado = contar_frecuencia_url(
-        filtrar_urls_vacias(logs_df)
+    sorted_url_frequency_df = count_url_frequency(
+        filter_empty_urls(logs_df)
     ).sort("visit_count", descending=True)
 
-    print(df_frecuencia_url_ordenado.head(10))
+    print(sorted_url_frequency_df.head(10))

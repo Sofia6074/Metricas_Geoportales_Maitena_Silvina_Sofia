@@ -1,7 +1,7 @@
 """
-Este módulo clasifica a los usuarios en perfiles (alto, medio, ocasional) basados en
-sus visitas y tiempo de permanencia en la página web. También realiza cálculos adicionales
-relacionados con los perfiles de usuario.
+This module classifies users into profiles (high, medium, occasional) based on
+their visits and time spent on the website. It also performs additional
+calculations related to user profiles.
 """
 
 import polars as pl
@@ -9,7 +9,7 @@ from metrics.metrics_utils import calculate_sessions
 
 def print_user_profile_counts(logs_df):
     """
-    Imprime el porcentaje de usuarios por perfil.
+    Prints the percentage of users per profile.
     """
     total_users = logs_df.select(pl.col("ip")).n_unique()
     profile_counts = logs_df.group_by("user_profile").agg([
@@ -22,23 +22,23 @@ def print_user_profile_counts(logs_df):
 
     print(profile_counts)
 
+
 def calculate_user_categorized_metrics(logs_df):
     """
-    Placeholder para cálculos adicionales basados en usuarios categorizados.
+    Placeholder for additional calculations based on categorized users.
     """
-    # Este espacio está reservado para cálculos adicionales futuros.
-    # logs_df se utilizará aquí en el futuro.
+    # This space is reserved for future additional calculations.
+    # logs_df will be used here in the future.
     logs_df.head(10)
+
 
 def classify_user_profiles(logs_df):
     """
-    Clasifica a los usuarios en tres perfiles según el número
-    de visitas y el tiempo total de permanencia.
+    Classifies users into three profiles based on the number
+    of visits and total time spent.
     """
 
     sessions_df = calculate_sessions(logs_df)
-
-    logs_df.write_csv("resultado_logs.csv")
 
     user_stats = sessions_df.group_by("ip").agg([
         pl.col("session_id").count().alias("visits"),
@@ -52,12 +52,12 @@ def classify_user_profiles(logs_df):
         pl.when(
             (pl.col("visits") > high_profile_threshold) &
             (pl.col("total_time_spent") > high_profile_threshold)
-        ).then(1)  # Perfil alto
+        ).then(1)  # High profile
         .when(
             (pl.col("visits") > average_profile_threshold) &
             (pl.col("total_time_spent") > average_profile_threshold)
-        ).then(2)  # Perfil medio
-        .otherwise(3).alias("user_profile")  # Usuarios ocasionales
+        ).then(2)  # Medium profile
+        .otherwise(3).alias("user_profile")  # Occasional users
     ])
 
     logs_df = logs_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
