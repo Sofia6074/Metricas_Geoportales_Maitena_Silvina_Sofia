@@ -1,5 +1,5 @@
 """
-Este módulo contiene utilidades para el cálculo de sesiones en los logs de mapas.
+Este módulo contiene utilidades para el cálculo metrics.
 """
 
 import polars as pl
@@ -40,3 +40,9 @@ def calculate_sessions(map_requests_df):
     ])
 
     return map_requests_df
+
+def filtrar_urls_vacias(logs_df):
+    """
+    Filtra las URLs vacías en el DataFrame.
+    """
+    return logs_df.filter(pl.col("request_url").is_not_null())
