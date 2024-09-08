@@ -3,14 +3,17 @@ from scripts_py.classes.logger import Logger
 
 logger_instance = Logger(__name__).get_logger()
 
+
 def downloadable_resources_hits_ratio(logs_df):
     """
-    Identifies and counts the number of times resources are downloaded, excluding irrelevant services.
+    Identifies and counts the number of times resources are downloaded,
+    excluding irrelevant services.
     """
 
     # Contenido descargable
     downloadable_patterns = [
-        ".pdf", ".zip", ".csv", ".shp", ".xls", ".xlsx", ".kml", ".kmz", ".tif", ".las", ".jpg",
+        ".pdf", ".zip", ".csv", ".shp", ".xls", ".xlsx",
+        ".kml", ".kmz", ".tif", ".las", ".jpg",
         "download=true", "request=GetFeature"
     ]
 
