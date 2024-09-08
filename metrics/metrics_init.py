@@ -6,6 +6,7 @@ from metrics.general.average_response_time import calculate_average_response_tim
 from metrics.general.average_time_spent_on_site import (
     calculate_average_time_spent_on_site,
 )
+from metrics.general.downloading_hits_ratio import downloadable_resources_hits_ratio
 from metrics.general.error_rate_success_rate import calculate_error_rate_success_rate
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom,
@@ -28,6 +29,7 @@ def run_all_metrics(logs_df):
     calculate_error_rate_success_rate(logs_df)
     calculate_average_time_spent_on_site(logs_df)
     calculate_average_response_time(logs_df)
+    downloadable_resources_hits_ratio(logs_df)
 
     print("Métricas de tiempo:")
     calculate_maximum_stable_value_zoom(logs_df)
