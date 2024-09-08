@@ -5,7 +5,7 @@ a partir de los logs filtrados.
 
 import polars as pl
 
-from metrics.metrics_utils import filtrar_urls_vacias, calculate_sessions
+from metrics.metrics_utils import filter_empty_urls, calculate_sessions
 
 
 def calculate_average_pages_viewed_per_session(logs_df):
@@ -16,7 +16,7 @@ def calculate_average_pages_viewed_per_session(logs_df):
     :return: None
     """
 
-    logs_df_without_null_url = filtrar_urls_vacias(logs_df)
+    logs_df_without_null_url = filter_empty_urls(logs_df)
 
     sessions_df = calculate_sessions(logs_df_without_null_url)
 

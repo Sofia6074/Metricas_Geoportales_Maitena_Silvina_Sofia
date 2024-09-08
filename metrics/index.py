@@ -3,8 +3,9 @@ Este módulo ejecuta todas las métricas utilizando un DataFrame de logs.
 """
 
 from metrics.general.average_response_time import calculate_average_response_time
-from metrics.general.average_time_spent_on_site import (
-    calculate_average_time_spent_on_site,
+from metrics.general.average_time_spent_on_site import calculate_average_time_spent_on_site
+from metrics.general.average_time_spent_per_page import (
+    calculate_average_time_spent_per_page,
 )
 from metrics.general.error_rate_success_rate import calculate_error_rate_success_rate
 from metrics.maps.maximum_stable_value_zoom import (
@@ -28,8 +29,9 @@ def run_all_metrics(logs_df):
 
     print("Métricas generales:")
     calculate_error_rate_success_rate(logs_df)
-    calculate_average_time_spent_on_site(logs_df)
+    calculate_average_time_spent_per_page(logs_df)
     calculate_average_response_time(logs_df)
+    calculate_average_time_spent_on_site(logs_df)
 
     print("Métricas de tiempo:")
     calculate_maximum_stable_value_zoom(logs_df)

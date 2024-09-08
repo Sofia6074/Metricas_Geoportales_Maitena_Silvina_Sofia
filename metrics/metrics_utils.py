@@ -41,8 +41,25 @@ def calculate_sessions(map_requests_df):
 
     return map_requests_df
 
-def filtrar_urls_vacias(logs_df):
+def filter_empty_urls(logs_df):
     """
     Filtra las URLs vacías en el DataFrame.
     """
     return logs_df.filter(pl.col("request_url").is_not_null())
+
+def format_average_time(average_time):
+    hours, remainder = divmod(average_time.total_seconds(), 3600)
+    minutes, seconds = divmod(remainder, 60)
+    formatted_string = f"{int(hours)} horas {int(minutes)} minutos {int(seconds)} segundos"
+    return formatted_string
+
+def filter_session_outliers(logs_df):
+    """
+    Filtra los outliers de sesiones mayores a 12 horas (12 * 60 minutos * 60 segundos * 1_000_000 microsegundos)
+    """
+    time_threshold = 12 * 60 * 60 * 1_000_000
+    session_df = logs_df.filter(
+        (pl.col("time_spent").is_not_null()) &
+        (pl.col("time_spent") > 0) &
+        (pl.col("time_spent") <= time_threshold)
+    )

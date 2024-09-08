@@ -38,8 +38,6 @@ def classify_user_profiles(logs_df):
 
     sessions_df = calculate_sessions(logs_df)
 
-    logs_df.write_csv("resultado_logs.csv")
-
     user_stats = sessions_df.group_by("ip").agg([
         pl.col("session_id").count().alias("visits"),
         pl.col("time_diff").sum().alias("total_time_spent")
