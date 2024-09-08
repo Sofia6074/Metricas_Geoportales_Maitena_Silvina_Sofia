@@ -11,6 +11,7 @@ from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom,
 )
 from metrics.nav.most_visited_pages import calculate_nav_most_visited_pages
+from metrics.user.average_stepback_actions import calculate_average_stepback_actions
 from metrics.users.average_pages_viewed_per_visitor import (
     calculate_average_pages_viewed_per_visitor,
 )
@@ -38,5 +39,6 @@ def run_all_metrics(logs_df):
     print("Métricas de usuarios:")
     calculate_average_pages_viewed_per_visitor(logs_df)
     calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
+    calculate_average_stepback_actions(logs_df)
 
     print("Todas las métricas han sido ejecutadas.")
