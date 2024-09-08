@@ -1,13 +1,13 @@
 """
-Este módulo cuenta las páginas más visitadas en los logs del servidor web y las muestra.
+This module counts the most visited pages in the web server logs and displays them.
 """
 from pyspark.sql.functions import desc
 
 def calculate_most_visited_pages(logs_df):
     """
-    Calcula las páginas más visitadas en los logs del servidor web.
+    Calculates the most visited pages in the web server logs.
     """
     most_visited_pages = logs_df.groupBy("request_url").count().orderBy(desc("count"))
 
-    print("URLs más visitadas:")
+    print("Most visited URLs:")
     most_visited_pages.show(10, truncate=False)

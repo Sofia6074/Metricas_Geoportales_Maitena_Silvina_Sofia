@@ -1,18 +1,17 @@
 """
-Este módulo contiene la función para calcular el promedio de páginas vistas por sesión
-a partir de los logs filtrados.
+This module contains the function to calculate the average pages viewed per session
+from the filtered logs.
 """
 
 import polars as pl
-
 from metrics.metrics_utils import filter_empty_urls, calculate_sessions
 
 
 def calculate_average_pages_viewed_per_session(logs_df):
     """
-    Calcula el promedio de páginas vistas por sesión a partir de los logs.
+    Calculates the average pages viewed per session from the logs.
 
-    :param logs_df: DataFrame de logs que contiene las solicitudes del sitio web.
+    :param logs_df: DataFrame containing the website requests.
     :return: None
     """
 

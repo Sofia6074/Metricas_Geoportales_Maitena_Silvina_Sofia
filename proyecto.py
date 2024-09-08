@@ -1,6 +1,6 @@
 """
-Este módulo realiza el procesamiento de logs usando Polars.
-Incluye la descarga de archivos CSV desde AWS S3, limpieza de datos y cálculo de métricas.
+This module processes logs using Polars.
+It includes downloading CSV files from AWS S3, cleaning the data, and calculating metrics.
 """
 
 import json
@@ -13,7 +13,7 @@ from metrics.index import run_all_metrics
 
 def get_aws_credentials():
     """
-    Obtiene las credenciales de AWS desde AWS Secrets Manager.
+    Retrieves AWS credentials from AWS Secrets Manager.
     """
     secret_name = "prod/AppBeta/AWS_Credentials"
     region_name = "us-east-2"
@@ -41,7 +41,7 @@ def download_file_from_s3(
     aws_access_key_id: str, aws_secret_access_key: str
 ):
     """
-    Descarga un archivo desde un bucket de S3 y lo guarda en la ubicación especificada.
+    Downloads a file from an S3 bucket and saves it to the specified location.
     """
     s3_client = boto3.client(
         's3',
@@ -53,7 +53,7 @@ def download_file_from_s3(
 
 def read_logs(file_path: str) -> pl.DataFrame:
     """
-    Lee un archivo CSV usando Polars y lo devuelve como un DataFrame.
+    Reads a CSV file using Polars and returns it as a DataFrame.
     """
     logger_instance = Logger(__name__).get_logger()
 
@@ -62,7 +62,7 @@ def read_logs(file_path: str) -> pl.DataFrame:
         return logs_dataframe
     except Exception:
         logger_instance.error(
-            "Ocurrió un error al leer el archivo CSV con Polars",
+            "An error occurred while reading the CSV file with Polars",
             exc_info=True
         )
         raise
@@ -85,4 +85,4 @@ if __name__ == "__main__":
 
     run_all_metrics(logs_df)
 
-    print("Procesamiento finalizado")
+    print("Processing completed")

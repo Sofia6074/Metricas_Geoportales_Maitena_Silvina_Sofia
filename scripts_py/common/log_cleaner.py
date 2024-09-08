@@ -1,6 +1,6 @@
 """
-Este módulo proporciona funciones para limpiar y transformar
-los datos de los logs del servidor web usando Polars.
+This module provides functions to clean and transform
+web server log data using Polars.
 """
 
 import polars as pl
@@ -14,7 +14,7 @@ def initialize_total_entries(data_frame):
     Initializes and returns the total number of entries in the dataframe.
     """
     initial_total_entries = data_frame.height
-    logger.info("Total registros inicializados: %d", initial_total_entries)
+    logger.info("Total entries initialized: %d", initial_total_entries)
     return initial_total_entries
 
 
@@ -22,14 +22,14 @@ def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Formats the logs by extracting relevant fields from the raw log string.
     """
-    logger.info("Formateando los logs")
+    logger.info("Formatting logs")
 
     log_pattern = (
         r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] '
         r'"(\S+)\s(\S+)\s(HTTP/\d\.\d)" (\d+) (\d+) "(.*?)" "(.*?)" Time (\d+)'
     )
 
-    # Reemplazos iniciales
+    # Initial replacements
     data_frame = data_frame.with_columns(
         pl.col("column_1").str.replace_all('""', '"')
     ).with_columns(
@@ -38,7 +38,7 @@ def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
         pl.col("column_1").str.replace_all('%2C', ',')
     )
 
-    # Extracción de datos utilizando expresiones regulares
+    # Extract data using regular expressions
     data_frame = data_frame.with_columns([
         pl.col("column_1").str.extract(log_pattern, 1).alias("ip"),
         pl.col("column_1").str.extract(log_pattern, 2).alias("timestamp"),
@@ -61,7 +61,7 @@ def remove_duplicates(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Removes duplicate rows from the dataframe.
     """
-    logger.info("Eliminando entradas duplicadas")
+    logger.info("Removing duplicate entries")
     return data_frame.unique()
 
 
@@ -69,7 +69,7 @@ def handle_null_values(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Handles null values by filling or dropping them.
     """
-    logger.info("Manejando valores nulos")
+    logger.info("Handling null values")
 
     data_frame = data_frame.with_columns([
         pl.col("status_code").fill_null(0),
@@ -84,7 +84,7 @@ def normalize_urls(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Normalizes the URLs by converting them to lowercase.
     """
-    logger.info("Normalizando URLs")
+    logger.info("Normalizing URLs")
     return data_frame.with_columns(pl.col("request_url").str.to_lowercase())
 
 
@@ -92,7 +92,7 @@ def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Converts the timestamp to datetime format.
     """
-    logger.info("Convirtiendo timestamp a formato datetime")
+    logger.info("Converting timestamp to datetime format")
     return data_frame.with_columns(
         pl.col("timestamp").str.strptime(pl.Datetime, format="%d/%b/%Y:%H:%M:%S %z", strict=False)
     )
@@ -107,12 +107,12 @@ def count_filters_robots(data_frame: pl.DataFrame):
     entries_googlebot = data_frame.filter(
         pl.col("user_agent").str.contains('Googlebot')
     ).height
-    entries_baiduspider = (data_frame.filter(
+    entries_baiduspider = data_frame.filter(
         pl.col("user_agent").str.contains('Baiduspider')
-    ).height)
-    entries_semrushbot = (data_frame.filter(
+    ).height
+    entries_semrushbot = data_frame.filter(
         pl.col("user_agent").str.contains('SemrushBot')
-    ).height)
+    ).height
     entries_agesic_crawler = data_frame.filter(
         pl.col("user_agent").str.contains('agesic-crawler')
     ).height
@@ -123,16 +123,16 @@ def count_filters_robots(data_frame: pl.DataFrame):
     percentile_agesic_crawler = (entries_agesic_crawler / total_entries) * 100
 
     logger.info(
-        "Registros 'Googlebot': %d (%.2f%%)", entries_googlebot, percentile_googlebot
+        "Googlebot records: %d (%.2f%%)", entries_googlebot, percentile_googlebot
     )
     logger.info(
-        "Registros 'Baiduspider': %d (%.2f%%)", entries_baiduspider, percentile_baiduspider
+        "Baiduspider records: %d (%.2f%%)", entries_baiduspider, percentile_baiduspider
     )
     logger.info(
-        "Registros 'SemrushBot': %d (%.2f%%)", entries_semrushbot, percentile_semrushbot
+        "SemrushBot records: %d (%.2f%%)", entries_semrushbot, percentile_semrushbot
     )
     logger.info(
-        "Registros 'agesic-crawler': %d (%.2f%%)", entries_agesic_crawler, percentile_agesic_crawler
+        "agesic-crawler records: %d (%.2f%%)", entries_agesic_crawler, percentile_agesic_crawler
     )
 
 
@@ -140,7 +140,7 @@ def filter_robots_and_crawlers(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Filters out known bots and crawlers from the dataframe.
     """
-    logger.info("Eliminando los siguientes registros de bots y crawlers:")
+    logger.info("Removing the following bot and crawler records:")
     return data_frame.filter(
         ~pl.col("user_agent").str.contains('Googlebot') &
         ~pl.col("user_agent").str.contains('Baiduspider') &
@@ -153,7 +153,7 @@ def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Filters out static files (e.g., CSS, JS, images) from the dataframe.
     """
-    logger.info("Eliminando los siguientes archivos estáticos:")
+    logger.info("Removing the following static files:")
     static_file_patterns = [
         r'/plugins/system/jcemediabox/', r'\.css$', r'\.js$',
         r'\.png$', r'\.jpg$', r'\.gif$', r'favicon\.ico$'
@@ -170,7 +170,7 @@ def remove_internal_requests(data_frame: pl.DataFrame) -> pl.DataFrame:
     Removes internal requests (e.g., from localhost)
     or requests with method OPTIONS and URL * from the dataframe.
     """
-    logger.info("Eliminando peticiones internas")
+    logger.info("Removing internal requests")
     return data_frame.filter(
         ~((pl.col("ip") == "127.0.0.1") |
           ((pl.col("request_method") == "OPTIONS") & (pl.col("request_url") == "*")))
@@ -181,7 +181,7 @@ def preview_logs(data_frame: pl.DataFrame, num=5):
     """
     Displays a preview of the first few rows of the dataframe.
     """
-    logger.info("Revisando los primeros registros del DataFrame")
+    logger.info("Previewing the first rows of the DataFrame")
     print(data_frame.head(num))
 
 
@@ -201,10 +201,10 @@ def log_cleaner(data_frame: pl.DataFrame) -> pl.DataFrame:
         data_frame = convert_timestamp(data_frame)
         preview_logs(data_frame)
         initialize_total_entries(data_frame)
-        logger.info("Se han limpiado los datos correctamente")
+        logger.info("Data has been successfully cleaned")
     except (ValueError, TypeError) as exc:
-        logger.error("Error específico al limpiar los datos: %s", str(exc))
+        logger.error("Specific error while cleaning data: %s", str(exc))
     except Exception as exc:  # pylint: disable=W0703
-        logger.error("Error inesperado al limpiar los datos: %s", str(exc))
+        logger.error("Unexpected error while cleaning data: %s", str(exc))
 
     return data_frame

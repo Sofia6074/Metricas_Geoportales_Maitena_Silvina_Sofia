@@ -1,13 +1,12 @@
 """
-Este módulo calcula la proporción de nuevos visitantes respecto al total de visitantes.
+This module calculates the ratio of new visitors to total visitors.
 """
 
 import polars as pl
 
 def calculate_ratio_of_new_visitors_to_all_visitors(logs_df):
     """
-    Calcula y muestra la proporción de nuevos visitantes respecto al total de visitantes.
-
+    Calculates and displays the ratio of new visitors to total visitors.
     """
     total_visitors = logs_df.select("ip").unique().height
 
