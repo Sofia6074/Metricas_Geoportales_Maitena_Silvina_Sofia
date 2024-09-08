@@ -1,43 +1,31 @@
+"""
+Este módulo contiene la función para calcular el promedio de páginas vistas por sesión
+a partir de los logs filtrados.
+"""
+
 import polars as pl
-from datetime import timedelta
+
+from metrics.metrics_utils import filtrar_urls_vacias, calculate_sessions
 
 
-def main():
-    df = pl.read_csv("/Users/admin/Documents/TesisArchivo/parsed_logs_with_headers.csv")
+def calculate_average_pages_viewed_per_session(logs_df):
+    """
+    Calcula el promedio de páginas vistas por sesión a partir de los logs.
 
-    df = df.with_columns(
-        pl.col("timestamp")
-        .str.strptime(pl.Datetime, "%d/%b/%Y:%H:%M:%S %z")
-        .alias("datetime")
+    :param logs_df: DataFrame de logs que contiene las solicitudes del sitio web.
+    :return: None
+    """
+
+    logs_df_without_null_url = filtrar_urls_vacias(logs_df)
+
+    sessions_df = calculate_sessions(logs_df_without_null_url)
+
+    pages_per_session = sessions_df.group_by("unique_session_id").agg(
+        pl.col("request_url").count().alias("pages_viewed")
     )
 
-    df = df.sort(by=["user_agent", "datetime"])
+    average_pages_viewed = pages_per_session.select(
+        pl.col("pages_viewed").mean().alias("avg_pages_viewed")
+    ).to_dict(as_series=False)["avg_pages_viewed"][0]
 
-    df = df.with_columns(
-        [
-            (pl.col("datetime") - pl.col("datetime").shift(1)).alias("time_diff"),
-            (pl.col("user_agent") != pl.col("user_agent").shift(1)).alias(
-                "new_user_agent"
-            ),
-        ]
-    )
-
-    df = df.with_columns(
-        (
-            (pl.col("time_diff") > timedelta(minutes=30)) | pl.col("new_user_agent")
-        ).alias("new_session")
-    )
-
-    df = df.with_columns(pl.col("new_session").cum_sum().alias("session_id"))
-
-    pages_per_session = df.group_by("session_id").agg(
-        pl.col("request").count().alias("pages_viewed")
-    )
-
-    average_pages_per_session = pages_per_session["pages_viewed"].mean()
-
-    print(f"Average Pages Viewed per Session: {average_pages_per_session:.2f}")
-
-
-if __name__ == "__main__":
-    main()
+    print(f"Average Pages Viewed per Session: {average_pages_viewed:.2f}")
