@@ -6,6 +6,9 @@ calculations related to user profiles.
 
 import polars as pl
 from metrics.metrics_utils import calculate_sessions
+from metrics.users.user_categorization.average_pages_viewed_per_user_cat import \
+    calculate_average_pages_viewed_per_session_by_profile
+
 
 def print_user_profile_counts(logs_df):
     """
@@ -29,7 +32,7 @@ def calculate_user_categorized_metrics(logs_df):
     """
     # This space is reserved for future additional calculations.
     # logs_df will be used here in the future.
-    logs_df.head(10)
+    calculate_average_pages_viewed_per_session_by_profile(logs_df)
 
 
 def classify_user_profiles(logs_df):
@@ -61,6 +64,8 @@ def classify_user_profiles(logs_df):
     ])
 
     logs_df = logs_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
+
+    logs_df.write_csv("user_profile.csv")
 
     print_user_profile_counts(logs_df)
 
