@@ -61,22 +61,16 @@ def format_average_time(average_time):
 
 def filter_session_outliers(logs_df):
     """
-    Filters out session outliers greater than 12 hours (43,200 seconds).
+    Filters out session outliers
     """
     session_df = calculate_sessions(logs_df)
 
     session_df = session_df.sort(['unique_session_id', 'timestamp'])
 
-    # Calculate the time difference between consecutive requests in the same session
-    # session_df = session_df.with_columns([
-    #     (pl.col("timestamp").shift(-1) - pl.col("timestamp")).alias("time_spent")
-    # ])
-
     session_df = session_df.with_columns(
         (pl.col("timestamp").diff().over("unique_session_id")).alias("time_spent")
     )
 
-    # Filter out unrealistic session gaps greater than 12 hours
     session_filtered_df = session_df.filter(
         (pl.col("unique_session_id").is_not_null()) &
         (pl.col("time_spent").is_not_null()) &
@@ -86,6 +80,16 @@ def filter_session_outliers(logs_df):
 
     return session_filtered_df
 
+def get_base_url(logs_df):
+    """
+    Filters out the base url from the query params
+    """
+    return logs_df.with_columns(
+        pl.col("request_url")
+        .str.split_exact("?", 1)
+        .struct.rename_fields(["base_url", "query_params"])
+        .alias("fields")
+    ).unnest("fields")
 
 def classify_device_type(logs_df):
     """
