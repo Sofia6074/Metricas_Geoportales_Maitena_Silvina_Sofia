@@ -75,6 +75,7 @@ def filter_session_outliers(logs_df):
 
     # Filter out unrealistic session gaps greater than 12 hours
     session_filtered_df = session_df.filter(
+        (pl.col("unique_session_id").is_not_null()) &
         (pl.col("time_spent").is_not_null()) &
         (pl.col("time_spent") > timedelta(seconds=10)) &
         (pl.col("time_spent") <= timedelta(hours=12))
