@@ -2,6 +2,7 @@
 This module runs all metrics using a DataFrame of logs.
 """
 
+from metrics.general import count_device_usage
 from metrics.general.average_response_time import (
     calculate_average_response_time
 )
@@ -23,12 +24,11 @@ from metrics.maps.maximum_stable_value_zoom import (
 from metrics.nav.most_visited_pages import (
     calculate_nav_most_visited_pages
 )
-from metrics.user.average_stepback_actions import (
-    calculate_average_stepback_actions
-)
 from metrics.users.average_pages_viewed_per_visitor import (
     calculate_average_pages_viewed_per_session
 )
+from metrics.users.average_stepback_actions import (
+    calculate_average_stepback_actions)
 from metrics.users.ratio_of_new_visitors_to_all_visitors import (
     calculate_ratio_of_new_visitors_to_all_visitors
 )
@@ -49,6 +49,7 @@ def run_all_metrics(logs_df):
     calculate_average_response_time(logs_df)
     downloadable_resources_hits_ratio(logs_df)
     calculate_average_time_spent_on_site(logs_df)
+    count_device_usage(logs_df)
 
     print("Time-related metrics:")
     calculate_maximum_stable_value_zoom(logs_df)

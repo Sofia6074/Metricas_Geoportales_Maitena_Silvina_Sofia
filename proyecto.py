@@ -11,6 +11,7 @@ from scripts_py.classes.logger import Logger
 from scripts_py.common.log_cleaner import log_cleaner
 from metrics.index import run_all_metrics
 
+
 def get_aws_credentials():
     """
     Retrieves AWS credentials from AWS Secrets Manager.
