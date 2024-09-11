@@ -1,6 +1,9 @@
+import polars as pl
+
 """
 This module contains utilities for metrics calculation.
 """
+
 from datetime import timedelta
 import polars as pl
 
@@ -82,3 +85,43 @@ def filter_session_outliers(logs_df):
     )
 
     return session_filtered_df
+
+
+def classify_device_type(logs_df):
+    """
+    Classifies the type of device from which the user connects
+    (mobile, tablet, or desktop). This is determined based on
+    the user agent string present in the logs.
+    """
+
+    mobile_patterns = (
+        r"Mobile|Android|iPhone|BlackBerry|Opera Mini|Windows Phone|webOS|"
+        r"Redmi|Samsung"
+    )
+    tablet_patterns = r"iPad|Tablet|Nexus 7|Nexus 10|Kindle|Galaxy Tab"
+    desktop_patterns = r"Windows NT|Macintosh|X11|Linux x86_64"
+
+    logs_df = logs_df.with_columns(pl.lit("unknown").alias("device_type"))
+
+    logs_df = logs_df.with_columns(
+        pl.when(pl.col("user_agent").str.contains(mobile_patterns))
+        .then(pl.lit("mobile"))
+        .otherwise(pl.col("device_type"))
+        .alias("device_type")
+    )
+
+    logs_df = logs_df.with_columns(
+        pl.when(pl.col("user_agent").str.contains(tablet_patterns))
+        .then(pl.lit("tablet"))
+        .otherwise(pl.col("device_type"))
+        .alias("device_type")
+    )
+
+    logs_df = logs_df.with_columns(
+        pl.when(pl.col("user_agent").str.contains(desktop_patterns))
+        .then(pl.lit("desktop"))
+        .otherwise(pl.col("device_type"))
+        .alias("device_type")
+    )
+
+    return logs_df
