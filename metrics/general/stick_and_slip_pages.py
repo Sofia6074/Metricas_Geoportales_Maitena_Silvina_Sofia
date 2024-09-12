@@ -28,7 +28,8 @@ def define_stick_and_slip_pages(logs_df):
     total_single_access_page_views = single_access_df.shape[0]
 
     # Using the Slip and Stick formula
-    slip = total_single_access_page_views / total_entry_page_views if total_entry_page_views > 0 else 0
+    slip = (total_single_access_page_views / total_entry_page_views
+            if total_entry_page_views > 0 else 0)
     stick = 1 - slip
 
     metrics_df = pl.DataFrame({
