@@ -156,7 +156,7 @@ def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
     logger.info("Removing the following static files:")
     static_file_patterns = [
         r'/plugins/system/jcemediabox/', r'\.css$', r'\.js$',
-        r'\.png$', r'\.jpg$', r'\.gif$', r'favicon\.ico$'
+        r'\.png$', r'\.gif$', r'favicon\.ico$'
     ]
 
     for pattern in static_file_patterns:
