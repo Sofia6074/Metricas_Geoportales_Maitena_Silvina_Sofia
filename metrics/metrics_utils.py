@@ -1,11 +1,9 @@
 import polars as pl
+from datetime import timedelta
 
 """
 This module contains utilities for metrics calculation.
 """
-
-from datetime import timedelta
-import polars as pl
 
 
 def calculate_sessions(data_frame):
@@ -19,17 +17,19 @@ def calculate_sessions(data_frame):
         pl.concat_str([pl.col("ip"), pl.col("user_agent")]).alias("session_id")
     ])
 
-    data_frame_with_sessions = data_frame_with_sessions.sort(by=["session_id", "timestamp"])
+    data_frame_with_sessions = data_frame_with_sessions.sort(
+        by=["session_id", "timestamp"])
 
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         pl.col("timestamp").diff().over("session_id").alias("time_diff")
     ])
 
-    # Crear una nueva sesión si la diferencia entre una request y la anterior es mayor a 30 minutos
+    # Crear una nueva sesión si la diferencia entre una request
+    # y la anterior es mayor a 30 minutos
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         (pl.col("time_diff") > timedelta(minutes=30))
-            .cum_sum().over("session_id")
-            .alias("session_segment")
+        .cum_sum().over("session_id")
+        .alias("session_segment")
     ])
 
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
@@ -39,11 +39,13 @@ def calculate_sessions(data_frame):
 
     return data_frame_with_sessions
 
+
 def filter_empty_urls(logs_df):
     """
     Filters empty URLs in the DataFrame.
     """
     return logs_df.filter(pl.col("request_url").is_not_null())
+
 
 def format_average_time(average_time):
     """
@@ -59,6 +61,7 @@ def format_average_time(average_time):
 
     return formatted_string
 
+
 def filter_session_outliers(logs_df):
     """
     Filters out session outliers
@@ -68,7 +71,8 @@ def filter_session_outliers(logs_df):
     session_df = session_df.sort(['unique_session_id', 'timestamp'])
 
     session_df = session_df.with_columns(
-        (pl.col("timestamp").diff().over("unique_session_id")).alias("time_spent")
+        (pl.col("timestamp").diff()
+         .over("unique_session_id")).alias("time_spent")
     )
 
     session_filtered_df = session_df.filter(
