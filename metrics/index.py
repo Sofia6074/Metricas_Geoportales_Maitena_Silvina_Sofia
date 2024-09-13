@@ -16,18 +16,12 @@ from metrics.general.average_time_spent_per_page import (
     calculate_average_time_spent_per_page
 )
 from metrics.general.error_rate_success_rate import (
-<<<<<<< feature/70/stick-and-slip
-    calculate_error_rate_success_rate)
-from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
-from metrics.maps.maximum_stable_value_zoom import (
-    calculate_maximum_stable_value_zoom)
-from metrics.nav.most_visited_pages import calculate_nav_most_visited_pages
-from metrics.users.average_pages_viewed_per_visitor import (
-    calculate_average_pages_viewed_per_session)
-from metrics.users.average_stepback_actions import calculate_average_stepback_actions
-=======
     calculate_error_rate_success_rate
 )
+from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
+from metrics.maps.average_zoom_response_time import (
+    calculate_average_response_time_during_zoom
+    )
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom
 )
@@ -39,7 +33,6 @@ from metrics.users.average_pages_viewed_per_visitor import (
 )
 from metrics.users.average_stepback_actions import (
     calculate_average_stepback_actions)
->>>>>>> develop
 from metrics.users.ratio_of_new_visitors_to_all_visitors import (
     calculate_ratio_of_new_visitors_to_all_visitors
 )
@@ -65,6 +58,7 @@ def run_all_metrics(logs_df):
 
     print("Time-related metrics:")
     calculate_maximum_stable_value_zoom(logs_df)
+    calculate_average_response_time_during_zoom(logs_df)
 
     print("Navigation metrics:")
     calculate_nav_most_visited_pages(logs_df)
