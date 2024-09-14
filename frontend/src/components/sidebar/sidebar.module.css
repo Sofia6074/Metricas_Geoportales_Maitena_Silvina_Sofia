@@ -1,25 +1,26 @@
 .sidebar {
     width: 250px;
-    background-color: #ffffff;
-    border-right: 1px solid #e5e7eb;
     height: 100vh;
     padding: 20px;
     position: fixed;
+    background-color: var(--color-light-gray);
+    border-right: 1px solid var(--color-border);
+    color: var(--color-text);
 }
 
 .logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
 }
 
 .logo h1 {
-    color: #137AA8;
-    font-size: 20px;
+    color: var(--color-primary);
+    font-size: 30px;
 }
 
 .upload {
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -29,24 +30,25 @@
 
 .fileLabel {
     display: block;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border);
     padding: 10px;
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
-    color: #999;
+    color: var(--color-secondary);
     font-size: 14px;
-}
-
-.menu {
-    margin-top: 30px;
 }
 
 .menu p {
+    padding: 10px 0;
     font-weight: 600;
     font-size: 14px;
-    color: #888;
+    color: var(--color-secondary);
     margin-bottom: 10px;
+}
+
+.menu ul {
+    list-style-type: none;
 }
 
 .menuItem {
@@ -59,6 +61,6 @@
 }
 
 .menuItem:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-background);
     border-radius: 8px;
 }

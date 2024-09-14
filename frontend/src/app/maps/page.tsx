@@ -1,5 +1,9 @@
+import Breadcrumb from "@/components/breadcrumb/breadcrumb";
+
 export default function Maps() {
     return (
-        <h1>Maps</h1>
+        <>
+            <Breadcrumb text={"Maps"} />
+        </>
     )
 }

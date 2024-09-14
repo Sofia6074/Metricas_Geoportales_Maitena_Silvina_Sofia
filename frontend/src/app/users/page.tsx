@@ -1,5 +1,9 @@
+import Breadcrumb from "@/components/breadcrumb/breadcrumb";
+
 export default function Users() {
     return (
-        <h1>Users</h1>
+        <>
+            <Breadcrumb text={"Users"} />
+        </>
     )
 }

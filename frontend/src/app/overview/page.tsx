@@ -1,5 +1,9 @@
+import Breadcrumb from "@/components/breadcrumb/breadcrumb";
+
 export default function Overview() {
     return (
-        <h1>Overview</h1>
+        <>
+            <Breadcrumb text={"Overview"} />
+        </>
     )
 }

@@ -19,7 +19,7 @@ export default function Sidebar() {
 				<p>MENU</p>
 				<ul>
 					<li>
-						<Link href="/overview" className={styles.menuItem}>
+						<Link href="/" className={styles.menuItem}>
 							<Icon iconName="boxes-outline" size={20} />
 							Overview
 						</Link>

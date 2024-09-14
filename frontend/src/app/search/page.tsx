@@ -1,5 +1,9 @@
+import Breadcrumb from "@/components/breadcrumb/breadcrumb";
+
 export default function Search() {
     return (
-        <h1>Search</h1>
+        <>
+            <Breadcrumb text={"Search"} />
+        </>
     )
 }

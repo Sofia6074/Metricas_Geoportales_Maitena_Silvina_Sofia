@@ -1,5 +1,9 @@
+import Breadcrumb from "@/components/breadcrumb/breadcrumb";
+
 export default function Navigability() {
     return (
-        <h1>Navigability</h1>
+        <>
+            <Breadcrumb text={"Navigability"} />
+        </>
     )
 }
