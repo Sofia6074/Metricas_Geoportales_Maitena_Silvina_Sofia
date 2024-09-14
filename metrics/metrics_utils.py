@@ -1,11 +1,9 @@
 import polars as pl
+from datetime import timedelta
 
 """
 This module contains utilities for metrics calculation.
 """
-
-from datetime import timedelta
-import polars as pl
 
 
 def calculate_sessions(data_frame):
@@ -19,17 +17,19 @@ def calculate_sessions(data_frame):
         pl.concat_str([pl.col("ip"), pl.col("user_agent")]).alias("session_id")
     ])
 
-    data_frame_with_sessions = data_frame_with_sessions.sort(by=["session_id", "timestamp"])
+    data_frame_with_sessions = data_frame_with_sessions.sort(
+        by=["session_id", "timestamp"])
 
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         pl.col("timestamp").diff().over("session_id").alias("time_diff")
     ])
 
-    # Crear una nueva sesión si la diferencia entre una request y la anterior es mayor a 30 minutos
+    # Crear una nueva sesión si la diferencia entre una request
+    # y la anterior es mayor a 30 minutos
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         (pl.col("time_diff") > timedelta(minutes=30))
-            .cum_sum().over("session_id")
-            .alias("session_segment")
+        .cum_sum().over("session_id")
+        .alias("session_segment")
     ])
 
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
@@ -39,11 +39,13 @@ def calculate_sessions(data_frame):
 
     return data_frame_with_sessions
 
+
 def filter_empty_urls(logs_df):
     """
     Filters empty URLs in the DataFrame.
     """
     return logs_df.filter(pl.col("request_url").is_not_null())
+
 
 def format_average_time(average_time):
     """
@@ -59,24 +61,20 @@ def format_average_time(average_time):
 
     return formatted_string
 
+
 def filter_session_outliers(logs_df):
     """
-    Filters out session outliers greater than 12 hours (43,200 seconds).
+    Filters out session outliers
     """
     session_df = calculate_sessions(logs_df)
 
     session_df = session_df.sort(['unique_session_id', 'timestamp'])
 
-    # Calculate the time difference between consecutive requests in the same session
-    # session_df = session_df.with_columns([
-    #     (pl.col("timestamp").shift(-1) - pl.col("timestamp")).alias("time_spent")
-    # ])
-
     session_df = session_df.with_columns(
-        (pl.col("timestamp").diff().over("unique_session_id")).alias("time_spent")
+        (pl.col("timestamp").diff()
+         .over("unique_session_id")).alias("time_spent")
     )
 
-    # Filter out unrealistic session gaps greater than 12 hours
     session_filtered_df = session_df.filter(
         (pl.col("unique_session_id").is_not_null()) &
         (pl.col("time_spent").is_not_null()) &
@@ -85,6 +83,18 @@ def filter_session_outliers(logs_df):
     )
 
     return session_filtered_df
+
+
+def get_base_url(logs_df):
+    """
+    Filters out the base url from the query params
+    """
+    return logs_df.with_columns(
+        pl.col("request_url")
+        .str.split_exact("?", 1)
+        .struct.rename_fields(["base_url", "query_params"])
+        .alias("fields")
+    ).unnest("fields")
 
 
 def classify_device_type(logs_df):

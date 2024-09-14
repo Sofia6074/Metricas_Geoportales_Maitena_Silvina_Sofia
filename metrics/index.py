@@ -2,15 +2,30 @@
 This module runs all metrics using a DataFrame of logs.
 """
 
+from metrics.general import count_device_usage
 from metrics.general.average_response_time import (
-    calculate_average_response_time)
+    calculate_average_response_time
+)
 from metrics.general.average_time_spent_on_site import (
-    calculate_average_time_spent_on_site)
+    calculate_average_time_spent_on_site
+)
+from metrics.general.downloading_hits_ratio import (
+    downloadable_resources_hits_ratio
+)
 from metrics.general.average_time_spent_per_page import (
-    calculate_average_time_spent_per_page)
-from metrics.general.count_device_usage import count_device_usage
+    calculate_average_time_spent_per_page
+)
 from metrics.general.error_rate_success_rate import (
-    calculate_error_rate_success_rate)
+    calculate_error_rate_success_rate
+)
+from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
+from metrics.maps.average_zoom_response_time import (
+    calculate_average_response_time_during_zoom
+    )
+from metrics.maps.maximum_stable_value_zoom import (
+    calculate_maximum_stable_value_zoom
+)
+from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
 from metrics.nav.most_visited_pages import calculate_nav_most_visited_pages
@@ -18,9 +33,20 @@ from metrics.search.related_search_parameter_consecutive import calculate_relate
 from metrics.users.average_pages_viewed_per_visitor import (
     calculate_average_pages_viewed_per_session)
 from metrics.users.average_stepback_actions import calculate_average_stepback_actions
+from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
+from metrics.users.average_pages_viewed_per_visitor import (
+    calculate_average_pages_viewed_per_session)
+from metrics.nav.most_visited_pages import (
+    calculate_nav_most_visited_pages
+)
+from metrics.users.average_stepback_actions import (
+    calculate_average_stepback_actions)
 from metrics.users.ratio_of_new_visitors_to_all_visitors import (
-    calculate_ratio_of_new_visitors_to_all_visitors)
-from metrics.users.user_categorization.index import classify_user_profiles
+    calculate_ratio_of_new_visitors_to_all_visitors
+)
+from metrics.users.user_categorization.index import (
+    classify_user_profiles
+)
 
 
 
@@ -34,11 +60,15 @@ def run_all_metrics(logs_df):
     calculate_error_rate_success_rate(logs_df)
     calculate_average_time_spent_per_page(logs_df)
     calculate_average_response_time(logs_df)
+    downloadable_resources_hits_ratio(logs_df)
     calculate_average_time_spent_on_site(logs_df)
     count_device_usage(logs_df)
+    define_stick_and_slip_pages(logs_df)
 
     print("Time-related metrics:")
+    calculate_maximum_zoom(logs_df)
     calculate_maximum_stable_value_zoom(logs_df)
+    calculate_average_response_time_during_zoom(logs_df)
 
     print("Navigation metrics:")
     calculate_nav_most_visited_pages(logs_df)
