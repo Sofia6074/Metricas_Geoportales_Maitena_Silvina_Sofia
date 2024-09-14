@@ -25,11 +25,14 @@ from metrics.maps.average_zoom_response_time import (
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom
 )
+from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
+from metrics.maps.maximum_stable_value_zoom import (
+    calculate_maximum_stable_value_zoom)
+from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
+from metrics.users.average_pages_viewed_per_visitor import (
+    calculate_average_pages_viewed_per_session)
 from metrics.nav.most_visited_pages import (
     calculate_nav_most_visited_pages
-)
-from metrics.users.average_pages_viewed_per_visitor import (
-    calculate_average_pages_viewed_per_session
 )
 from metrics.users.average_stepback_actions import (
     calculate_average_stepback_actions)
@@ -57,6 +60,7 @@ def run_all_metrics(logs_df):
     define_stick_and_slip_pages(logs_df)
 
     print("Time-related metrics:")
+    calculate_maximum_zoom(logs_df)
     calculate_maximum_stable_value_zoom(logs_df)
     calculate_average_response_time_during_zoom(logs_df)
 
