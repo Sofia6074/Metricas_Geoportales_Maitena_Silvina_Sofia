@@ -74,13 +74,15 @@ def filter_session_outliers(logs_df):
     """
     session_df = calculate_sessions(logs_df)
 
-    session_df = session_df.sort(['unique_session_id', 'timestamp'])
+    # Agrupar por unique_session_id y calcular el tiempo total de la sesión
+    session_summary_df = session_df.group_by("unique_session_id").agg([
+        (pl.col("timestamp").max() - pl.col("timestamp").min()).alias("time_spent")
+    ])
 
-    session_df = session_df.with_columns(
-        (pl.col("timestamp").diff()
-         .over("unique_session_id")).alias("time_spent")
-    )
+    # Unir el DataFrame original con el resumen para agregar la columna time_spent
+    session_df = session_df.join(session_summary_df, on="unique_session_id")
 
+    # Filtrar las sesiones según el tiempo gastado
     session_filtered_df = session_df.filter(
         (pl.col("time_spent").is_not_null()) &
         (pl.col("time_spent") > timedelta(seconds=10)) &
