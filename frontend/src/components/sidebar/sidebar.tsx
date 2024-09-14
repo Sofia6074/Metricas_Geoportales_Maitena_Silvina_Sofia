@@ -1,12 +1,12 @@
 import styles from './Sidebar.module.css';
 import Link from 'next/link';
-import Logo from '@/components/logo/logo';
+import Icon from '@/components/icon/icon';
 
 export default function Sidebar() {
 	return (
 		<div className={styles.sidebar}>
 			<div className={styles.logo}>
-				<Logo />
+				<Icon iconName="logo" size={30} />
 				<h1>Geometrics</h1>
 			</div>
 			<div className={styles.upload}>
@@ -20,27 +20,28 @@ export default function Sidebar() {
 				<ul>
 					<li>
 						<Link href="/overview" className={styles.menuItem}>
-							<span role="img" aria-label="Overview Icon">🗂️</span>Overview
+							<Icon iconName="boxes-outline" size={20} />
+							Overview
 						</Link>
 					</li>
 					<li>
 						<Link href="/users" className={styles.menuItem}>
-							<span role="img" aria-label="Users Icon">👤</span>Users
+							<Icon iconName="person-outline" size={20} />Users
 						</Link>
 					</li>
 					<li>
 						<Link href="/maps" className={styles.menuItem}>
-							<span role="img" aria-label="Maps Icon">📍</span>Maps
+							<Icon iconName="location-outline" size={20} />Maps
 						</Link>
 					</li>
 					<li>
 						<Link href="/navigability" className={styles.menuItem}>
-							<span role="img" aria-label="Navigability Icon">🧭</span>Navigability
+							<Icon iconName="compass-outline" size={20} />Navigability
 						</Link>
 					</li>
 					<li>
 						<Link href="/search" className={styles.menuItem}>
-							<span role="img" aria-label="Search Icon">🔍</span>Search
+							<Icon iconName="search-outline" size={20} />Search
 						</Link>
 					</li>
 				</ul>

@@ -10,12 +10,8 @@
 .logo {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
-}
-
-.logo img {
-    width: 30px;
-    margin-right: 10px;
 }
 
 .logo h1 {
@@ -65,9 +61,4 @@
 .menuItem:hover {
     background-color: #f3f4f6;
     border-radius: 8px;
-}
-
-.menuItem span {
-    margin-left: 10px;
-    margin-right: 10px;
 }
