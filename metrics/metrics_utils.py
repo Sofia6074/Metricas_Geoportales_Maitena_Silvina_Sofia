@@ -84,6 +84,7 @@ def filter_session_outliers(logs_df):
 
     return session_filtered_df
 
+
 def get_base_url(logs_df):
     """
     Filters out the base url from the query params
@@ -94,6 +95,7 @@ def get_base_url(logs_df):
         .struct.rename_fields(["base_url", "query_params"])
         .alias("fields")
     ).unnest("fields")
+
 
 def classify_device_type(logs_df):
     """
