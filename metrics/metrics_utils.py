@@ -6,6 +6,9 @@ This module contains utilities for metrics calculation.
 """
 
 
+from datetime import timedelta
+import polars as pl
+
 def calculate_sessions(data_frame):
     """
     Calculates unique sessions based on:
@@ -18,7 +21,8 @@ def calculate_sessions(data_frame):
     ])
 
     data_frame_with_sessions = data_frame_with_sessions.sort(
-        by=["session_id", "timestamp"])
+        by=["session_id", "timestamp"]
+    )
 
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         pl.col("timestamp").diff().over("session_id").alias("time_diff")
@@ -28,7 +32,9 @@ def calculate_sessions(data_frame):
     # y la anterior es mayor a 30 minutos
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         (pl.col("time_diff") > timedelta(minutes=30))
-        .cum_sum().over("session_id")
+        .cum_sum()
+        .over("session_id")
+        .fill_null(0)  # Asigna 0 al primer log de cada sesión
         .alias("session_segment")
     ])
 
@@ -76,7 +82,6 @@ def filter_session_outliers(logs_df):
     )
 
     session_filtered_df = session_df.filter(
-        (pl.col("unique_session_id").is_not_null()) &
         (pl.col("time_spent").is_not_null()) &
         (pl.col("time_spent") > timedelta(seconds=10)) &
         (pl.col("time_spent") <= timedelta(hours=12))

@@ -2,13 +2,13 @@
 This module runs all metrics using a DataFrame of logs.
 """
 
-from metrics.general import count_device_usage
 from metrics.general.average_response_time import (
     calculate_average_response_time
 )
 from metrics.general.average_time_spent_on_site import (
     calculate_average_time_spent_on_site
 )
+from metrics.general.count_device_usage import count_device_usage
 from metrics.general.downloading_hits_ratio import (
     downloadable_resources_hits_ratio
 )
@@ -18,13 +18,9 @@ from metrics.general.average_time_spent_per_page import (
 from metrics.general.error_rate_success_rate import (
     calculate_error_rate_success_rate
 )
-from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.average_zoom_response_time import (
     calculate_average_response_time_during_zoom
     )
-from metrics.maps.maximum_stable_value_zoom import (
-    calculate_maximum_stable_value_zoom
-)
 from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
