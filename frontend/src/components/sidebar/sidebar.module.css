@@ -18,6 +18,11 @@
     margin-right: 10px;
 }
 
+.logo h1 {
+    color: #137AA8;
+    font-size: 20px;
+}
+
 .upload {
     margin-bottom: 20px;
 }
@@ -38,12 +43,13 @@
 }
 
 .menu {
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .menu p {
+    font-weight: 600;
     font-size: 14px;
-    color: #333;
+    color: #888;
     margin-bottom: 10px;
 }
 
@@ -58,9 +64,10 @@
 
 .menuItem:hover {
     background-color: #f3f4f6;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 .menuItem span {
+    margin-left: 10px;
     margin-right: 10px;
 }
