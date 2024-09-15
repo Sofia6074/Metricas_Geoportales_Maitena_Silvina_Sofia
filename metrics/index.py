@@ -25,6 +25,7 @@ from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
 from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
+from metrics.search.most_repeated_words_in_consecutive_searches import calculate_most_repeated_words_filtered
 from metrics.users.average_pages_viewed_per_visitor import (
     calculate_average_pages_viewed_per_session)
 from metrics.nav.most_visited_pages import (
@@ -60,8 +61,8 @@ def run_all_metrics(logs_df):
     calculate_maximum_stable_value_zoom(logs_df)
     calculate_average_response_time_during_zoom(logs_df)
 
-    print("Navigation metrics:")
-    calculate_nav_most_visited_pages(logs_df)
+    print("Search metrics:")
+    calculate_most_repeated_words_filtered(logs_df)
 
     print("User metrics:")
     calculate_average_pages_viewed_per_session(logs_df)
