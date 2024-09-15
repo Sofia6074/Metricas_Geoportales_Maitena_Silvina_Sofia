@@ -25,8 +25,10 @@ from metrics.maps.average_zoom_response_time import (
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
 from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
-from metrics.search.most_repeated_words_in_consecutive_searches import calculate_most_repeated_words_filtered
-from metrics.search.related_search_parameter_consecutive import calculate_related_search_parameters
+from metrics.search.most_repeated_words_in_consecutive_searches import (
+    calculate_most_repeated_words_filtered)
+from metrics.search.related_search_parameter_consecutive import (
+    calculate_related_search_parameters)
 from metrics.users.average_pages_viewed_per_visitor import (
     calculate_average_pages_viewed_per_session)
 from metrics.users.average_stepback_actions import (
