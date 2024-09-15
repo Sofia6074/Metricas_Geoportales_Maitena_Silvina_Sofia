@@ -60,8 +60,8 @@ def format_average_time(average_time):
 
     hours, remainder = divmod(average_time.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
-    formatted_string = f"{int(hours)} hours {int(minutes)} minutes {
-        int(seconds)} seconds"
+    formatted_string = (f"{int(hours)} hours {int(minutes)}"
+                        f"minutes {int(seconds)} seconds")
 
     return formatted_string
 
