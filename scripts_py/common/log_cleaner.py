@@ -93,9 +93,13 @@ def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     Converts the timestamp to datetime format.
     """
     logger.info("Converting timestamp to datetime format")
-    return data_frame.with_columns(
+    data_frame = data_frame.with_columns(
         pl.col("timestamp").str.strptime(pl.Datetime, format="%d/%b/%Y:%H:%M:%S %z", strict=False)
     )
+
+    data_frame = data_frame.sort("timestamp")
+
+    return data_frame
 
 
 def count_filters_robots(data_frame: pl.DataFrame):

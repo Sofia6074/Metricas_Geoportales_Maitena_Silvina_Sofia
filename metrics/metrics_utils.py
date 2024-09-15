@@ -18,7 +18,8 @@ def calculate_sessions(data_frame):
     ])
 
     data_frame_with_sessions = data_frame_with_sessions.sort(
-        by=["session_id", "timestamp"])
+        by=["session_id", "timestamp"]
+    )
 
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         pl.col("timestamp").diff().over("session_id").alias("time_diff")
@@ -28,7 +29,9 @@ def calculate_sessions(data_frame):
     # y la anterior es mayor a 30 minutos
     data_frame_with_sessions = data_frame_with_sessions.with_columns([
         (pl.col("time_diff") > timedelta(minutes=30))
-        .cum_sum().over("session_id")
+        .cum_sum()
+        .over("session_id")
+        .fill_null(0)  # Asigna 0 al primer log de cada sesión
         .alias("session_segment")
     ])
 
@@ -57,7 +60,8 @@ def format_average_time(average_time):
 
     hours, remainder = divmod(average_time.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
-    formatted_string = f"{int(hours)} hours {int(minutes)} minutes {int(seconds)} seconds"
+    formatted_string = (f"{int(hours)} hours {int(minutes)}"
+                        f"minutes {int(seconds)} seconds")
 
     return formatted_string
 
@@ -68,15 +72,18 @@ def filter_session_outliers(logs_df):
     """
     session_df = calculate_sessions(logs_df)
 
-    session_df = session_df.sort(['unique_session_id', 'timestamp'])
+    # Agrupar por unique_session_id y calcular el tiempo total de la sesión
+    session_summary_df = session_df.group_by("unique_session_id").agg([
+        (pl.col("timestamp").max() - pl.col("timestamp").min())
+        .alias("time_spent")
+    ])
 
-    session_df = session_df.with_columns(
-        (pl.col("timestamp").diff()
-         .over("unique_session_id")).alias("time_spent")
-    )
+    # Unir el DataFrame original con el resumen para agregar la columna
+    # time_spent
+    session_df = session_df.join(session_summary_df, on="unique_session_id")
 
+    # Filtrar las sesiones según el tiempo gastado
     session_filtered_df = session_df.filter(
-        (pl.col("unique_session_id").is_not_null()) &
         (pl.col("time_spent").is_not_null()) &
         (pl.col("time_spent") > timedelta(seconds=10)) &
         (pl.col("time_spent") <= timedelta(hours=12))
