@@ -6,9 +6,6 @@ This module contains utilities for metrics calculation.
 """
 
 
-from datetime import timedelta
-import polars as pl
-
 def calculate_sessions(data_frame):
     """
     Calculates unique sessions based on:
@@ -63,7 +60,8 @@ def format_average_time(average_time):
 
     hours, remainder = divmod(average_time.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
-    formatted_string = f"{int(hours)} hours {int(minutes)} minutes {int(seconds)} seconds"
+    formatted_string = f"{int(hours)} hours {int(minutes)} minutes {
+        int(seconds)} seconds"
 
     return formatted_string
 
@@ -76,10 +74,12 @@ def filter_session_outliers(logs_df):
 
     # Agrupar por unique_session_id y calcular el tiempo total de la sesión
     session_summary_df = session_df.group_by("unique_session_id").agg([
-        (pl.col("timestamp").max() - pl.col("timestamp").min()).alias("time_spent")
+        (pl.col("timestamp").max() - pl.col("timestamp").min())
+        .alias("time_spent")
     ])
 
-    # Unir el DataFrame original con el resumen para agregar la columna time_spent
+    # Unir el DataFrame original con el resumen para agregar la columna
+    # time_spent
     session_df = session_df.join(session_summary_df, on="unique_session_id")
 
     # Filtrar las sesiones según el tiempo gastado
