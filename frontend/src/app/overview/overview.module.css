@@ -3,13 +3,6 @@
     flex-direction: column;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
 .chart {
     width: 100%;
     display: flex;
@@ -20,6 +13,7 @@
     border-radius: 8px;
 }
 
+/* TABLA */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -45,4 +39,55 @@
 
 .table tbody tr:hover {
     background-color: #f8f9fa;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-rows: 100px auto auto;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.grid-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.item1 {
+    grid-column: span 1;
+}
+
+.item2 {
+    grid-column: span 1;
+}
+
+.item3 {
+    grid-column: span 1;
+}
+
+.item4 {
+    grid-column: span 1;
+}
+
+.item5 {
+    grid-column: span 2;
+}
+
+.item6 {
+    grid-column: span 2;
+}
+
+.item7 {
+    grid-column: span 1;
+}
+
+.item8 {
+    grid-column: span 1;
+}
+
+.item9 {
+    grid-column: span 1;
 }
