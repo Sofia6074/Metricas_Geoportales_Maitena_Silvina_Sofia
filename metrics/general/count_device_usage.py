@@ -15,7 +15,7 @@ def count_device_usage(logs_df):
     device_df = classify_device_type(session_df)
 
     csv_df = device_df.drop("time_diff")
-    csv_df.write_csv("device_df.csv")
+    #csv_df.write_csv("device_df.csv")
 
     device_usage_count = device_df.group_by("device_type").agg(
         pl.count().alias("device_usage_count")
