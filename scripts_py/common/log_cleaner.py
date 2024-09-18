@@ -90,11 +90,15 @@ def normalize_urls(data_frame: pl.DataFrame) -> pl.DataFrame:
 
 def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
-    Converts the timestamp to datetime format.
+    Converts the timestamp to datetime format while preserving the original time.
     """
     logger.info("Converting timestamp to datetime format")
+
     data_frame = data_frame.with_columns(
-        pl.col("timestamp").str.strptime(pl.Datetime, format="%d/%b/%Y:%H:%M:%S %z", strict=False)
+        pl.col("timestamp")
+        .str.strptime(pl.Datetime, format="%d/%b/%Y:%H:%M:%S %z",
+                      strict=False)  # Parses the timestamp with timezone info
+        .dt.convert_time_zone("America/Montevideo")  # Converts to the correct local timezone
     )
 
     data_frame = data_frame.sort("timestamp")

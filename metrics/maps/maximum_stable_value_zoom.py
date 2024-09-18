@@ -28,6 +28,8 @@ def find_stable_zoom(map_requests_df):
     Finds the stable zoom level based on the logic of
     increasing zoom and then returning to a lower level.
     """
+    map_requests_df = map_requests_df.sort("timestamp")  # Ordenar por timestamp
+
     map_requests_df = map_requests_df.with_columns([
         pl.col("zoom_level").shift(1).alias("prev_zoom_level"),
         pl.col("zoom_level").shift(-1).alias("next_zoom_level")
@@ -46,9 +48,9 @@ def calculate_maximum_stable_value_zoom(logs_df):
     """
     Calculates the maximum stable zoom value in the logs.
     """
-    map_requests_df = logs_df.filter(pl.col("request_url").str.contains("wms|wmts"))
+    map_requests_df = filter_session_outliers(logs_df)
+    map_requests_df = map_requests_df.filter(pl.col("request_url").str.contains("wms|wmts"))
     map_requests_df = calculate_zoom_levels(map_requests_df)
-    map_requests_df = filter_session_outliers(map_requests_df)
     stable_zoom_df = find_stable_zoom(map_requests_df)
 
     stable_zoom_counts = stable_zoom_df.group_by(["unique_session_id", "zoom_level"]).agg(
