@@ -22,7 +22,7 @@ def calculate_average_stepback_actions(logs_df):
         ~pl.col("request_url").str.contains("geoserver")
     )
 
-    session_df = session_df.sort("timestamp")  # Ordenar por timestamp
+    session_df = session_df.sort("unique_session_id","timestamp")  # Ordenar por timestamp
 
     session_df = session_df.with_columns([
         pl.col("timestamp").cast(pl.Datetime).alias("timestamp"),
