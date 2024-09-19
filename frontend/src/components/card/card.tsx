@@ -7,11 +7,12 @@ type CardProps = {
     title?: string;
     children: ReactNode;
     infoIcon?: boolean;
+    className?: string;
 };
 
-export default function Card({ title, children, infoIcon }: CardProps) {
+export default function Card({ title, children, infoIcon, className }: CardProps) {
     return (
-        <div className={styles.card}>
+        <div className={`${styles.card} ${className || ''}`}>
             {title && (
                 <div className={styles.header}>
                     <h3 className={styles.title}>{title}</h3>

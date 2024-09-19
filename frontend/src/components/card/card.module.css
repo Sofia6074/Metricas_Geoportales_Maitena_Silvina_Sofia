@@ -10,6 +10,7 @@
     gap: 10px;
 }
 
+
 .header {
     display: flex;
     align-items: center;
@@ -17,13 +18,14 @@
 }
 
 .title {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
-    color: var(--color-foreground);
+    color: var(--color-secondary);
 }
 
 .infoIcon {
-    margin: 0;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     font-size: 1rem;
     color: var(--color-secondary);
     cursor: pointer;

@@ -12,6 +12,10 @@
   --color-chart-blue: #4a90e2;
   --color-white: white;
   --color-black: black;
+
+  /* Charts */
+  --color-chart-red: #bb3f46;
+  --color-chart-green: #accc9c;
 }
 
 html,
