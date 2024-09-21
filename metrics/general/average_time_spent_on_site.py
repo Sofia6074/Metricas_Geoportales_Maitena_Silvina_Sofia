@@ -20,3 +20,4 @@ def calculate_average_time_spent_on_site(logs_df):
 
     print(f"User Average Time Spent on Site: "
           f"{format_average_time(global_avg_time_spent)}")
+    return global_avg_time_spent

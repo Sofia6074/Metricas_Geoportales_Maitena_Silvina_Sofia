@@ -12,3 +12,4 @@ def calculate_maximum_zoom(logs_df):
     max_zoom_level = map_requests_df.select(pl.col("zoom_level").max()).item()
 
     print(f"Maximum zoom level: {max_zoom_level}")
+    return max_zoom_level

@@ -24,3 +24,9 @@ def calculate_average_response_time(logs_df):
     print(f"Average Response Time: {avg_response_time:.2f} ms")
     print(f"Maximum Response Time: {max_response_time:.2f} ms")
     print(f"Minimum Response Time: {min_response_time:.2f} ms")
+
+    return {
+        "avg_response_time": avg_response_time,
+        "max_response_time": max_response_time,
+        "min_response_time": min_response_time,
+    }
