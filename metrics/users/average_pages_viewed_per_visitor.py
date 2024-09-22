@@ -28,3 +28,4 @@ def calculate_average_pages_viewed_per_session(logs_df):
     ).to_dict(as_series=False)["avg_pages_viewed"][0]
 
     print(f"Average Pages Viewed per Session: {average_pages_viewed:.2f}")
+    return average_pages_viewed
