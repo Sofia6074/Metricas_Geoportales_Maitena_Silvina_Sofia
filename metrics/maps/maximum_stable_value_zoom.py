@@ -70,3 +70,4 @@ def calculate_maximum_stable_value_zoom(logs_df):
 
     print("Most Stable Zoom Across All Sessions:")
     print(total_stable_zoom.head(10))
+    return total_stable_zoom.head(10)

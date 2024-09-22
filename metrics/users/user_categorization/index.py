@@ -29,6 +29,9 @@ def print_user_profile_counts(logs_df):
 
     print(profile_counts)
 
+    profile_counts_json = profile_counts.to_dicts()
+    return profile_counts_json
+
 
 def calculate_user_categorized_metrics(logs_df):
     """
@@ -67,8 +70,8 @@ def classify_user_profiles(logs_df):
 
     logs_df = logs_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
 
-    print_user_profile_counts(logs_df)
+    user_profile_counts = print_user_profile_counts(logs_df)
 
     calculate_user_categorized_metrics(logs_df)
 
-    return logs_df
+    return user_profile_counts

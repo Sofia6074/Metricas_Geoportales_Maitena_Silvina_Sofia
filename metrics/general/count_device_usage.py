@@ -1,3 +1,7 @@
+"""
+This script counts how many times each device type was used.
+"""
+
 import polars as pl
 from scripts_py.classes.logger import Logger
 from metrics.metrics_utils import classify_device_type
@@ -32,5 +36,4 @@ def count_device_usage(logs_df):
 
     logger_instance.info("Device Usage Count:")
     logger_instance.info(device_usage_count)
-
-    return device_usage_count
+    return device_usage_count.to_dicts()

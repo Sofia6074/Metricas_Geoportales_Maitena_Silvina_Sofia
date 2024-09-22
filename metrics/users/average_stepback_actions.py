@@ -46,3 +46,4 @@ def calculate_average_stepback_actions(logs_df):
     ).with_columns(pl.col("average_stepback_actions").round(2))[0, "average_stepback_actions"]
 
     print(f"Average Stepback Actions per Session: {average_stepback}")
+    return average_stepback

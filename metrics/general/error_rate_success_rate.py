@@ -29,3 +29,8 @@ def calculate_error_rate_success_rate(logs_df):
 
     print(f"Success Rate: {success_rate:.2f}%")
     print(f"Error Rate: {error_rate:.2f}%")
+
+    return {
+        "success_rate": success_rate,
+        "error_rate": error_rate
+    }

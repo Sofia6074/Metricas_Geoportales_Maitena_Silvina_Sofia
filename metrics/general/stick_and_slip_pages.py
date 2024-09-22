@@ -1,3 +1,7 @@
+"""
+Calculates "slip" and "stick" metrics.
+"""
+
 import polars as pl
 
 
@@ -37,3 +41,9 @@ def define_stick_and_slip_pages(logs_df):
 
     print("Slip and Stick:")
     print(metrics_df)
+    return {
+        'total_entry_page_views': total_entry_page_views,
+        'total_single_access_page_views': total_single_access_page_views,
+        'slip': [slip],
+        'stick': [stick]
+    }
