@@ -3,7 +3,6 @@ This module calculates the maximum stable zoom value in map logs.
 """
 
 import polars as pl
-from metrics.metrics_utils import filter_session_outliers
 
 
 def calculate_zoom_levels(map_requests_df):
@@ -48,8 +47,7 @@ def calculate_maximum_stable_value_zoom(logs_df):
     """
     Calculates the maximum stable zoom value in the logs.
     """
-    map_requests_df = filter_session_outliers(logs_df)
-    map_requests_df = map_requests_df.filter(pl.col("request_url").str.contains("wms|wmts"))
+    map_requests_df = logs_df.filter(pl.col("request_url").str.contains("wms|wmts"))
     map_requests_df = calculate_zoom_levels(map_requests_df)
     stable_zoom_df = find_stable_zoom(map_requests_df)
 

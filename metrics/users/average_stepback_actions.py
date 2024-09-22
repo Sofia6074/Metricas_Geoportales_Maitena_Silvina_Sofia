@@ -3,7 +3,6 @@ This module calculates the average number of stepback actions per session.
 """
 
 import polars as pl
-from metrics.metrics_utils import filter_session_outliers
 from scripts_py.classes.logger import Logger
 
 logger_instance = Logger(__name__).get_logger()
@@ -14,11 +13,10 @@ def calculate_average_stepback_actions(logs_df):
     if a user returns to a previously visited URL, considering a 3-second time gap
     between requests.
     """
-    session_df = filter_session_outliers(logs_df)
 
     # Filter out requests to GeoServer to focus on user interactions
     # (excluding map service requests)
-    session_df = session_df.filter(
+    session_df = logs_df.filter(
         ~pl.col("request_url").str.contains("geoserver")
     )
 

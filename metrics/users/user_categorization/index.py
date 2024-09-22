@@ -5,7 +5,6 @@ calculations related to user profiles.
 """
 
 import polars as pl
-from metrics.metrics_utils import filter_session_outliers
 from metrics.users.user_categorization.average_time_spent_on_site_per_user_cat import (
     calculate_weighted_average_time_spent_on_site
 )
@@ -46,9 +45,7 @@ def classify_user_profiles(logs_df):
     of visits and total time spent.
     """
 
-    sessions_df = filter_session_outliers(logs_df)
-
-    user_stats = sessions_df.group_by("ip").agg([
+    user_stats = logs_df.group_by("ip").agg([
         pl.col("session_id").count().alias("visits"),
         pl.col("time_diff").sum().alias("total_time_spent")
     ])
@@ -68,7 +65,7 @@ def classify_user_profiles(logs_df):
         .otherwise(3).alias("user_profile")  # Occasional users
     ])
 
-    logs_df = sessions_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
+    logs_df = logs_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
 
     print_user_profile_counts(logs_df)
 
