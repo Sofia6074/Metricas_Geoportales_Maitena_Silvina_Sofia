@@ -1,8 +1,31 @@
+"use client";
+
 import styles from './Sidebar.module.css';
 import Link from 'next/link';
 import Icon from '@/components/icon/icon';
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 export default function Sidebar() {
+	const pathname = usePathname();
+	const [selectedMenuItem, setSelectedMenuItem] = useState(pathname);
+
+	const menuItems = [
+		{ name: 'Overview', icon: 'boxes-outline', path: '/' },
+		{ name: 'Users', icon: 'person-outline', path: '/users' },
+		{ name: 'Maps', icon: 'location-outline', path: '/maps' },
+		{ name: 'Navigability', icon: 'compass-outline', path: '/navigability' },
+		{ name: 'Search', icon: 'search-outline', path: '/search' },
+	];
+
+	const handleMenuClick = (path: string) => {
+		setSelectedMenuItem(path);
+	};
+
+	useEffect(() => {
+		setSelectedMenuItem(pathname);
+	}, [pathname]);
+
 	return (
 		<div className={styles.sidebar}>
 			<div className={styles.logo}>
@@ -18,32 +41,19 @@ export default function Sidebar() {
 			<nav className={styles.menu}>
 				<p>MENU</p>
 				<ul>
-					<li>
-						<Link href="/" className={styles.menuItem}>
-							<Icon iconName="boxes-outline" size={20} />
-							Overview
-						</Link>
-					</li>
-					<li>
-						<Link href="/users" className={styles.menuItem}>
-							<Icon iconName="person-outline" size={20} />Users
-						</Link>
-					</li>
-					<li>
-						<Link href="/maps" className={styles.menuItem}>
-							<Icon iconName="location-outline" size={20} />Maps
-						</Link>
-					</li>
-					<li>
-						<Link href="/navigability" className={styles.menuItem}>
-							<Icon iconName="compass-outline" size={20} />Navigability
-						</Link>
-					</li>
-					<li>
-						<Link href="/search" className={styles.menuItem}>
-							<Icon iconName="search-outline" size={20} />Search
-						</Link>
-					</li>
+					{menuItems.map((item) => (
+						<li key={item.name}>
+							<Link href={item.path} passHref legacyBehavior>
+								<a
+									className={`${styles.menuItem} ${selectedMenuItem === item.path ? styles.active : ''}`}
+									onClick={() => handleMenuClick(item.path)}
+								>
+									<Icon iconName={item.icon} size={20} color={selectedMenuItem === item.path ? 'white' : 'inherit'} />
+									{item.name}
+								</a>
+							</Link>
+						</li>
+					))}
 				</ul>
 			</nav>
 		</div>

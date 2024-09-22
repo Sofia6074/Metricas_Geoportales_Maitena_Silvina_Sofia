@@ -58,9 +58,14 @@
     color: #333;
     text-decoration: none;
     transition: background 0.3s;
+    border-radius: 8px;
 }
 
 .menuItem:hover {
     background-color: var(--color-background);
-    border-radius: 8px;
+}
+
+.menuItem.active {
+    background-color: var(--color-primary) !important;
+    color: white;
 }
