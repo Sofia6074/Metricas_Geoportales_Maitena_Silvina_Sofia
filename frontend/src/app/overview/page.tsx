@@ -6,7 +6,7 @@ import styles from "./overview.module.css"
 import Card from "@/components/card/card";
 import { LineChart, Line, ResponsiveContainer, Bar, BarChart, PieChart, Pie } from 'recharts';
 import { MetricsContext } from "@/context/MetricsContext";
-import Loading from "@/components/loading/loading";
+import Spinner from "@/components/spinner/spinner";
 
 export default function Overview() {
     const data = [
@@ -68,7 +68,7 @@ export default function Overview() {
     return (
         <div className={styles.flex}>
             <Breadcrumb text={"Overview"} />
-            {loading || true ? <Loading /> :
+            {loading ? <Spinner /> :
                 error ? <p>Error: {error}</p> :
                     <div className={styles.grid}>
                         {/* Primera Fila */}
