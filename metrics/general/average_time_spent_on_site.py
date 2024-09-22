@@ -14,9 +14,13 @@ def calculate_average_time_spent_on_site(logs_df):
     """
     session_df = filter_session_outliers(logs_df)
 
-    global_avg_time_spent = session_df.select(
+    grouped_df = session_df.group_by("unique_session_id").agg([
         pl.col("time_spent").mean().alias("global_avg_time_spent_on_site")
-    )[0, "global_avg_time_spent_on_site"]
+    ])
+
+    global_avg_time_spent = grouped_df.select(
+        pl.col("global_avg_time_spent_on_site").mean()
+    )[0, 0]
 
     print(f"User Average Time Spent on Site: "
           f"{format_average_time(global_avg_time_spent)}")
