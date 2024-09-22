@@ -2,7 +2,6 @@
 This module runs all metrics using a DataFrame of logs.
 """
 
-import json
 from metrics.general.average_response_time import (
     calculate_average_response_time
 )
@@ -26,7 +25,6 @@ from metrics.maps.average_zoom_response_time import (
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
 from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
-from metrics.metrics_utils import custom_serializer
 from metrics.search.most_repeated_words_in_consecutive_searches import (
     calculate_most_repeated_words_filtered)
 from metrics.search.related_search_parameter_consecutive import (
