@@ -45,3 +45,4 @@ def downloadable_resources_hits_ratio(logs_df):
 
     total_downloads = download_counts["download_count"].sum()
     print(f"Total Downloads: {total_downloads}")
+    return total_downloads

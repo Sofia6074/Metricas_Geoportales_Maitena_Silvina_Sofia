@@ -52,9 +52,7 @@ def calculate_maximum_stable_value_zoom(logs_df):
     """
     Calculates the maximum stable zoom value in the logs.
     """
-    logs_df = convert_timestamp(logs_df)
     map_requests_df = filter_session_outliers(logs_df)
-    map_requests_df = map_requests_df.sort(["unique_session_id", "timestamp"])
 
     map_requests_df = map_requests_df.filter(pl.col("request_url").str.contains(r"(?i)wms|wmts"))
     map_requests_df = calculate_zoom_levels(map_requests_df)
@@ -77,3 +75,4 @@ def calculate_maximum_stable_value_zoom(logs_df):
 
     print("Most Stable Zoom Across All Sessions:")
     print(total_stable_zoom.head(10))
+    return total_stable_zoom.head(10)

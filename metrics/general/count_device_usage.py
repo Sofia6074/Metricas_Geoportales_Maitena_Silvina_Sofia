@@ -1,10 +1,14 @@
+"""
+This script counts how many times each device type was used.
+"""
+
 import polars as pl
 
 from metrics.metrics_utils import classify_device_type, filter_session_outliers
 from scripts_py.classes.logger import Logger
+from metrics.metrics_utils import calculate_sessions, classify_device_type
 
 logger_instance = Logger(__name__).get_logger()
-
 
 def count_device_usage(logs_df):
     """
@@ -34,6 +38,6 @@ def count_device_usage(logs_df):
         ])
         device_usage_count = pl.concat([device_usage_count, missing_rows])
 
-    # Use print instead of logger
-    print("Device Usage Count:")
-    print(device_usage_count)
+    logger_instance.info("Device Usage Count:")
+    logger_instance.info(device_usage_count)
+    return device_usage_count.to_dicts()

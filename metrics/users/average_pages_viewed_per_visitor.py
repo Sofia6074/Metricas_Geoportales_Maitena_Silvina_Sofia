@@ -4,7 +4,7 @@ from the filtered logs.
 """
 
 import polars as pl
-from metrics.metrics_utils import filter_empty_urls, filter_session_outliers
+from metrics.metrics_utils import filter_empty_urls
 
 
 def calculate_average_pages_viewed_per_session(logs_df):
@@ -17,9 +17,7 @@ def calculate_average_pages_viewed_per_session(logs_df):
 
     logs_df_without_null_url = filter_empty_urls(logs_df)
 
-    sessions_df = filter_session_outliers(logs_df_without_null_url)
-
-    pages_per_session = sessions_df.group_by("unique_session_id").agg(
+    pages_per_session = logs_df_without_null_url.group_by("unique_session_id").agg(
         pl.col("request_url").count().alias("pages_viewed")
     )
 
@@ -28,3 +26,4 @@ def calculate_average_pages_viewed_per_session(logs_df):
     ).to_dict(as_series=False)["avg_pages_viewed"][0]
 
     print(f"Average Pages Viewed per Session: {average_pages_viewed:.2f}")
+    return average_pages_viewed

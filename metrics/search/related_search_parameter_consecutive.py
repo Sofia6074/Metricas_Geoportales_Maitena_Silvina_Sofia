@@ -4,8 +4,6 @@ from itertools import combinations
 
 import polars as pl
 
-from metrics.metrics_utils import calculate_sessions
-
 
 def calculate_related_search_parameters(logs_df):
     """
@@ -28,8 +26,6 @@ def calculate_related_search_parameters(logs_df):
         pairs, and their respective Jaccard similarity index.
     """
     map_requests_df = convert_timestamp(logs_df)
-
-    map_requests_df = calculate_sessions(map_requests_df)
 
     map_requests_df = extract_search_params(map_requests_df)
 

@@ -28,3 +28,4 @@ def calculate_average_response_time_during_zoom(logs_df):
         pl.col("response_time").mean()).item()
 
     print(f"Average response time during zoom: {average_response_time} ms")
+    return average_response_time

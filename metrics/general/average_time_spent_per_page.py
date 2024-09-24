@@ -3,6 +3,7 @@ This module contains the function to calculate the average time users spend per 
 """
 
 import polars as pl
+from metrics.metrics_utils import format_average_time, get_base_url
 
 from metrics.metrics_utils import format_average_time, filter_session_outliers, get_base_url
 
@@ -47,3 +48,4 @@ def calculate_average_time_spent_per_page(logs_df):
     )[0, 0]
 
     print(f"User Average Time Spent per Page: {format_average_time(global_avg_time_spent)}")
+    return global_avg_time_spent

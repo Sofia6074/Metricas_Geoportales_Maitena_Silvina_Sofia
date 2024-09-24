@@ -40,42 +40,43 @@ from metrics.users.ratio_of_new_visitors_to_all_visitors import (
 from metrics.users.user_categorization.index import (
     classify_user_profiles
 )
+from scripts_py.create_json import create_json
 
 
 def run_all_metrics(logs_df):
     """
     Runs all metrics using the provided logs DataFrame.
     """
+    results = {}
     print("Running all metrics...")
 
     print("General metrics:")
-    calculate_error_rate_success_rate(logs_df)
-    calculate_average_time_spent_per_page(logs_df)
-    calculate_average_response_time(logs_df)
-    downloadable_resources_hits_ratio(logs_df)
-    calculate_average_time_spent_on_site(logs_df)
-    count_device_usage(logs_df)
-    define_stick_and_slip_pages(logs_df)
-    calculate_most_visited_pages(logs_df)
+    results['error_rate_success_rate'] = calculate_error_rate_success_rate(logs_df)
+    results['average_time_spent_on_site'] = calculate_average_time_spent_on_site(logs_df)
+    results['average_time_spent_per_page'] = calculate_average_time_spent_per_page(logs_df)
+    results['average_response_time'] = calculate_average_response_time(logs_df)
+    results['device_usage'] = count_device_usage(logs_df)
+    results['downloadable_resources_hits_ratio'] = downloadable_resources_hits_ratio(logs_df)
+    results['stick_and_slip_pages'] = define_stick_and_slip_pages(logs_df)
+    results['count_device_usage'] = count_device_usage(logs_df)
+    results['most_visited_pages'] = calculate_most_visited_pages(logs_df)
 
     print("Time-related metrics:")
-    calculate_maximum_zoom(logs_df)
-    calculate_maximum_stable_value_zoom(logs_df)
-    calculate_average_response_time_during_zoom(logs_df)
+    results['maximum_zoom'] = calculate_maximum_zoom(logs_df)
+    results['maximum_stable_zoom'] = calculate_maximum_stable_value_zoom(logs_df)
+    results['zoom_response_time'] = calculate_average_response_time_during_zoom(logs_df)
 
     print("Search metrics:")
-    calculate_most_repeated_words_filtered(logs_df)
-    calculate_related_search_parameters(logs_df)
+    results['most_repeated_words'] = calculate_most_repeated_words_filtered(logs_df)
+
+    print("Search metrics:")
+    results['related_search_parameters'] = calculate_related_search_parameters(logs_df)
 
     print("User metrics:")
-    calculate_average_pages_viewed_per_session(logs_df)
-    calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
-    calculate_average_stepback_actions(logs_df)
-    classify_user_profiles(logs_df)
-
-    print("Maps metrics:")
-    calculate_average_response_time_during_zoom(logs_df)
-    calculate_maximum_zoom(logs_df)
-    calculate_maximum_stable_value_zoom(logs_df)
+    results['average_pages_viewed'] = calculate_average_pages_viewed_per_session(logs_df)
+    results['new_visitors_vs_all_visitors'] = calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
+    results['avrg_stepbacks'] = calculate_average_stepback_actions(logs_df)
+    results['user_profiles'] = classify_user_profiles(logs_df)
 
     print("All metrics have been executed.")
+    create_json(results)
