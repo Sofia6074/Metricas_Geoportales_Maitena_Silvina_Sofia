@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import styles from './Card.module.css';
+import styles from './card.module.css';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 
