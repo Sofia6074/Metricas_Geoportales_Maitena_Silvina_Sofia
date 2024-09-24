@@ -33,3 +33,4 @@ def count_device_usage(logs_df):
 
     logger_instance.info("Device Usage Count:")
     logger_instance.info(device_usage_count)
+    return device_usage_count.to_dicts()

@@ -1,0 +1,71 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    padding: 20px;
+    position: fixed;
+    background-color: var(--color-light-gray);
+    border-right: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo h1 {
+    color: var(--color-primary);
+    font-size: 30px;
+}
+
+.upload {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.inputFile {
+    display: none;
+}
+
+.fileLabel {
+    display: block;
+    border: 1px solid var(--color-border);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--color-secondary);
+    font-size: 14px;
+}
+
+.menu p {
+    padding: 10px 0;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-secondary);
+    margin-bottom: 10px;
+}
+
+.menu ul {
+    list-style-type: none;
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s;
+    border-radius: 8px;
+}
+
+.menuItem:hover {
+    background-color: var(--color-background);
+}
+
+.menuItem.active {
+    background-color: var(--color-primary) !important;
+    color: white;
+}

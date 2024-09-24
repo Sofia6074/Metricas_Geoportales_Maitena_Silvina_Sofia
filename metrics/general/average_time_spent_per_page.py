@@ -23,3 +23,4 @@ def calculate_average_time_spent_per_page(logs_df):
     )[0, "global_avg_time_per_page"]
 
     print(f"User Average Time Spent per Page: {format_average_time(global_avg_time_per_page)}")
+    return global_avg_time_per_page

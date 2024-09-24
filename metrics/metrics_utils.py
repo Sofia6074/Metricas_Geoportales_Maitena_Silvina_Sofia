@@ -1,5 +1,5 @@
 import polars as pl
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 """
 This module contains utilities for metrics calculation.
@@ -118,7 +118,7 @@ def classify_device_type(logs_df):
     tablet_patterns = r"iPad|Tablet|Nexus 7|Nexus 10|Kindle|Galaxy Tab"
     desktop_patterns = r"Windows NT|Macintosh|X11|Linux x86_64"
 
-    logs_df = logs_df.with_columns(pl.lit("unknown").alias("device_type"))
+    logs_df = logs_df.with_columns(pl.lit("other").alias("device_type"))
 
     logs_df = logs_df.with_columns(
         pl.when(pl.col("user_agent").str.contains(mobile_patterns))
@@ -142,3 +142,15 @@ def classify_device_type(logs_df):
     )
 
     return logs_df
+
+
+def custom_serializer(obj):
+    if isinstance(obj, timedelta):
+        return obj.total_seconds()
+    elif isinstance(obj, datetime):
+        if obj.tzinfo is not None:
+            obj = obj.astimezone(None)
+        return obj.isoformat()
+    elif isinstance(obj, pl.DataFrame):
+        return obj.to_dicts()
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")

@@ -90,5 +90,5 @@ def calculate_most_repeated_words_filtered(logs_df):
 
     print("Top 5 Words:")
     print(top_5_words)
-
+    
     return top_5_words
