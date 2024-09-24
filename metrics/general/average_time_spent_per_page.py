@@ -3,20 +3,16 @@ This module contains the function to calculate the average time users spend per 
 """
 
 import polars as pl
+
 from metrics.metrics_utils import format_average_time, get_base_url
-
-from metrics.metrics_utils import format_average_time, filter_session_outliers, get_base_url
-
 
 def calculate_average_time_spent_per_page(logs_df):
     """
     Calculates the average time users spend per page on the site.
     """
 
-    session_df = filter_session_outliers(logs_df)
-
     # Extract the base URL for each request
-    session_df = get_base_url(session_df)
+    session_df = get_base_url(logs_df)
 
     data_frame_with_sessions = session_df.with_columns([
         (pl.col("unique_session_id") + "_" +

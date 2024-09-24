@@ -5,6 +5,7 @@ import polars as pl
 
 from metrics.metrics_utils import get_base_url
 
+
 def calculate_most_visited_pages(logs_df):
     """
     Calculates the most visited pages in the web server logs.
