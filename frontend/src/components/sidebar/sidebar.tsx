@@ -1,6 +1,6 @@
 "use client";
 
-import styles from './Sidebar.module.css';
+import styles from './sidebar.module.css';
 import Link from 'next/link';
 import Icon from '@/components/icon/icon';
 import { usePathname } from 'next/navigation';
