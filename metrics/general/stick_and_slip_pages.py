@@ -1,5 +1,6 @@
 import polars as pl
-from metrics.metrics_utils import calculate_sessions
+
+from metrics.metrics_utils import filter_session_outliers
 
 
 def define_stick_and_slip_pages(logs_df):
@@ -14,7 +15,7 @@ def define_stick_and_slip_pages(logs_df):
     - Stick: 1 - slip, indicating page retention ability.
     """
 
-    session_df = calculate_sessions(logs_df)
+    session_df = filter_session_outliers(logs_df)
 
     entry_pages_df = session_df.group_by('unique_session_id').agg([
         pl.col('request_url').first().alias('entry_page')

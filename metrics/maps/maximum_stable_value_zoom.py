@@ -3,7 +3,9 @@ This module calculates the maximum stable zoom value in map logs.
 """
 
 import polars as pl
+
 from metrics.metrics_utils import filter_session_outliers
+from scripts_py.common.log_cleaner import convert_timestamp
 
 
 def calculate_zoom_levels(map_requests_df):
@@ -50,6 +52,7 @@ def calculate_maximum_stable_value_zoom(logs_df):
     """
     Calculates the maximum stable zoom value in the logs.
     """
+    logs_df = convert_timestamp(logs_df)
     map_requests_df = filter_session_outliers(logs_df)
     map_requests_df = map_requests_df.sort(["unique_session_id", "timestamp"])
 

@@ -1,13 +1,10 @@
 """
 This module contains the function to calculate the average time users spend per page on the site.
 """
-from datetime import timedelta
 
 import polars as pl
-from requests import session
 
 from metrics.metrics_utils import format_average_time, filter_session_outliers, get_base_url
-from scripts_py.common.log_cleaner import convert_timestamp
 
 
 def calculate_average_time_spent_per_page(logs_df):
@@ -15,11 +12,7 @@ def calculate_average_time_spent_per_page(logs_df):
     Calculates the average time users spend per page on the site.
     """
 
-    # Convert timestamps
-    session_df = convert_timestamp(logs_df)
-
-    # Filter out session outliers
-    session_df = filter_session_outliers(session_df)
+    session_df = filter_session_outliers(logs_df)
 
     # Extract the base URL for each request
     session_df = get_base_url(session_df)

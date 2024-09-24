@@ -18,6 +18,7 @@ from metrics.general.downloading_hits_ratio import (
 from metrics.general.error_rate_success_rate import (
     calculate_error_rate_success_rate
 )
+from metrics.general.most_visited_pages import calculate_most_visited_pages
 from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.average_zoom_response_time import (
     calculate_average_response_time_during_zoom
@@ -55,6 +56,7 @@ def run_all_metrics(logs_df):
     calculate_average_time_spent_on_site(logs_df)
     count_device_usage(logs_df)
     define_stick_and_slip_pages(logs_df)
+    calculate_most_visited_pages(logs_df)
 
     print("Time-related metrics:")
     calculate_maximum_zoom(logs_df)
@@ -63,8 +65,6 @@ def run_all_metrics(logs_df):
 
     print("Search metrics:")
     calculate_most_repeated_words_filtered(logs_df)
-
-    print("Search metrics:")
     calculate_related_search_parameters(logs_df)
 
     print("User metrics:")
@@ -72,5 +72,10 @@ def run_all_metrics(logs_df):
     calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
     calculate_average_stepback_actions(logs_df)
     classify_user_profiles(logs_df)
+
+    print("Maps metrics:")
+    calculate_average_response_time_during_zoom(logs_df)
+    calculate_maximum_zoom(logs_df)
+    calculate_maximum_stable_value_zoom(logs_df)
 
     print("All metrics have been executed.")
