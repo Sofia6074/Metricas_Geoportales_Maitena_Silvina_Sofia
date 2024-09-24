@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import styles from './Card.module.css';
-import Icon from '../icon/icon';
-import Tooltip from '../tooltip/tooltip';
+import styles from './card.module.css';
+import Icon from '@/components/icon/icon';
+import Tooltip from '@/components/tooltip/tooltip';
 
 type CardProps = {
     title?: string;
