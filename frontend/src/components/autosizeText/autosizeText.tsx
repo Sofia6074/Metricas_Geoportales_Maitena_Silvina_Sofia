@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './AutoSizeText.module.css';
+import styles from './autoSizeText.module.css';
 
 type AutoSizeTextProps = {
     children: ReactNode;
