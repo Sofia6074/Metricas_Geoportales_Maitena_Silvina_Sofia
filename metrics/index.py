@@ -39,7 +39,7 @@ from metrics.users.ratio_of_new_visitors_to_all_visitors import (
 from metrics.users.user_categorization.index import (
     classify_user_profiles
 )
-from scripts_py.create_json import create_json
+from Utils.create_json import create_json
 
 
 def run_all_metrics(logs_df):

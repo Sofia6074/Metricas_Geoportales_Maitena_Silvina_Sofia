@@ -5,7 +5,7 @@ web server log data using Polars.
 from datetime import timedelta
 
 import polars as pl
-from scripts_py.classes.logger import Logger
+from Utils.classes.logger import Logger
 
 logger = Logger(__name__).get_logger()
 

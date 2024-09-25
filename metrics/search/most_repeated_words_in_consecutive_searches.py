@@ -1,6 +1,5 @@
 from collections import Counter
 import polars as pl
-from metrics.metrics_utils import filter_session_outliers
 
 
 def calculate_most_repeated_words_filtered(logs_df):
@@ -20,9 +19,7 @@ def calculate_most_repeated_words_filtered(logs_df):
         repeated words and their counts.
     """
 
-    df = filter_session_outliers(logs_df)
-
-    df_search = df.filter(pl.col('request_url').str.contains(r'q='))
+    df_search = logs_df.filter(pl.col('request_url').str.contains(r'q='))
 
     df_search = df_search.with_columns(
         pl.col('request_url').str.extract(r'q=([^&]*)')
@@ -58,12 +55,32 @@ def calculate_most_repeated_words_filtered(logs_df):
         .alias('next_term')
     ])
 
-    df_search_filtered = df_search_filtered.filter(
-        (pl.col('next_term').is_null()) |
-        (~pl.col('next_term').str.starts_with(pl.col('search_term'))) |
-        (pl.col('next_term').str.len_chars() - pl.col('search_term')
-         .str.len_chars() <= 2)
-    )
+    df_search_filtered = df_search_filtered.with_columns([
+        (
+            (
+                    (pl.col('unique_session_id') != pl.col('unique_session_id').shift(1)) |
+                    (pl.col('next_term').is_null()) |
+                    (~pl.col('next_term').str.starts_with(pl.col('search_term'))) |
+                    (pl.col('search_term').str.slice(0, 5) != pl.col('next_term').str.slice(0, 5))
+            ).cum_sum().fill_null(0)
+        ).alias('search_group')
+    ])
+
+    df_search_filtered = df_search_filtered.with_columns([
+        pl.col('search_term').str.len_chars().alias('search_term_length')
+    ])
+
+    df_search_filtered = df_search_filtered.groupby(['unique_session_id', 'search_group']).agg([
+        pl.col('search_term').filter(pl.col('search_term_length') == pl.col('search_term_length').max()).first().alias(
+            'longest_search_term')
+    ])
+
+    # df_search_filtered = df_search_filtered.filter(
+    #     (pl.col('next_term').is_null()) |
+    #     (~pl.col('next_term').str.starts_with(pl.col('search_term'))) |
+    #     (pl.col('next_term').str.len_chars() - pl.col('search_term')
+    #      .str.len_chars() <= 2)
+    # )
     df_search_filtered = df_search_filtered.with_columns([
         pl.col('search_term').str.split(',').alias('split_terms')
     ]).explode('split_terms')
