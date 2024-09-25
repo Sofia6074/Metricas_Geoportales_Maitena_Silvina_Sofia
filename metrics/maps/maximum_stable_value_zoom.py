@@ -4,7 +4,6 @@ This module calculates the maximum stable zoom value in map logs.
 
 import polars as pl
 
-
 def calculate_zoom_levels(map_requests_df):
     """
     Calculates the zoom levels from the map requests.
@@ -49,6 +48,7 @@ def calculate_maximum_stable_value_zoom(logs_df):
     """
     Calculates the maximum stable zoom value in the logs.
     """
+
     map_requests_df = logs_df.filter(pl.col("request_url").str.contains(r"(?i)wms|wmts"))
     map_requests_df = calculate_zoom_levels(map_requests_df)
 

@@ -1,8 +1,8 @@
+"""
+Contains the code to calculate the ratio of downloadable resources
+"""
+
 import polars as pl
-from Utils.classes.logger import Logger
-
-logger_instance = Logger(__name__).get_logger()
-
 
 def downloadable_resources_hits_ratio(logs_df):
     """

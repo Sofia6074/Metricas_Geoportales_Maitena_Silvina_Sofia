@@ -4,7 +4,6 @@ Calculates "slip" and "stick" metrics.
 
 import polars as pl
 
-
 def define_stick_and_slip_pages(logs_df):
     """
     Calculates "slip" and "stick" metrics.
@@ -16,12 +15,13 @@ def define_stick_and_slip_pages(logs_df):
     - Slip: ratio of single access views to entry views.
     - Stick: 1 - slip, indicating page retention ability.
     """
+
     entry_pages_df = logs_df.group_by('unique_session_id').agg([
         pl.col('request_url').first().alias('entry_page')
     ])
     total_entry_page_views = entry_pages_df.shape[0]
 
-    single_access_df = logs_df.group_by('unique_session_id').agg([
+    single_access_df = total_entry_page_views.group_by('unique_session_id').agg([
         pl.col('request_url').n_unique().alias('unique_page_views')
     ])
     single_access_df = single_access_df.filter(pl.col('unique_page_views') == 1)

@@ -18,6 +18,7 @@ from metrics.general.downloading_hits_ratio import (
 from metrics.general.error_rate_success_rate import (
     calculate_error_rate_success_rate
 )
+from metrics.general.most_visited_pages import calculate_most_visited_pages
 from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.average_zoom_response_time import (
     calculate_average_response_time_during_zoom
@@ -57,6 +58,8 @@ def run_all_metrics(logs_df):
     results['device_usage'] = count_device_usage(logs_df)
     results['downloadable_resources_hits_ratio'] = downloadable_resources_hits_ratio(logs_df)
     results['stick_and_slip_pages'] = define_stick_and_slip_pages(logs_df)
+    results['count_device_usage'] = count_device_usage(logs_df)
+    results['most_visited_pages'] = calculate_most_visited_pages(logs_df)
 
     print("Time-related metrics:")
     results['maximum_zoom'] = calculate_maximum_zoom(logs_df)
@@ -71,7 +74,8 @@ def run_all_metrics(logs_df):
 
     print("User metrics:")
     results['average_pages_viewed'] = calculate_average_pages_viewed_per_session(logs_df)
-    results['new_visitors_vs_all_visitors'] = calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
+    results['new_visitors_vs_all_visitors'] = (
+        calculate_ratio_of_new_visitors_to_all_visitors(logs_df))
     results['avrg_stepbacks'] = calculate_average_stepback_actions(logs_df)
     results['user_profiles'] = classify_user_profiles(logs_df)
 
