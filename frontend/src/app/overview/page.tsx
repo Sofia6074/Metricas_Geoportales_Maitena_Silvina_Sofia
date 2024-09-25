@@ -106,7 +106,7 @@ export default function Overview() {
 
                         <Card title="Average Response Time" infoIcon className={`${styles.item2}`}>
                             <div className={styles.display}>
-                                <AutoSizeText colorVar="color-text" textAlign="center">
+                                <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_response_time.avg_response_time.toFixed(2)}s
                                 </AutoSizeText>
                             </div>
@@ -114,7 +114,7 @@ export default function Overview() {
 
                         <Card title="Average Time Spent on Site" infoIcon className={`${styles.item3}`}>
                             <div className={styles.display}>
-                                <AutoSizeText colorVar="color-text" textAlign="center">
+                                <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_time_spent_on_site.toFixed(2)}s
                                 </AutoSizeText>
                             </div>
@@ -150,7 +150,7 @@ export default function Overview() {
 
                         <Card title="Average time spent per page" infoIcon className={`${styles.item5}`}>
                             <div className={styles.display}>
-                                <AutoSizeText colorVar="color-text" textAlign="center">
+                                <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_time_spent_per_page.toFixed(2)}s
                                 </AutoSizeText>
                             </div>
@@ -158,7 +158,7 @@ export default function Overview() {
 
                         <Card title="Downloading hits ratio" infoIcon className={`${styles.item6}`}>
                             <div className={styles.display}>
-                                <AutoSizeText colorVar="color-text" textAlign="center">
+                                <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.downloadable_resources_hits_ratio} hits
                                 </AutoSizeText>
                             </div>
