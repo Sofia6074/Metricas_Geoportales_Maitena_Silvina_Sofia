@@ -16,6 +16,9 @@
     /* Charts */
     --color-chart-red: #bb3f46;
     --color-chart-green: #accc9c;
+    --color-chart-blue: #accc9c;
+    --color-chart-purple: #58508d;
+    --color-chart-orange: #ffa600;
   }
 
   html,

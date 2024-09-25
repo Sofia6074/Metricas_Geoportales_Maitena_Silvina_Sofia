@@ -36,8 +36,8 @@ export interface DeviceUsage {
 export interface StickAndSlipPages {
     total_entry_page_views: number
     total_single_access_page_views: number
-    slip: number[]
-    stick: number[]
+    slip: number
+    stick: number
 }
 
 export interface MaximumStableZoom {
