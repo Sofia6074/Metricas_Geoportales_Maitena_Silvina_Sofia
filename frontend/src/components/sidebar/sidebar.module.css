@@ -3,9 +3,15 @@
     height: 100vh;
     padding: 20px;
     position: fixed;
-    background-color: var(--color-light-gray);
-    border-right: 1px solid var(--color-border);
+    box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.05);
     color: var(--color-text);
+
+    /* Glassmorphism */
+    background: rgba(248, 249, 250, 0.9);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(248, 249, 250, 0.29);
 }
 
 .logo {
@@ -30,24 +36,24 @@
 
 .fileLabel {
     display: block;
-    border: 1px solid var(--color-border);
-    padding: 10px;
-    border-radius: 5px;
     text-align: center;
     cursor: pointer;
-    color: var(--color-secondary);
     font-size: 14px;
+    padding: 10px;
+    border-radius: 5px;
+    color: var(--color-secondary);
+    background-color: var(--color-border);
 }
 
 .menu p {
     padding: 10px 0;
     font-weight: 600;
-    font-size: 14px;
-    color: var(--color-secondary);
-    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--color-prim);
 }
 
 .menu ul {
+    margin-top: 14px;
     list-style-type: none;
 }
 
@@ -66,6 +72,9 @@
 }
 
 .menuItem.active {
-    background-color: var(--color-primary) !important;
     color: white;
+    background-color: var(--color-primary) !important;
+    -webkit-box-shadow: 0px 0px 10px 1px rgba(90, 143, 223, 0.6);
+    -moz-box-shadow: 0px 0px 10px 1px rgba(90, 143, 223, 0.6);
+    box-shadow: 0px 0px 10px 1px rgba(90, 143, 223, 0.6);
 }

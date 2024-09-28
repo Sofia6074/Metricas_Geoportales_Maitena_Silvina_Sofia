@@ -1,7 +1,7 @@
   :root {
-    --color-primary: #5a8fdf;
+    --color-primary: #5586d0bf;
     --color-secondary: #6c757d;
-    --color-background: #ededed;
+    --color-background: #5182cb2b;
     --color-text: #171717;
     --color-light-gray: #f8f9fa;
     --color-border: #ccc;
@@ -19,6 +19,9 @@
     --color-chart-blue: #accc9c;
     --color-chart-purple: #58508d;
     --color-chart-orange: #ffa600;
+
+    /* Variations */
+    --color-vibrant-primary: #5a8fdf;
   }
 
   html,
