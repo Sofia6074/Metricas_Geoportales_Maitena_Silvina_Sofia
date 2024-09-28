@@ -75,12 +75,12 @@ def run_all_metrics(logs_df):
 
     print("User metrics:")
     results['average_pages_viewed'] = calculate_average_pages_viewed_per_session(logs_df)
-    results['average_pages_viewed_categorization'] = calculate_average_pages_viewed_per_session_by_profile(logs_df)
+    # results['average_pages_viewed_categorization'] = calculate_average_pages_viewed_per_session_by_profile(logs_df)
     results['new_visitors_vs_all_visitors'] = calculate_ratio_of_new_visitors_to_all_visitors(logs_df)
-    results['avrg_stepbacks'] = calculate_average_stepback_actions(logs_df)
+    results['average_stepbacks'] = calculate_average_stepback_actions(logs_df)
     results['user_profiles'] = classify_user_profiles(logs_df)
-    results['average_time_spent_on_site_categorization'] = calculate_weighted_average_time_spent_on_site(logs_df)
-    results['average_time_spent_per_page_categorization'] = calculate_average_time_spent_per_page_per_user_cat(logs_df)
+    # results['average_time_spent_on_site_categorization'] = calculate_weighted_average_time_spent_on_site(logs_df)
+    # results['average_time_spent_per_page_categorization'] = calculate_average_time_spent_per_page_per_user_cat(logs_df)
 
 
     print("All metrics have been executed.")
