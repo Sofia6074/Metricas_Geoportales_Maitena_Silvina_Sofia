@@ -5,17 +5,13 @@ web server log data using Polars.
 from datetime import timedelta
 
 import polars as pl
-from Utils.classes.logger import Logger
-
-logger = Logger(__name__).get_logger()
-
 
 def initialize_total_entries(data_frame):
     """
     Initializes and returns the total number of entries in the dataframe.
     """
     initial_total_entries = data_frame.height
-    logger.info("Total entries initialized: %d", initial_total_entries)
+    print("Total entries initialized: %d", initial_total_entries)
     return initial_total_entries
 
 
@@ -23,7 +19,7 @@ def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Formats the logs by extracting relevant fields from the raw log string.
     """
-    logger.info("Formatting logs")
+    print("Formatting logs")
 
     log_pattern = (
         r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] '
@@ -62,7 +58,7 @@ def remove_duplicates(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Removes duplicate rows from the dataframe.
     """
-    logger.info("Removing duplicate entries")
+    print("Removing duplicate entries")
     return data_frame.unique()
 
 
@@ -70,7 +66,7 @@ def handle_null_values(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Handles null values by filling or dropping them.
     """
-    logger.info("Handling null values")
+    print("Handling null values")
 
     data_frame = data_frame.with_columns([
         pl.col("status_code").fill_null(0),
@@ -85,7 +81,7 @@ def normalize_urls(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Normalizes the URLs by converting them to lowercase.
     """
-    logger.info("Normalizing URLs")
+    print("Normalizing URLs")
     return data_frame.with_columns(pl.col("request_url").str.to_lowercase())
 
 
@@ -93,7 +89,7 @@ def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Converts the timestamp to datetime format while preserving the original time.
     """
-    logger.info("Converting timestamp to datetime format")
+    print("Converting timestamp to datetime format")
 
     data_frame = data_frame.with_columns(
         pl.col("timestamp")
@@ -131,16 +127,16 @@ def count_filters_robots(data_frame: pl.DataFrame):
     percentile_semrushbot = (entries_semrushbot / total_entries) * 100
     percentile_agesic_crawler = (entries_agesic_crawler / total_entries) * 100
 
-    logger.info(
+    print(
         "Googlebot records: %d (%.2f%%)", entries_googlebot, percentile_googlebot
     )
-    logger.info(
+    print(
         "Baiduspider records: %d (%.2f%%)", entries_baiduspider, percentile_baiduspider
     )
-    logger.info(
+    print(
         "SemrushBot records: %d (%.2f%%)", entries_semrushbot, percentile_semrushbot
     )
-    logger.info(
+    print(
         "agesic-crawler records: %d (%.2f%%)", entries_agesic_crawler, percentile_agesic_crawler
     )
 
@@ -149,7 +145,7 @@ def filter_robots_and_crawlers(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Filters out known bots and crawlers from the dataframe.
     """
-    logger.info("Removing the following bot and crawler records:")
+    print("Removing the following bot and crawler records:")
     return data_frame.filter(
         ~pl.col("user_agent").str.contains('Googlebot') &
         ~pl.col("user_agent").str.contains('Baiduspider') &
@@ -162,7 +158,7 @@ def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     Filters out static files (e.g., CSS, JS, images) from the dataframe.
     """
-    logger.info("Removing the following static files:")
+    print("Removing the following static files:")
     static_file_patterns = [
         r'/plugins/system/jcemediabox/', r'\.css$', r'\.js$',
         r'\.png$', r'\.gif$', r'favicon\.ico$'
@@ -179,7 +175,7 @@ def remove_internal_requests(data_frame: pl.DataFrame) -> pl.DataFrame:
     Removes internal requests (e.g., from localhost)
     or requests with method OPTIONS and URL * from the dataframe.
     """
-    logger.info("Removing internal requests")
+    print("Removing internal requests")
     return data_frame.filter(
         ~((pl.col("ip") == "127.0.0.1") |
           ((pl.col("request_method") == "OPTIONS") & (pl.col("request_url") == "*")))
@@ -190,11 +186,11 @@ def preview_logs(data_frame: pl.DataFrame, num=5):
     """
     Displays a preview of the first few rows of the dataframe.
     """
-    logger.info("Previewing the first rows of the DataFrame")
+    print("Previewing the first rows of the DataFrame")
     print(data_frame.head(num))
 
 def filter_invalid_ips(data_frame: pl.DataFrame) -> pl.DataFrame:
-    logger.info("Filtrando IPs malformadas o sospechosas")
+    print("Filtrando IPs malformadas o sospechosas")
     invalid_ip_patterns = [
         r'^0\.',  # Direcciones IP inválidas
         r'^192\.168\.',  # Rango de IPs privadas
@@ -207,14 +203,14 @@ def filter_invalid_ips(data_frame: pl.DataFrame) -> pl.DataFrame:
 
 
 def filter_invalid_user_agents(data_frame: pl.DataFrame) -> pl.DataFrame:
-    logger.info("Filtrando User Agents inválidos")
+    print("Filtrando User Agents inválidos")
     data_frame = data_frame.filter(
         pl.col("user_agent").str.contains(r'.{6,}')
     )
     return data_frame
 
 def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
-    logger.info("Filtrando duraciones sospechosas")
+    print("Filtrando duraciones sospechosas")
     data_frame = data_frame.filter(
         (pl.col("response_time") > timedelta(milliseconds=10)) &
         (pl.col("response_time") < timedelta(hours=1))
@@ -222,14 +218,14 @@ def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
     return data_frame
 
 def filter_invalid_status_codes(data_frame: pl.DataFrame) -> pl.DataFrame:
-    logger.info("Filtrando códigos de estado HTTP inválidos")
+    print("Filtrando códigos de estado HTTP inválidos")
     data_frame = data_frame.filter(
         (pl.col("status_code") >= 100) & (pl.col("status_code") <= 599)
     )
     return data_frame
 
 def filter_invalid_referers(data_frame: pl.DataFrame) -> pl.DataFrame:
-    logger.info("Filtrando referers inválidos")
+    print("Filtrando referers inválidos")
     data_frame = data_frame.filter(
         pl.col("referer").str.contains(r'^https?://')
     )
@@ -276,7 +272,7 @@ def calculate_sessions(data_frame):
         - User Agent
         - 30-minute threshold between searches.
     """
-    logger.info("Calculating unique sessions")
+    print("Calculating unique sessions")
     data_frame_with_sessions = data_frame.with_columns([
         pl.concat_str([pl.col("ip"), pl.col("user_agent")]).alias("session_id")
     ])
@@ -337,12 +333,13 @@ def log_cleaner(data_frame: pl.DataFrame) -> pl.DataFrame:
         data_frame = filter_invalid_status_codes(data_frame)
         data_frame = filter_invalid_referers(data_frame)
         data_frame = calculate_sessions(data_frame)
+        data_frame = filter_outliers(data_frame)
         preview_logs(data_frame)
         initialize_total_entries(data_frame)
-        logger.info("Data has been successfully cleaned")
+        print("Data has been successfully cleaned")
     except (ValueError, TypeError) as exc:
-        logger.error("Specific error while cleaning data: %s", str(exc))
+        print("Specific error while cleaning data: %s", str(exc))
     except Exception as exc:  # pylint: disable=W0703
-        logger.error("Unexpected error while cleaning data: %s", str(exc))
+        print("Unexpected error while cleaning data: %s", str(exc))
 
     return data_frame

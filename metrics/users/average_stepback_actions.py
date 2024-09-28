@@ -3,9 +3,6 @@ This module calculates the average number of stepback actions per session.
 """
 
 import polars as pl
-from Utils.classes.logger import Logger
-
-logger_instance = Logger(__name__).get_logger()
 
 def calculate_average_stepback_actions(logs_df):
     """

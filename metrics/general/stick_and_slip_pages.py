@@ -21,8 +21,8 @@ def define_stick_and_slip_pages(logs_df):
     ])
     total_entry_page_views = entry_pages_df.shape[0]
 
-    single_access_df = total_entry_page_views.group_by('unique_session_id').agg([
-        pl.col('request_url').n_unique().alias('unique_page_views')
+    single_access_df = entry_pages_df.group_by('unique_session_id').agg([
+        pl.col('entry_page').n_unique().alias('unique_page_views')
     ])
     single_access_df = single_access_df.filter(pl.col('unique_page_views') == 1)
     total_single_access_page_views = single_access_df.shape[0]

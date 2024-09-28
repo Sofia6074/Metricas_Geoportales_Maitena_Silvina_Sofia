@@ -7,8 +7,8 @@ import json
 import boto3
 import polars as pl
 from botocore.exceptions import ClientError
-from scripts_py.classes.logger import Logger
-from scripts_py.common.log_cleaner import log_cleaner
+
+from Utils.log_cleaner import log_cleaner
 from metrics.index import run_all_metrics
 
 
@@ -56,16 +56,12 @@ def read_logs(file_path: str) -> pl.DataFrame:
     """
     Reads a CSV file using Polars and returns it as a DataFrame.
     """
-    logger_instance = Logger(__name__).get_logger()
-
     try:
         logs_dataframe = pl.read_csv(file_path, has_header=False, separator=',', quote_char='"')
         return logs_dataframe
-    except Exception:
-        logger_instance.error(
-            "An error occurred while reading the CSV file with Polars",
-            exc_info=True
-        )
+    except Exception as e:
+        print("An error occurred while reading the CSV file with Polars:")
+        print(e)
         raise
 
 if __name__ == "__main__":

@@ -70,7 +70,7 @@ def calculate_most_repeated_words_filtered(logs_df):
         pl.col('search_term').str.len_chars().alias('search_term_length')
     ])
 
-    df_search_filtered = df_search_filtered.groupby(['unique_session_id', 'search_group']).agg([
+    df_search_filtered = df_search_filtered.group_by(['unique_session_id', 'search_group']).agg([
         pl.col('search_term').filter(pl.col('search_term_length') == pl.col('search_term_length').max()).first().alias(
             'longest_search_term')
     ])
@@ -107,5 +107,5 @@ def calculate_most_repeated_words_filtered(logs_df):
 
     print("Top 5 Words:")
     print(top_5_words)
-    
+
     return top_5_words
