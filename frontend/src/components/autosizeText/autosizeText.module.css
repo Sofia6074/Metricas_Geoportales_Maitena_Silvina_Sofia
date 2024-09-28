@@ -1,0 +1,8 @@
+.autoSizeText {
+    line-height: 1.2;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
