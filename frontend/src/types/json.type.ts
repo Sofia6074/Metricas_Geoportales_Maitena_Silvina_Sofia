@@ -6,9 +6,9 @@ export interface JsonData {
     device_usage: DeviceUsage[]
     downloadable_resources_hits_ratio: number
     stick_and_slip_pages: StickAndSlipPages
-    maximum_zoom: number
+    maximum_zoom_reached: number
     maximum_stable_zoom: MaximumStableZoom[]
-    zoom_response_time: number
+    average_zoom_response_time: number
     most_repeated_words: MostRepeatedWord[]
     related_search_parameters: RelatedSearchParameter[]
     average_pages_viewed: number
