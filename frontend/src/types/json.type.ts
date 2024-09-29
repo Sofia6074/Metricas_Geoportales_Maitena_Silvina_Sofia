@@ -46,8 +46,8 @@ export interface MaximumStableZoom {
 }
 
 export interface MostRepeatedWord {
-    word: string
-    count: number
+    text: string
+    value: number
 }
 
 export interface RelatedSearchParameter {

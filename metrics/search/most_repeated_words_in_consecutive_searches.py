@@ -81,11 +81,11 @@ def calculate_most_repeated_words_filtered(logs_df):
     word_counts = Counter(all_search_terms)
 
     word_counts_df = pl.DataFrame({
-        'word': list(word_counts.keys()),
-        'count': list(word_counts.values())
+        'text': list(word_counts.keys()),
+        'value': list(word_counts.values())
     })
 
-    word_counts_df_sorted = word_counts_df.sort('count', descending=True)
+    word_counts_df_sorted = word_counts_df.sort('value', descending=True)
     top_5_words = word_counts_df_sorted.head(5)
 
     print("Top 5 Words:")

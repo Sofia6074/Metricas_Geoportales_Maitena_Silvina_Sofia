@@ -4,9 +4,10 @@ import { useContext } from "react";
 import styles from "./search.module.css"
 import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import Card from "@/components/card/card";
-import { ResponsiveContainer, Bar, BarChart, Tooltip, XAxis, YAxis, YAxisProps } from 'recharts';
+import { ResponsiveContainer, Bar, BarChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { MetricsContext } from "@/context/MetricsContext";
 import Spinner from "@/components/spinner/spinner";
+import { Wordcloud } from "@visx/wordcloud";
 
 export default function Search() {
     const { metrics, loading, error } = useContext(MetricsContext);
@@ -71,7 +72,29 @@ export default function Search() {
 
                         <Card title="Repeated words in consecutive searches" infoIcon className={`${styles.item2}`}>
                             <div className={styles.chart}>
-                                351.15s
+                                <Wordcloud
+                                    words={metrics.most_repeated_words}
+                                    width={500}
+                                    height={300}
+                                    fontSize={(word) => word.value * 10}
+                                    spiral="rectangular"
+                                    rotate={() => 0}
+                                    padding={2}
+                                >
+                                    {(cloudWords) =>
+                                        cloudWords.map((w, i) => (
+                                            <text
+                                                key={i}
+                                                fontSize={w.size}
+                                                textAnchor="middle"
+                                                transform={`translate(${w.x}, ${w.y})`}
+                                                fill="#8884d8"
+                                            >
+                                                {w.text}
+                                            </text>
+                                        ))
+                                    }
+                                </Wordcloud>
                             </div>
                         </Card>
                     </div>}
