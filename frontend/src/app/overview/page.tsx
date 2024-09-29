@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import styles from "./overview.module.css"
