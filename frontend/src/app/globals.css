@@ -17,7 +17,7 @@
     --color-chart-red: #bb3f46;
     --color-chart-green: #accc9c;
     --color-chart-blue: #accc9c;
-    --color-chart-purple: #58508d;
+    --color-chart-purple: #7368b8;
     --color-chart-orange: #ffa600;
 
     /* Variations */
@@ -71,4 +71,34 @@
   .sidebar {
     width: 250px;
     flex-shrink: 0;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-border);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-vibrant-primary);
+  }
+
+  /* RECHARTS TOOLTIP */
+  .recharts-default-tooltip {
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(237, 237, 237, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(237, 237, 237, 0.3);
+    pointer-events: none;
   }

@@ -1,10 +1,10 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import styles from "./overview.module.css"
 import Card from "@/components/card/card";
-import { ResponsiveContainer, PieChart, Pie } from 'recharts';
+import { ResponsiveContainer, PieChart, Pie, Tooltip } from 'recharts';
 import { MetricsContext } from "@/context/MetricsContext";
 import Spinner from "@/components/spinner/spinner";
 import AutoSizeText from "@/components/autosizeText/autosizeText";
@@ -12,19 +12,36 @@ import AutoSizeText from "@/components/autosizeText/autosizeText";
 export default function Overview() {
     const { metrics, loading, error } = useContext(MetricsContext);
 
-    useEffect(() => {
-        console.log(metrics);
-    }, [metrics])
+    const [colors, setColors] = useState({
+        green: '',
+        red: '',
+        orange: '',
+        purple: ''
+    });
+
+    const getCssVariable = (variableName: string): string => {
+        const rootStyle = getComputedStyle(document.documentElement);
+        return rootStyle.getPropertyValue(variableName).trim();
+    };
 
     const successRateErrorRateData = [
-        { name: "Success", value: metrics?.error_rate_success_rate.success_rate, fill: "#accc9c" },
-        { name: "Error", value: metrics?.error_rate_success_rate.error_rate, fill: "#bb3f46" },
+        { name: "Success", value: metrics?.error_rate_success_rate.success_rate, fill: colors.green },
+        { name: "Error", value: metrics?.error_rate_success_rate.error_rate, fill: colors.red },
     ];
 
     const stickAndSlipData = [
-        { name: "Stick", value: metrics?.stick_and_slip_pages.stick, fill: "#58508d" },
-        { name: "Slip", value: metrics?.stick_and_slip_pages.slip, fill: "#ffa600" },
+        { name: "Stick", value: metrics?.stick_and_slip_pages.stick, fill: colors.purple },
+        { name: "Slip", value: metrics?.stick_and_slip_pages.slip, fill: colors.orange },
     ];
+
+    useEffect(() => {
+        setColors({
+            green: getCssVariable('--color-chart-green'),
+            red: getCssVariable('--color-chart-red'),
+            orange: getCssVariable('--color-chart-orange'),
+            purple: getCssVariable('--color-chart-purple'),
+        });
+    }, []);
 
     return (
         <div className={styles.flex}>
@@ -51,10 +68,10 @@ export default function Overview() {
                                             cy="50%"
                                             innerRadius={20}
                                             outerRadius={40}
-                                            fill="#8884d8"
                                             paddingAngle={0}
                                             dataKey="value"
                                         />
+                                        <Tooltip />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
@@ -95,10 +112,10 @@ export default function Overview() {
                                             cy="50%"
                                             innerRadius={20}
                                             outerRadius={40}
-                                            fill="#8884d8"
                                             paddingAngle={0}
                                             dataKey="value"
                                         />
+                                        <Tooltip />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
