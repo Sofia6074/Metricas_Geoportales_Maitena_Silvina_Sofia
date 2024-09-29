@@ -13,14 +13,23 @@
     justify-content: center;
 }
 
+.customTooltip {
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(237, 237, 237, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(237, 237, 237, 0.3);
+}
+
 /* GRID */
 .grid {
     display: grid;
     gap: 20px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-areas: "item1 item2 item3 item4"
-        "item5 item5 item6 item6"
-        "item7 item8 item9 item9";
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas: "item1 item2 item2"
+        "item3 item2 item2";
     padding: 20px;
 }
 
@@ -34,28 +43,4 @@
 
 .item3 {
     grid-area: item3;
-}
-
-.item4 {
-    grid-area: item4;
-}
-
-.item5 {
-    grid-area: item5;
-}
-
-.item6 {
-    grid-area: item6;
-}
-
-.item7 {
-    grid-area: item7;
-}
-
-.item8 {
-    grid-area: item8;
-}
-
-.item9 {
-    grid-area: item9;
 }
