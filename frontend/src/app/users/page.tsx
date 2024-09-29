@@ -6,11 +6,18 @@ import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import Card from "@/components/card/card";
 import Spinner from "@/components/spinner/spinner";
 import { MetricsContext } from "@/context/MetricsContext";
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { ResponsiveContainer, BarChart, Bar, Tooltip, XAxis } from "recharts";
 
 export default function Users() {
+    const [primaryChartColor, setPrimaryChartColor] = useState<string>('');
     const { metrics, loading, error } = useContext(MetricsContext);
+
+    useEffect(() => {
+        const rootStyle = getComputedStyle(document.documentElement);
+        const purpleColor = rootStyle.getPropertyValue('--color-chart-purple').trim();
+        setPrimaryChartColor(purpleColor);
+    }, [])
 
     const userProfilesWithNames = useMemo(() => {
         if (!metrics?.user_profiles) return [];
@@ -68,7 +75,7 @@ export default function Users() {
                                     <BarChart width={60} height={150} data={userProfilesWithNames}>
                                         <XAxis dataKey="name" />
                                         <Tooltip />
-                                        <Bar dataKey="count" fill="#8884d8" />
+                                        <Bar dataKey="count" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
