@@ -13,7 +13,7 @@ export interface JsonData {
     related_search_parameters: RelatedSearchParameter[]
     average_pages_viewed: number
     new_visitors_vs_all_visitors: number
-    avrg_stepbacks: number
+    average_stepbacks: number
     user_profiles: UserProfile[]
 }
 
@@ -46,8 +46,8 @@ export interface MaximumStableZoom {
 }
 
 export interface MostRepeatedWord {
-    word: string
-    count: number
+    text: string
+    value: number
 }
 
 export interface RelatedSearchParameter {

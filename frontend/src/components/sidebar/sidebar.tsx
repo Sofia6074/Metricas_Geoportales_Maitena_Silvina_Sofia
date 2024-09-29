@@ -33,7 +33,7 @@ export default function Sidebar() {
 				<h1>Geometrics</h1>
 			</div>
 			<div className={styles.upload}>
-				<input type="file" id="file" className={styles.inputFile} />
+				<input type="file" id="file" disabled className={styles.inputFile} />
 				<label htmlFor="file" className={styles.fileLabel}>
 					geo-web-server-logs.csv
 				</label>
