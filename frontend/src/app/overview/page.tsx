@@ -33,7 +33,7 @@ export default function Overview() {
                 error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
                         {/* Primera Fila */}
-                        <Card title="Success Rate & Error Rate" infoIcon className={`${styles.item1}`}>
+                        <Card title="Success rate & error rate" infoIcon className={`${styles.item1}`}>
                             <div className={styles.display}>
                                 <div>
                                     <AutoSizeText minSize="18px" maxSize="36px" colorVar="color-chart-green" textAlign="right">
@@ -60,7 +60,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Average Response Time" infoIcon className={`${styles.item2}`}>
+                        <Card title="Average response time" infoIcon className={`${styles.item2}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_response_time.avg_response_time.toFixed(2)}s
@@ -68,7 +68,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Average Time Spent on Site" infoIcon className={`${styles.item3}`}>
+                        <Card title="Average time spent on site" infoIcon className={`${styles.item3}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_time_spent_on_site.toFixed(2)}s
@@ -77,7 +77,7 @@ export default function Overview() {
                         </Card>
 
                         {/* Segunda Fila */}
-                        <Card title="Pages Stick and Slip" infoIcon className={`${styles.item4}`}>
+                        <Card title="Pages stick and slip" infoIcon className={`${styles.item4}`}>
                             <div className={styles.display}>
                                 <div>
                                     <AutoSizeText minSize="18px" maxSize="36px" colorVar="color-chart-purple" textAlign="right">
