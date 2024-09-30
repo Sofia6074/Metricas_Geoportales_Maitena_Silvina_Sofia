@@ -89,11 +89,8 @@ def extract_search_params(map_requests_df):
         .otherwise(None).alias("search_params")
     )
 
-    map_requests_df = map_requests_df.filter(pl.col("search_params")
-                                             .is_not_null())
-
+    map_requests_df = map_requests_df.filter(pl.col("search_params").is_not_null())
     map_requests_df = map_requests_df.filter(pl.col("status_code") == 200)
-
     map_requests_df = map_requests_df.filter(pl.col("response_size") > 100)
     map_requests_df = map_requests_df.filter(pl.col("response_time") > 50)
 
@@ -108,7 +105,7 @@ def extract_search_params(map_requests_df):
 
 
 def calculate_jaccard_similarity(
-        search_list, search_time, session_id, time_threshold=4,
+        search_list, search_time, session_id, time_threshold=10,
         max_distance=2, max_comb_size=3):
     """
     Calculate Jaccard similarity between all possible combinations of searches
@@ -137,33 +134,25 @@ def calculate_jaccard_similarity(
                                 Jaccard similarity scores.
     """
     session_results = []
-
     for size in range(2, min(max_comb_size + 1, len(search_list) + 1)):
         for combo in combinations(range(len(search_list)), size):
             terms = [search_list[i] for i in combo]
             times = [search_time[i] for i in combo]
 
-            if any(is_autocomplete(terms[i], terms[j],
-                                   max_distance=max_distance)
+            if any(is_autocomplete(terms[i], terms[j], max_distance=max_distance)
                    for i, j in combinations(range(len(terms)), 2)):
                 continue
 
             time_diffs = [
-                convert_to_datetime(times[i]) -
-                convert_to_datetime(times[i - 1])
+                (convert_to_datetime(times[i]) - convert_to_datetime(times[i - 1])).total_seconds()
                 for i in range(1, len(times))
             ]
-            if any(diff.total_seconds() >
-                   time_threshold for diff in time_diffs):
+            if any(diff > time_threshold for diff in time_diffs):
                 continue
 
-            list_combo = [sorted(term.split()) for term in terms]
-
-            intersection = list_combo[0]
-            union = list_combo[0]
-            for s in list_combo[1:]:
-                intersection = sorted(set(intersection) & set(s))
-                union = sorted(set(union) | set(s))
+            list_combo = [set(term.split()) for term in terms]
+            intersection = list_combo[0].intersection(*list_combo[1:])
+            union = list_combo[0].union(*list_combo[1:])
 
             jaccard_sim = len(intersection) / len(union) if union else 0
 
@@ -173,9 +162,6 @@ def calculate_jaccard_similarity(
                     "search_pair": " - ".join(terms),
                     "jaccard_similarity": round(jaccard_sim, 2)
                 })
-
-                if jaccard_sim == 1.0:
-                    break
 
     return session_results
 
