@@ -1,7 +1,3 @@
-"""
-This module calculates the average number of stepback actions per session.
-"""
-
 import polars as pl
 
 def calculate_average_stepback_actions(logs_df):
@@ -11,8 +7,6 @@ def calculate_average_stepback_actions(logs_df):
     between requests.
     """
 
-    # Filter out requests to GeoServer to focus on user interactions
-    # (excluding map service requests)
     session_df = logs_df.filter(
         ~pl.col("request_url").str.contains("geoserver")
     )
@@ -30,7 +24,6 @@ def calculate_average_stepback_actions(logs_df):
         (pl.col("time_diff_seconds").cast(pl.Float64) / 1_000_000).alias("time_diff_seconds")
     )
 
-    # Filter stepbacks, considering only those with a time difference of more than 3 seconds
     stepbacks = session_df.filter(
         (pl.col("request_url") == pl.col("previous_url")) &
         (pl.col("time_diff_seconds") > 3)

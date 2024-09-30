@@ -6,7 +6,6 @@ from the filtered logs.
 import polars as pl
 from metrics.metrics_utils import filter_empty_urls
 
-
 def calculate_average_pages_viewed_per_session(logs_df):
     """
     Calculates the average pages viewed per session from the logs.
