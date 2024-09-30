@@ -75,25 +75,14 @@ def calculate_most_repeated_words_filtered(logs_df):
             'longest_search_term')
     ])
 
-    # df_search_filtered = df_search_filtered.filter(
-    #     (pl.col('next_term').is_null()) |
-    #     (~pl.col('next_term').str.starts_with(pl.col('search_term'))) |
-    #     (pl.col('next_term').str.len_chars() - pl.col('search_term')
-    #      .str.len_chars() <= 2)
-    # )
     df_search_filtered = df_search_filtered.with_columns([
-        pl.col('search_term').str.split(',').alias('split_terms')
-    ]).explode('split_terms')
+        pl.col('longest_search_term').str.strip_chars().str.to_lowercase().alias('cleaned_longest_search_term')
+    ])
 
-    df_search_filtered = df_search_filtered.with_columns([
-        pl.col('split_terms').str.strip_chars().str.to_lowercase()
-    ]).filter(
-        pl.col('split_terms').str.len_chars() > 0
-    )
     df_search_filtered = df_search_filtered.unique(
-        subset=['unique_session_id', 'split_terms'])
+        subset=['unique_session_id', 'cleaned_longest_search_term'])
 
-    all_search_terms = df_search_filtered['split_terms']
+    all_search_terms = df_search_filtered['cleaned_longest_search_term']
 
     word_counts = Counter(all_search_terms)
 
