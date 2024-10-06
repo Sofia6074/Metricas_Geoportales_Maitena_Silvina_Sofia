@@ -16,9 +16,9 @@ def calculate_average_pages_viewed_per_session(logs_df):
     """
 
     logs_df_filtered = filter_empty_urls(logs_df)
-    session_df = get_base_url(logs_df_filtered)
+    base_df = get_base_url(logs_df_filtered)
 
-    data_frame_with_sessions = session_df.with_columns([
+    data_frame_with_sessions = base_df.with_columns([
         (pl.col("unique_session_id") + "_" +
          pl.col("base_url")).alias("unique_url")
     ])

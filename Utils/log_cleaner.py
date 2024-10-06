@@ -335,7 +335,6 @@ def log_cleaner(data_frame: pl.DataFrame) -> pl.DataFrame:
         data_frame = calculate_sessions(data_frame)
         data_frame = filter_outliers(data_frame)
         preview_logs(data_frame)
-        initialize_total_entries(data_frame)
         print("Data has been successfully cleaned")
     except (ValueError, TypeError) as exc:
         print("Specific error while cleaning data: %s", str(exc))
