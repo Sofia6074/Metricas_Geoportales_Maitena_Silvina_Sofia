@@ -34,8 +34,6 @@ def calculate_average_time_spent_per_page(logs_df):
          pl.col("url_segment").cast(pl.Utf8)).alias("unique_url_id")
     ])
 
-    print(data_frame_with_sessions)
-
     entry_pages_df = data_frame_with_sessions.group_by('unique_url_id').agg([
         pl.col('time_diff').sum().alias('time_spent_on_page')
     ])
