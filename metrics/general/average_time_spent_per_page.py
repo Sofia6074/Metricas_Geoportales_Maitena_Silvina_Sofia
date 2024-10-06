@@ -25,7 +25,7 @@ def calculate_average_time_spent_per_page(logs_df):
         (~pl.col("base_url").str.contains(
             pl.col("base_url").shift(1).str.replace_all(r"\{", r"\{").str.replace_all(r"\}", r"\}")))
         .cum_sum()
-        .fill_null(0)  # Asigna 0 al primer log de cada sesión
+        .fill_null(0)
         .alias("url_segment")
     ])
 
