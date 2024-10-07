@@ -7,7 +7,7 @@ import polars as pl
 from metrics.metrics_utils import format_average_time, get_base_url
 
 
-def calculate_average_time_spent_per_page_per_user_cat(logs_df):
+def calculate_average_time_spent_per_page_per_user_category(logs_df):
     """
     Calculates the average time users spend per page on the site
     per user categorization.

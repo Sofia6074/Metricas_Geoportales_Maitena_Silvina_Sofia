@@ -50,6 +50,7 @@ def run_all_metrics(logs_df):
     results = {}
     print("Running all metrics...")
 
+
     print("General metrics:")
     results['error_rate_success_rate'] = calculate_error_rate_success_rate(logs_df)
     results['average_time_spent_on_site'] = calculate_average_time_spent_on_site(logs_df)
@@ -76,7 +77,7 @@ def run_all_metrics(logs_df):
     results['average_pages_viewed'] = calculate_average_pages_viewed_per_session(logs_df)
     results['new_visitors_vs_all_visitors'] = (
         calculate_ratio_of_new_visitors_to_all_visitors(logs_df))
-    results['avrg_stepbacks'] = calculate_average_stepback_actions(logs_df)
+    results['average_stepbacks'] = calculate_average_stepback_actions(logs_df)
     results['user_profiles'] = classify_user_profiles(logs_df)
 
     print("All metrics have been executed.")
