@@ -115,7 +115,7 @@ export default function Overview() {
                         <Card title="Downloading hits ratio" infoIcon className={`${styles.item6}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
-                                    {metrics.downloadable_resources_hits_ratio} hits
+                                    {metrics.downloadable_resources_hits} hits
                                 </AutoSizeText>
                             </div>
                         </Card>
