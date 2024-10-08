@@ -1,4 +1,4 @@
-export interface Root {
+export interface JsonData {
     error_rate_success_rate: ErrorRateSuccessRate
     average_time_spent_on_site: number
     average_time_spent_per_page: number
