@@ -7,7 +7,7 @@ import polars as pl
 from metrics.metrics_utils import get_base_url, filter_empty_urls
 
 
-def calculate_average_pages_viewed_per_session_by_profile(logs_df):
+def calculate_average_pages_viewed_per_session_per_user_category(logs_df):
     """
     Calculates the average pages viewed per session
     for each user profile within a time period.

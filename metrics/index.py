@@ -12,9 +12,7 @@ from metrics.general.average_time_spent_per_page import (
     calculate_average_time_spent_per_page
 )
 from metrics.general.count_device_usage import count_device_usage
-from metrics.general.downloading_hits_ratio import (
-    downloadable_resources_hits_ratio
-)
+from metrics.general.downloading_hits_ratio import downloadable_resources_hits
 from metrics.general.error_rate_success_rate import (
     calculate_error_rate_success_rate
 )
@@ -57,7 +55,7 @@ def run_all_metrics(logs_df):
     results['average_time_spent_per_page'] = calculate_average_time_spent_per_page(logs_df)
     results['average_response_time'] = calculate_average_response_time(logs_df)
     results['device_usage'] = count_device_usage(logs_df)
-    results['downloadable_resources_hits_ratio'] = downloadable_resources_hits_ratio(logs_df)
+    results['downloadable_resources_hits'] = downloadable_resources_hits(logs_df)
     results['stick_and_slip_pages'] = define_stick_and_slip_pages(logs_df)
     results['count_device_usage'] = count_device_usage(logs_df)
     results['most_visited_pages'] = calculate_most_visited_pages(logs_df)

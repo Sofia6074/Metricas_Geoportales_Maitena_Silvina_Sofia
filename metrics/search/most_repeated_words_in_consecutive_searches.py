@@ -92,9 +92,9 @@ def calculate_most_repeated_words_filtered(logs_df):
     })
 
     word_counts_df_sorted = word_counts_df.sort('count', descending=True)
-    top_5_words = word_counts_df_sorted.head(5)
+    top_words = word_counts_df_sorted.head(20)
 
-    print("Top 5 Words:")
-    print(top_5_words)
+    print("Top 20 Words:")
+    print(top_words)
 
-    return top_5_words
+    return top_words

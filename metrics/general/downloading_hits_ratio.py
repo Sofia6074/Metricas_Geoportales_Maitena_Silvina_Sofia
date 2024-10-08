@@ -1,23 +1,21 @@
 """
-Contains the code to calculate the ratio of downloadable resources
+Contains the code to calculate the times downloadable resources are downloaded
 """
 
 import polars as pl
 
-def downloadable_resources_hits_ratio(logs_df):
+def downloadable_resources_hits(logs_df):
     """
     Identifies and counts the number of times resources are downloaded,
     excluding irrelevant services.
     """
 
-    # Contenido descargable
     downloadable_patterns = [
         ".pdf", ".zip", ".csv", ".shp", ".xls", ".xlsx",
         ".kml", ".kmz", ".tif", ".las", ".jpg",
         "download=true", "request=GetFeature"
     ]
 
-    # Para evitar los servicios de consulta
     exclusion_patterns = [
         "geocoding", "search"
     ]

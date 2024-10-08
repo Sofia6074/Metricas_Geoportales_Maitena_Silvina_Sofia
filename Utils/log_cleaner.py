@@ -307,8 +307,6 @@ def calculate_sessions(data_frame):
 
     data_frame_with_sessions = data_frame_with_sessions.join(data_frame_with_sessions_timespent, on="unique_session_id")
 
-    # data_frame_with_sessions = filter_outliers(data_frame_with_sessions)
-
     return data_frame_with_sessions
 
 
