@@ -60,16 +60,20 @@ def run_all_metrics(logs_df):
     results['count_device_usage'] = count_device_usage(logs_df)
     results['most_visited_pages'] = calculate_most_visited_pages(logs_df)
 
-    print("Time-related metrics:")
-    results['maximum_zoom'] = calculate_maximum_zoom(logs_df)
-    results['maximum_stable_zoom'] = calculate_maximum_stable_value_zoom(logs_df)
-    results['zoom_response_time'] = calculate_average_response_time_during_zoom(logs_df)
+    print("Maps metrics:")
+    results['maximum_zoom_reached'] = calculate_maximum_zoom(logs_df)
+    results['maximum_stable_zoom'] = (
+        calculate_maximum_stable_value_zoom(logs_df))
+    results['average_zoom_response_time'] = (
+        calculate_average_response_time_during_zoom(logs_df))
 
     print("Search metrics:")
-    results['most_repeated_words'] = calculate_most_repeated_words_filtered(logs_df)
-
-    print("Search metrics:")
-    results['related_search_parameters'] = calculate_related_search_parameters(logs_df)
+    results['most_repeated_words'] = calculate_most_repeated_words_filtered(
+        logs_df
+    )
+    results['related_search_parameters'] = calculate_related_search_parameters(
+        logs_df
+    )
 
     print("User metrics:")
     results['average_pages_viewed'] = calculate_average_pages_viewed_per_session(logs_df)

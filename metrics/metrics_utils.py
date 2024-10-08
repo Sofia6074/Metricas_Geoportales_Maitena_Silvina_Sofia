@@ -91,4 +91,7 @@ def custom_serializer(obj):
         return obj.isoformat()
     if isinstance(obj, pl.DataFrame):
         return obj.to_dicts()
-    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+    raise TypeError(
+        f"Object of type {obj.__class__.__name__} is not JSON serializable"
+    )
+

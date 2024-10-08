@@ -1,170 +1,121 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./search.module.css"
 import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import Card from "@/components/card/card";
-import { LineChart, Line, ResponsiveContainer, Bar, BarChart, PieChart, Pie } from 'recharts';
+import { ResponsiveContainer, Bar, BarChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { MetricsContext } from "@/context/MetricsContext";
 import Spinner from "@/components/spinner/spinner";
+import { Wordcloud } from "@visx/wordcloud";
+import { scaleLinear } from "d3-scale";
 
 export default function Search() {
-    const data = [
-        {
-            name: 'Page A',
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
-        },
-        {
-            name: 'Page B',
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
-        },
-        {
-            name: 'Page C',
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
-        },
-        {
-            name: 'Page D',
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: 'Page E',
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: 'Page F',
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: 'Page G',
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
-    ];
-
-    const donutData = [
-        { name: "Group B", value: 50, fill: "#bb3f46" },
-        { name: "Group A", value: 400, fill: "#accc9c" },
-    ];
+    const [primaryChartColor, setPrimaryChartColor] = useState<string>('');
 
     const { metrics, loading, error } = useContext(MetricsContext);
+    const colorScale = useRef<ReturnType<typeof scaleLinear<string>> | null>(null);
 
     useEffect(() => {
-        console.log(metrics);
-    }, [metrics])
+        const rootStyle = getComputedStyle(document.documentElement);
+        const purpleColor = rootStyle.getPropertyValue('--color-chart-purple').trim();
+        setPrimaryChartColor(purpleColor);
+    }, [])
+
+    useEffect(() => {
+        if (metrics) {
+            const words = metrics.most_repeated_words;
+
+            colorScale.current = scaleLinear<string>()
+                .domain([Math.min(...words.map((d) => d.value)), Math.max(...words.map((d) => d.value))])
+                .range(['#8884d8', '#58508d']);
+        }
+    }, [metrics]);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const CustomYAxisTick = ({ x, y, payload }: any) => {
+        const text = payload.value;
+        const maxLength = 20;
+
+        return (
+            <g transform={`translate(${x},${y})`}>
+                <title>{text}</title>
+                <text
+                    x={0}
+                    y={0}
+                    dy={4}
+                    textAnchor="end"
+                    fill="#666"
+                    style={{
+                        fontSize: '16px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        maxWidth: `${maxLength}ch`,
+                    }}
+                >
+                    {text.length > maxLength ? `${text.substring(0, maxLength)}...` : text}
+                </text>
+            </g>
+        );
+    };
 
     return (
         <div className={styles.flex}>
             <Breadcrumb text={"Search"} />
             {loading ? <Spinner /> :
-                error ? <p>Error: {error}</p> :
+                error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
-                        {/* Primera Fila */}
-                        <Card title="Quality Score" infoIcon className={`${styles.item1}`}>
+                        <Card title="Related ratio of consecutive search parameters" infoIcon className={`${styles.item1}`}>
                             <div className={styles.chart}>
-                                78%
-                            </div>
-                        </Card>
-
-                        <Card title="Success Rate & Error Rate" infoIcon className={`${styles.item2}`}>
-                            <div className={styles.chart}>
-                                <ResponsiveContainer width="100%" height={100}>
-                                    <PieChart>
-                                        <Pie
-                                            data={donutData}
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={20}
-                                            outerRadius={40}
-                                            fill="#8884d8"
-                                            paddingAngle={0}
-                                            dataKey="value"
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        layout="vertical"
+                                        width={500}
+                                        height={300}
+                                        data={metrics.related_search_parameters}
+                                        margin={{ top: 20, right: 20, left: 100, bottom: 5 }}
+                                    >
+                                        <XAxis type="number" dataKey="jaccard_similarity" />
+                                        <YAxis
+                                            type="category"
+                                            dataKey="search_pair"
+                                            width={80}
+                                            tick={<CustomYAxisTick />}
                                         />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </Card>
-
-                        <Card title="Average Response Time" infoIcon className={`${styles.item3}`}>
-                            <div className={styles.chart}>
-                                351.15s
-                            </div>
-                        </Card>
-
-                        <Card title="Average Time Spent on Site" infoIcon className={`${styles.item4}`}>
-                            <div className={styles.chart}>
-                                8 min
-                            </div>
-                        </Card>
-
-                        {/* Segunda Fila */}
-                        <Card title="Average time spent per page" infoIcon className={`${styles.item5}`}>
-                            <div className={styles.chart}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <LineChart width={300} height={100} data={data}>
-                                        <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeWidth={2} />
-                                    </LineChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </Card>
-
-                        <Card title="Most Viewed Pages" infoIcon className={`${styles.item6}`}>
-                            <table className={styles.table}>
-                                <thead>
-                                    <tr>
-                                        <th>Base URL</th>
-                                        <th>Visits</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>/geoserver-raster/gwc/service/secto...</td>
-                                        <td>72577</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </Card>
-
-                        {/* Tercera Fila */}
-                        <Card title="Pages Stick and Slip" infoIcon className={`${styles.item7}`}>
-                            <div className={styles.chart}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart width={150} height={40} data={data}>
-                                        <Bar dataKey="uv" fill="#8884d8" />
+                                        <Tooltip />
+                                        <Bar dataKey="jaccard_similarity" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
                         </Card>
 
-                        <Card title="Downloading hits ratio" infoIcon className={`${styles.item8}`}>
+                        <Card title="Repeated words in consecutive searches" infoIcon className={`${styles.item2}`}>
                             <div className={styles.chart}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart width={150} height={40} data={data}>
-                                        <Bar dataKey="uv" fill="#8884d8" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </Card>
-
-                        <Card title="Average Time Spent on Site - Displays" infoIcon className={`${styles.item9}`}>
-                            <div className={styles.chart}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart width={150} height={40} data={data}>
-                                        <Bar dataKey="uv" fill="#8884d8" />
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                <Wordcloud
+                                    words={metrics.most_repeated_words}
+                                    width={500}
+                                    height={300}
+                                    fontSize={(word) => word.value * 10}
+                                    spiral="rectangular"
+                                    rotate={() => 0}
+                                    padding={2}
+                                >
+                                    {(cloudWords) =>
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        cloudWords.map((w: any, i) => (
+                                            <text
+                                                key={i}
+                                                fontSize={w.size}
+                                                textAnchor="middle"
+                                                transform={`translate(${w.x}, ${w.y})`}
+                                                fill={colorScale.current!(w.value)}
+                                            >
+                                                {w.text}
+                                            </text>
+                                        ))
+                                    }
+                                </Wordcloud>
                             </div>
                         </Card>
                     </div>}
