@@ -51,7 +51,6 @@ def calculate_related_search_parameters(logs_df):
     )
 
     print(results_df)
-
     return results_df
 
 

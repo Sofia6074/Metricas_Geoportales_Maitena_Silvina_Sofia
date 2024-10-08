@@ -21,3 +21,4 @@ def calculate_most_visited_pages(logs_df):
 
     print("Most visited URLs:")
     print(most_visited_pages.head(10))
+    return most_visited_pages.head(10)

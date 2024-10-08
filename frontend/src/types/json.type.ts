@@ -7,12 +7,12 @@ export interface Root {
     downloadable_resources_hits: number
     stick_and_slip_pages: StickAndSlipPages
     count_device_usage: CountDeviceUsage[]
-    most_visited_pages: any
+    most_visited_pages: MostVisitedPage[]
     maximum_zoom: number
     maximum_stable_zoom: MaximumStableZoom[]
     zoom_response_time: number
     most_repeated_words: MostRepeatedWord[]
-    related_search_parameters: any[]
+    related_search_parameters: RelatedSearchParameter[]
     average_pages_viewed: number
     new_visitors_vs_all_visitors: number
     average_stepbacks: number
@@ -47,6 +47,11 @@ export interface CountDeviceUsage {
     device_usage_count: number
 }
 
+export interface MostVisitedPage {
+    base_url: string
+    count: number
+}
+
 export interface MaximumStableZoom {
     zoom_level: number
     total_count: number
@@ -55,6 +60,12 @@ export interface MaximumStableZoom {
 export interface MostRepeatedWord {
     word: string
     count: number
+}
+
+export interface RelatedSearchParameter {
+    unique_session_id: string
+    search_pair: string
+    jaccard_similarity: number
 }
 
 export interface UserProfiles {
