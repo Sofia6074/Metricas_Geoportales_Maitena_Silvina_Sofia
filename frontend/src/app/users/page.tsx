@@ -84,7 +84,7 @@ export default function Users() {
                         {/* Segunda Fila */}
                         <Card title="Average stepbacks actions" infoIcon className={`${styles.item4}`}>
                             <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
-                                {metrics.average_stepbacks.toFixed(2)}
+                                {metrics.average_stepbacks.toFixed(0)}
                             </AutoSizeText>
                         </Card>
                     </div>}

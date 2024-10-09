@@ -62,7 +62,7 @@ export default function Maps() {
                         <Card title="Maximum zoom reached" infoIcon className={`${styles.item3}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
-                                    {metrics.maximum_zoom_reached.toFixed(2)}s
+                                    {metrics.maximum_zoom_reached.toFixed(0)}
                                 </AutoSizeText>
                             </div>
                         </Card>

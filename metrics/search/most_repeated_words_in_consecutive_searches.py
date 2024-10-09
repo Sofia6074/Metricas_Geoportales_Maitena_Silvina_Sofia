@@ -10,13 +10,6 @@ def calculate_most_repeated_words_filtered(logs_df):
     processes the terms,removes autocompleted terms, splits search terms
     by commas, and finally counts the occurrences
     of each unique term.
-
-    Args:
-        logs_df (DataFrame): Input DataFrame containing log entries.
-
-    Returns:
-        DataFrame: A DataFrame containing the top 5 most
-        repeated words and their counts.
     """
 
     df_search = logs_df.filter(pl.col('request_url').str.contains(r'q='))
