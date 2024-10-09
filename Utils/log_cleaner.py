@@ -3,8 +3,8 @@ This module provides functions to clean and transform
 web server log data using Polars.
 """
 from datetime import timedelta
-
 import polars as pl
+
 
 def initialize_total_entries(data_frame):
     """
@@ -37,16 +37,26 @@ def format_logs(data_frame: pl.DataFrame) -> pl.DataFrame:
 
     # Extract data using regular expressions
     data_frame = data_frame.with_columns([
-        pl.col("column_1").str.extract(log_pattern, 1).alias("ip"),
-        pl.col("column_1").str.extract(log_pattern, 2).alias("timestamp"),
-        pl.col("column_1").str.extract(log_pattern, 3).alias("request_method"),
-        pl.col("column_1").str.extract(log_pattern, 4).alias("request_url"),
-        pl.col("column_1").str.extract(log_pattern, 5).alias("http_version"),
-        pl.col("column_1").str.extract(log_pattern, 6).cast(pl.Int32).alias("status_code"),
-        pl.col("column_1").str.extract(log_pattern, 7).cast(pl.Int64).alias("response_size"),
-        pl.col("column_1").str.extract(log_pattern, 8).alias("referer"),
-        pl.col("column_1").str.extract(log_pattern, 9).alias("user_agent"),
-        pl.col("column_1").str.extract(log_pattern, 10).cast(pl.Int64).alias("response_time")
+        pl.col("column_1").str.extract(log_pattern, 1)
+        .alias("ip"),
+        pl.col("column_1").str.extract(log_pattern, 2)
+        .alias("timestamp"),
+        pl.col("column_1").str.extract(log_pattern, 3)
+        .alias("request_method"),
+        pl.col("column_1").str.extract(log_pattern, 4)
+        .alias("request_url"),
+        pl.col("column_1").str.extract(log_pattern, 5)
+        .alias("http_version"),
+        pl.col("column_1").str.extract(log_pattern, 6)
+        .cast(pl.Int32).alias("status_code"),
+        pl.col("column_1").str.extract(log_pattern, 7)
+        .cast(pl.Int64).alias("response_size"),
+        pl.col("column_1").str.extract(log_pattern, 8)
+        .alias("referer"),
+        pl.col("column_1").str.extract(log_pattern, 9)
+        .alias("user_agent"),
+        pl.col("column_1").str.extract(log_pattern, 10)
+        .cast(pl.Int64).alias("response_time")
     ])
 
     data_frame = data_frame.drop("column_1")
@@ -74,7 +84,14 @@ def handle_null_values(data_frame: pl.DataFrame) -> pl.DataFrame:
         pl.col("response_time").fill_null(0)
     ])
 
-    return data_frame.drop_nulls(subset=["ip", "timestamp", "request_method", "request_url"])
+    return data_frame.drop_nulls(
+        subset=[
+            "ip", 
+            "timestamp", 
+            "request_method", 
+            "request_url"
+        ]
+    )
 
 
 def normalize_urls(data_frame: pl.DataFrame) -> pl.DataFrame:
@@ -87,15 +104,16 @@ def normalize_urls(data_frame: pl.DataFrame) -> pl.DataFrame:
 
 def convert_timestamp(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
-    Converts the timestamp to datetime format while preserving the original time.
+    Converts the timestamp to datetime format
+    while preserving the original time.
     """
     print("Converting timestamp to datetime format")
 
     data_frame = data_frame.with_columns(
         pl.col("timestamp")
         .str.strptime(pl.Datetime, format="%d/%b/%Y:%H:%M:%S %z",
-                      strict=False)  # Parses the timestamp with timezone info
-        .dt.convert_time_zone("America/Montevideo")  # Converts to the correct local timezone
+                      strict=False)
+        .dt.convert_time_zone("America/Montevideo")
     )
 
     data_frame = data_frame.sort("timestamp")
@@ -128,16 +146,24 @@ def count_filters_robots(data_frame: pl.DataFrame):
     percentile_agesic_crawler = (entries_agesic_crawler / total_entries) * 100
 
     print(
-        "Googlebot records: %d (%.2f%%)", entries_googlebot, percentile_googlebot
+        "Googlebot records: %d (%.2f%%)" % (
+            entries_googlebot, percentile_googlebot
+        )
     )
     print(
-        "Baiduspider records: %d (%.2f%%)", entries_baiduspider, percentile_baiduspider
+        "Baiduspider records: %d (%.2f%%)" % (
+            entries_baiduspider, percentile_baiduspider
+        )
     )
     print(
-        "SemrushBot records: %d (%.2f%%)", entries_semrushbot, percentile_semrushbot
+        "SemrushBot records: %d (%.2f%%)" % (
+            entries_semrushbot, percentile_semrushbot
+        )
     )
     print(
-        "agesic-crawler records: %d (%.2f%%)", entries_agesic_crawler, percentile_agesic_crawler
+        "agesic-crawler records: %d (%.2f%%)" % (
+            entries_agesic_crawler, percentile_agesic_crawler
+        )
     )
 
 
@@ -165,7 +191,9 @@ def filter_static_files(data_frame: pl.DataFrame) -> pl.DataFrame:
     ]
 
     for pattern in static_file_patterns:
-        data_frame = data_frame.filter(~pl.col("request_url").str.contains(pattern))
+        data_frame = data_frame.filter(
+            ~pl.col("request_url").str.contains(pattern)
+        )
 
     return data_frame
 
@@ -177,8 +205,9 @@ def remove_internal_requests(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     print("Removing internal requests")
     return data_frame.filter(
-        ~((pl.col("ip") == "127.0.0.1") |
-          ((pl.col("request_method") == "OPTIONS") & (pl.col("request_url") == "*")))
+        ~((pl.col("ip") == "127.0.0.1") | 
+            ((pl.col("request_method") == "OPTIONS") & 
+                (pl.col("request_url") == "*")))
     )
 
 
@@ -188,6 +217,7 @@ def preview_logs(data_frame: pl.DataFrame, num=5):
     """
     print("Previewing the first rows of the DataFrame")
     print(data_frame.head(num))
+
 
 def filter_invalid_ips(data_frame: pl.DataFrame) -> pl.DataFrame:
     print("Filtrando IPs malformadas o sospechosas")
@@ -209,6 +239,7 @@ def filter_invalid_user_agents(data_frame: pl.DataFrame) -> pl.DataFrame:
     )
     return data_frame
 
+
 def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
     print("Filtrando duraciones sospechosas")
     data_frame = data_frame.filter(
@@ -217,12 +248,14 @@ def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
     )
     return data_frame
 
+
 def filter_invalid_status_codes(data_frame: pl.DataFrame) -> pl.DataFrame:
     print("Filtrando códigos de estado HTTP inválidos")
     data_frame = data_frame.filter(
         (pl.col("status_code") >= 100) & (pl.col("status_code") <= 599)
     )
     return data_frame
+
 
 def filter_invalid_referers(data_frame: pl.DataFrame) -> pl.DataFrame:
     print("Filtrando referers inválidos")
@@ -265,6 +298,7 @@ def filter_outliers(data_frame):
 
     return data_frame
 
+
 def calculate_sessions(data_frame):
     """
     Calculates unique sessions based on:
@@ -300,15 +334,19 @@ def calculate_sessions(data_frame):
          pl.col("session_segment").cast(pl.Utf8)).alias("unique_session_id")
     ])
 
-    data_frame_with_sessions_timespent = data_frame_with_sessions.group_by("unique_session_id").agg([
+    data_frame_with_sessions_timespent = data_frame_with_sessions.group_by(
+        "unique_session_id"
+    ).agg([
         (pl.col("timestamp").max() - pl.col("timestamp").min())
         .alias("time_spent")
     ])
 
-    data_frame_with_sessions = data_frame_with_sessions.join(data_frame_with_sessions_timespent, on="unique_session_id")
+    data_frame_with_sessions = data_frame_with_sessions.join(
+        data_frame_with_sessions_timespent, 
+        on="unique_session_id"
+    )
 
     return data_frame_with_sessions
-
 
 
 def log_cleaner(data_frame: pl.DataFrame) -> pl.DataFrame:
