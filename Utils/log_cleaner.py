@@ -205,8 +205,8 @@ def remove_internal_requests(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
     print("Removing internal requests")
     return data_frame.filter(
-        ~((pl.col("ip") == "127.0.0.1") | 
-            ((pl.col("request_method") == "OPTIONS") & 
+        ~((pl.col("ip") == "127.0.0.1") |
+            ((pl.col("request_method") == "OPTIONS") &
                 (pl.col("request_url") == "*")))
     )
 
@@ -342,7 +342,7 @@ def calculate_sessions(data_frame):
     ])
 
     data_frame_with_sessions = data_frame_with_sessions.join(
-        data_frame_with_sessions_timespent, 
+        data_frame_with_sessions_timespent,
         on="unique_session_id"
     )
 

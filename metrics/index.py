@@ -24,6 +24,7 @@ from metrics.maps.average_zoom_response_time import (
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
 from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
+from metrics.nav.node_map_between_top_content_pages import node_map_between_top_content_pages
 from metrics.search.most_repeated_words_in_consecutive_searches import (
     calculate_most_repeated_words_filtered)
 from metrics.search.related_search_parameter_consecutive import (
@@ -49,7 +50,7 @@ def run_all_metrics(logs_df):
     print("Running all metrics...")
 
 
-    print("General metrics:")
+    print("General metrics")
     results['error_rate_success_rate'] = calculate_error_rate_success_rate(logs_df)
     results['average_time_spent_on_site'] = calculate_average_time_spent_on_site(logs_df)
     results['average_time_spent_per_page'] = calculate_average_time_spent_per_page(logs_df)
@@ -60,14 +61,14 @@ def run_all_metrics(logs_df):
     results['count_device_usage'] = count_device_usage(logs_df)
     results['most_visited_pages'] = calculate_most_visited_pages(logs_df)
 
-    print("Maps metrics:")
+    print("Maps metrics")
     results['maximum_zoom_reached'] = calculate_maximum_zoom(logs_df)
     results['maximum_stable_zoom'] = (
         calculate_maximum_stable_value_zoom(logs_df))
     results['average_zoom_response_time'] = (
         calculate_average_response_time_during_zoom(logs_df))
 
-    print("Search metrics:")
+    print("Search metrics")
     results['most_repeated_words'] = calculate_most_repeated_words_filtered(
         logs_df
     )
@@ -75,12 +76,15 @@ def run_all_metrics(logs_df):
         logs_df
     )
 
-    print("User metrics:")
+    print("User metrics")
     results['average_pages_viewed'] = calculate_average_pages_viewed_per_session(logs_df)
     results['new_visitors_vs_all_visitors'] = (
         calculate_ratio_of_new_visitors_to_all_visitors(logs_df))
     results['average_stepbacks'] = calculate_average_stepback_actions(logs_df)
     results['user_profiles'] = classify_user_profiles(logs_df)
+
+    print("Navigability metrics")
+    results['top_pages_node_map'] = node_map_between_top_content_pages(logs_df)
 
     print("All metrics have been executed.")
     create_json(results)

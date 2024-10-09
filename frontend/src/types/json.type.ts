@@ -17,6 +17,7 @@ export interface JsonData {
     new_visitors_vs_all_visitors: number
     average_stepbacks: number
     user_profiles: UserProfiles
+    top_pages_node_map: [string, [string, number][]][]
 }
 
 export interface ErrorRateSuccessRate {
