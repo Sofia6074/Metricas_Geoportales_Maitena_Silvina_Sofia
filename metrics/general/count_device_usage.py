@@ -1,9 +1,10 @@
+"""
+This script counts how many times each device type was used.
+"""
+
 import polars as pl
-from scripts_py.classes.logger import Logger
-from metrics.metrics_utils import calculate_sessions, classify_device_type
 
-logger_instance = Logger(__name__).get_logger()
-
+from metrics.metrics_utils import classify_device_type
 
 def count_device_usage(logs_df):
     """
@@ -11,11 +12,7 @@ def count_device_usage(logs_df):
     how many times each device type was used.
     """
 
-    session_df = calculate_sessions(logs_df)
-    device_df = classify_device_type(session_df)
-
-    csv_df = device_df.drop("time_diff")
-    #csv_df.write_csv("device_df.csv")
+    device_df = classify_device_type(logs_df)
 
     device_usage_count = device_df.group_by("device_type").agg(
         pl.count().alias("device_usage_count")
@@ -28,9 +25,14 @@ def count_device_usage(logs_df):
         missing_rows = pl.DataFrame({
             "device_type": list(missing_device_types),
             "device_usage_count": [0] * len(missing_device_types)
-        })
+        }).with_columns([
+            pl.col("device_usage_count").cast(pl.UInt32)  # Ensure type consistency
+        ])
+        device_usage_count = device_usage_count.with_columns([
+            pl.col("device_usage_count").cast(pl.UInt32)  # Ensure type consistency
+        ])
         device_usage_count = pl.concat([device_usage_count, missing_rows])
 
-    logger_instance.info("Device Usage Count:")
-    logger_instance.info(device_usage_count)
+    print("Device Usage Count:")
+    print(device_usage_count)
     return device_usage_count.to_dicts()

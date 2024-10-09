@@ -22,7 +22,7 @@ export default function Users() {
     const userProfilesWithNames = useMemo(() => {
         if (!metrics?.user_profiles) return [];
 
-        return metrics.user_profiles.map((profile) => {
+        return metrics.user_profiles.user_profile_counts.map((profile) => {
             let profileName = "";
 
             switch (profile.user_profile) {

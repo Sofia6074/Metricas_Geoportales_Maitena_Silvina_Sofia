@@ -5,14 +5,13 @@ calculations related to user profiles.
 """
 
 import polars as pl
-from metrics.metrics_utils import filter_session_outliers
 from metrics.users.user_categorization.average_time_spent_on_site_per_user_cat import (
-    calculate_weighted_average_time_spent_on_site
+    calculate_average_time_spent_on_site_per_user_category
 )
 from metrics.users.user_categorization.average_pages_viewed_per_user_cat import \
-    calculate_average_pages_viewed_per_session_by_profile
+    calculate_average_pages_viewed_per_session_per_user_category
 from metrics.users.user_categorization.average_time_spent_per_page_per_user_cat import \
-    calculate_average_time_spent_per_page_per_user_cat
+    calculate_average_time_spent_per_page_per_user_category
 
 
 def print_user_profile_counts(logs_df):
@@ -28,6 +27,7 @@ def print_user_profile_counts(logs_df):
         (pl.col("count") / total_users * 100).alias("percentage")
     ])
 
+    print("profile_counts: ")
     print(profile_counts)
 
     profile_counts_json = profile_counts.to_dicts()
@@ -38,9 +38,17 @@ def calculate_user_categorized_metrics(logs_df):
     """
     Additional calculations based on categorized users.
     """
-    calculate_weighted_average_time_spent_on_site(logs_df)
-    calculate_average_pages_viewed_per_session_by_profile(logs_df)
-    calculate_average_time_spent_per_page_per_user_cat(logs_df)
+
+    results = {}
+
+    results['average_time_spent_on_site_per_user_category'] = (
+        calculate_average_time_spent_on_site_per_user_category(logs_df))
+    results['average_pages_viewed_per_session_per_user_category'] = (
+        calculate_average_pages_viewed_per_session_per_user_category(logs_df))
+    results['average_time_spent_per_page_per_user_category'] = (
+        calculate_average_time_spent_per_page_per_user_category(logs_df))
+
+    return results
 
 
 def classify_user_profiles(logs_df):
@@ -49,9 +57,9 @@ def classify_user_profiles(logs_df):
     of visits and total time spent.
     """
 
-    sessions_df = filter_session_outliers(logs_df)
+    results = {}
 
-    user_stats = sessions_df.group_by("ip").agg([
+    user_stats = logs_df.group_by("ip").agg([
         pl.col("session_id").count().alias("visits"),
         pl.col("time_diff").sum().alias("total_time_spent")
     ])
@@ -71,11 +79,9 @@ def classify_user_profiles(logs_df):
         .otherwise(3).alias("user_profile")  # Occasional users
     ])
 
-    logs_df = sessions_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
+    logs_df = logs_df.join(user_stats.select(["ip", "user_profile"]), on="ip", how="left")
+    results['user_profile_counts'] = (print_user_profile_counts(logs_df))
 
-    user_profile_counts = print_user_profile_counts(logs_df)
+    results['user_categorized_metrics'] = (calculate_user_categorized_metrics(logs_df))
 
-    calculate_user_categorized_metrics(logs_df)
-
-    return user_profile_counts
-
+    return results

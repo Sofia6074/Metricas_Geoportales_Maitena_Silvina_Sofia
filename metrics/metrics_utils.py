@@ -1,47 +1,9 @@
-import polars as pl
-from datetime import timedelta, datetime
-
 """
 This module contains utilities for metrics calculation.
 """
 
-
-def calculate_sessions(data_frame):
-    """
-    Calculates unique sessions based on:
-        - IP
-        - User Agent
-        - 30-minute threshold between searches.
-    """
-    data_frame_with_sessions = data_frame.with_columns([
-        pl.concat_str([pl.col("ip"), pl.col("user_agent")]).alias("session_id")
-    ])
-
-    data_frame_with_sessions = data_frame_with_sessions.sort(
-        by=["session_id", "timestamp"]
-    )
-
-    data_frame_with_sessions = data_frame_with_sessions.with_columns([
-        pl.col("timestamp").diff().over("session_id").alias("time_diff")
-    ])
-
-    # Crear una nueva sesión si la diferencia entre una request
-    # y la anterior es mayor a 30 minutos
-    data_frame_with_sessions = data_frame_with_sessions.with_columns([
-        (pl.col("time_diff") > timedelta(minutes=30))
-        .cum_sum()
-        .over("session_id")
-        .fill_null(0)  # Asigna 0 al primer log de cada sesión
-        .alias("session_segment")
-    ])
-
-    data_frame_with_sessions = data_frame_with_sessions.with_columns([
-        (pl.col("session_id") + "_" +
-         pl.col("session_segment").cast(pl.Utf8)).alias("unique_session_id")
-    ])
-
-    return data_frame_with_sessions
-
+from datetime import timedelta, datetime
+import polars as pl
 
 def filter_empty_urls(logs_df):
     """
@@ -61,36 +23,9 @@ def format_average_time(average_time):
     hours, remainder = divmod(average_time.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
     formatted_string = (f"{int(hours)} hours {int(minutes)}"
-                        f"minutes {int(seconds)} seconds")
+                        f" minutes {int(seconds)} seconds")
 
     return formatted_string
-
-
-def filter_session_outliers(logs_df):
-    """
-    Filters out session outliers
-    """
-    session_df = calculate_sessions(logs_df)
-
-    # Agrupar por unique_session_id y calcular el tiempo total de la sesión
-    session_summary_df = session_df.group_by("unique_session_id").agg([
-        (pl.col("timestamp").max() - pl.col("timestamp").min())
-        .alias("time_spent")
-    ])
-
-    # Unir el DataFrame original con el resumen para agregar la columna
-    # time_spent
-    session_df = session_df.join(session_summary_df, on="unique_session_id")
-
-    # Filtrar las sesiones según el tiempo gastado
-    session_filtered_df = session_df.filter(
-        (pl.col("time_spent").is_not_null()) &
-        (pl.col("time_spent") > timedelta(seconds=10)) &
-        (pl.col("time_spent") <= timedelta(hours=12))
-    )
-
-    return session_filtered_df
-
 
 def get_base_url(logs_df):
     """
@@ -121,13 +56,6 @@ def classify_device_type(logs_df):
     logs_df = logs_df.with_columns(pl.lit("other").alias("device_type"))
 
     logs_df = logs_df.with_columns(
-        pl.when(pl.col("user_agent").str.contains(mobile_patterns))
-        .then(pl.lit("mobile"))
-        .otherwise(pl.col("device_type"))
-        .alias("device_type")
-    )
-
-    logs_df = logs_df.with_columns(
         pl.when(pl.col("user_agent").str.contains(tablet_patterns))
         .then(pl.lit("tablet"))
         .otherwise(pl.col("device_type"))
@@ -141,17 +69,27 @@ def classify_device_type(logs_df):
         .alias("device_type")
     )
 
+    logs_df = logs_df.with_columns(
+        pl.when(pl.col("user_agent").str.contains(mobile_patterns))
+        .then(pl.lit("mobile"))
+        .otherwise(pl.col("device_type"))
+        .alias("device_type")
+    )
+
     return logs_df
 
 
 def custom_serializer(obj):
+    """
+    Custom JSON serializer for datetime and timedelta objects
+    """
     if isinstance(obj, timedelta):
         return obj.total_seconds()
-    elif isinstance(obj, datetime):
+    if isinstance(obj, datetime):
         if obj.tzinfo is not None:
             obj = obj.astimezone(None)
         return obj.isoformat()
-    elif isinstance(obj, pl.DataFrame):
+    if isinstance(obj, pl.DataFrame):
         return obj.to_dicts()
     raise TypeError(
         f"Object of type {obj.__class__.__name__} is not JSON serializable"

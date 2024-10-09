@@ -3,24 +3,44 @@ This module contains the function to calculate the average time users spend per 
 """
 
 import polars as pl
-from metrics.metrics_utils import format_average_time, filter_session_outliers, get_base_url
 
+from metrics.metrics_utils import format_average_time, get_base_url
 
 def calculate_average_time_spent_per_page(logs_df):
     """
     Calculates the average time users spend per page on the site.
     """
-    session_df = filter_session_outliers(logs_df)
 
-    session_df = get_base_url(session_df)
+    # Extract the base URL for each request
+    session_df = get_base_url(logs_df)
 
-    avg_time_per_page = session_df.group_by("base_url").agg(
-        pl.col("time_spent").mean().alias("avg_time_per_page")
-    )
+    data_frame_with_sessions = session_df.with_columns([
+        (pl.col("unique_session_id") + "_" +
+         pl.col("base_url")).alias("unique_url")
+    ])
 
-    global_avg_time_per_page = avg_time_per_page.select(
-        pl.col("avg_time_per_page").mean().alias("global_avg_time_per_page")
-    )[0, "global_avg_time_per_page"]
+    data_frame_with_sessions = data_frame_with_sessions.filter(pl.col("time_diff").is_not_null())
 
-    print(f"User Average Time Spent per Page: {format_average_time(global_avg_time_per_page)}")
-    return global_avg_time_per_page
+    data_frame_with_sessions = data_frame_with_sessions.with_columns([
+        (~pl.col("base_url").str.contains(
+            pl.col("base_url").shift(1).str.replace_all(r"\{", r"\{").str.replace_all(r"\}", r"\}")))
+        .cum_sum()
+        .fill_null(0)
+        .alias("url_segment")
+    ])
+
+    data_frame_with_sessions = data_frame_with_sessions.with_columns([
+        (pl.col("unique_url") + "_" +
+         pl.col("url_segment").cast(pl.Utf8)).alias("unique_url_id")
+    ])
+
+    entry_pages_df = data_frame_with_sessions.group_by('unique_url_id').agg([
+        pl.col('time_diff').sum().alias('time_spent_on_page')
+    ])
+
+    global_avg_time_spent = entry_pages_df.select(
+        pl.col("time_spent_on_page").mean()
+    )[0, 0]
+
+    print(f"User Average Time Spent per Page: {format_average_time(global_avg_time_spent)}")
+    return global_avg_time_spent
