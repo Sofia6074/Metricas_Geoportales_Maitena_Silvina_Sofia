@@ -64,7 +64,28 @@ export default function Navigability() {
             {loading ? <Spinner /> :
                 error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
-                        <Card title="Navigability between home and top pages" infoIcon className={styles.item1}>
+                        <Card title="Most visited pages" infoIcon className={styles.item1}>
+                            <div className={styles.chart}>
+                                <table className={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th>Base url</th>
+                                            <th>Visits</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {metrics.most_visited_pages.map((page, index) => (
+                                            <tr key={index}>
+                                                <td>{page.base_url}</td>
+                                                <td>{page.count}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </Card>
+
+                        <Card title="Navigability between home and top pages" infoIcon className={styles.item2}>
                             <div className={styles.chart}>
                                 {data && data.nodes?.length > 0 && data.links?.length > 0 && (
                                     <ForceGraph2D
