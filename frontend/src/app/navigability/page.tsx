@@ -6,7 +6,9 @@ import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import Card from "@/components/card/card";
 import { MetricsContext } from "@/context/MetricsContext";
 import Spinner from "@/components/spinner/spinner";
-import { ForceGraph2D } from "react-force-graph";
+import dynamic from "next/dynamic";
+
+const ForceGraph2D = dynamic(() => import("react-force-graph").then(mod => mod.ForceGraph2D), { ssr: false });
 
 export default function Navigability() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
