@@ -64,7 +64,7 @@ export default function Navigability() {
             {loading ? <Spinner /> :
                 error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
-                        <Card title="Most visited pages" infoIcon className={styles.item1}>
+                        <Card title="Most visited pages" infoIcon tooltipText="Top 10 pages that are most visited." tooltipDirection="top" className={styles.item1}>
                             <div className={styles.chart}>
                                 <table className={styles.table}>
                                     <thead>
@@ -85,7 +85,7 @@ export default function Navigability() {
                             </div>
                         </Card>
 
-                        <Card title="Navigability between home and top pages" infoIcon className={styles.item2}>
+                        <Card title="Navigability between home and top pages" infoIcon tooltipText="Nodes map that recreates the navigability between the home pages and the top 5 visited pages." tooltipDirection="left" className={styles.item2}>
                             <div className={styles.chart}>
                                 {data && data.nodes?.length > 0 && data.links?.length > 0 && (
                                     <ForceGraph2D

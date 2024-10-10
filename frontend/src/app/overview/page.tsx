@@ -55,7 +55,7 @@ export default function Overview() {
                 error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
                         {/* Primera Fila */}
-                        <Card title="Success rate & error rate" infoIcon className={`${styles.item1}`}>
+                        <Card title="Success rate & error rate" infoIcon tooltipText="Rate of responses that result in error and in success." className={`${styles.item1}`}>
                             <div className={styles.display}>
                                 <div>
                                     <AutoSizeText minSize="18px" maxSize="36px" colorVar="color-chart-green" textAlign="right">
@@ -82,7 +82,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Average response time" infoIcon className={`${styles.item2}`}>
+                        <Card title="Average response time" infoIcon tooltipText="Average response time of all the requests made to the server." className={`${styles.item2}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_response_time.avg_response_time.toFixed(2)}s
@@ -90,7 +90,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Average time spent on site" infoIcon className={`${styles.item3}`}>
+                        <Card title="Average time spent on site" infoIcon tooltipText="Average time each user spends on the site." tooltipDirection="left" className={`${styles.item3}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_time_spent_on_site.toFixed(2)}s
@@ -99,7 +99,7 @@ export default function Overview() {
                         </Card>
 
                         {/* Segunda Fila */}
-                        <Card title="Pages stick and slip" infoIcon className={`${styles.item4}`}>
+                        <Card title="Pages stick and slip" infoIcon tooltipText="Slip shows the ratio of single access views to entry views. Stick indicates page retention ability." className={`${styles.item4}`}>
                             <div className={styles.display}>
                                 <div>
                                     <AutoSizeText minSize="18px" maxSize="36px" colorVar="color-chart-purple" textAlign="right">
@@ -126,7 +126,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Average time spent per page" infoIcon className={`${styles.item5}`}>
+                        <Card title="Average time spent per page" infoIcon tooltipText="Average time the visitors spends per page." className={`${styles.item5}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_time_spent_per_page.toFixed(2)}s
@@ -134,7 +134,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Downloading hits ratio" infoIcon className={`${styles.item6}`}>
+                        <Card title="Downloading hits ratio" infoIcon tooltipText="Amount of times downloadable resources are downloaded." tooltipDirection="left" className={`${styles.item6}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.downloadable_resources_hits} hits
@@ -142,7 +142,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Devices usage" infoIcon className={`${styles.item7}`}>
+                        <Card title="Devices usage" infoIcon tooltipText="Device classification to count how many times each device type was used." tooltipDirection="right" className={`${styles.item7}`}>
                             <div className={styles.display}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={metrics.device_usage.sort((a, b) => a.device_usage_count - b.device_usage_count)}>
