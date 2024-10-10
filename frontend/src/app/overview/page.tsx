@@ -134,7 +134,9 @@ export default function Overview() {
                                             paddingAngle={0}
                                             dataKey="value"
                                         />
-                                        <Tooltip />
+                                        <Tooltip
+                                            formatter={(value) => `${((+value) * 100).toFixed(2)}%`}
+                                        />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>

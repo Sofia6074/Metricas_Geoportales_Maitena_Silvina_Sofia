@@ -16,34 +16,32 @@ def define_stick_and_slip_pages(logs_df):
     - Stick: 1 - slip, indicating page retention ability.
     """
 
-    entry_pages_df = logs_df.group_by('unique_session_id').agg([
+    # Umbral de tiempo en microsegundos (3 segundos = 3 * 1_000_000 microsegundos)
+    threshold_duration_us = 3 * 1_000_000
+
+    logs_df = logs_df.sort(['unique_session_id', 'timestamp'])
+    logs_with_diff = logs_df.with_columns([
+        (pl.col('timestamp') - pl.col('timestamp').shift(1)).alias('time_diff'),
+        (pl.col('time_diff') > threshold_duration_us).fill_null(True).alias('new_entry')
+    ])
+
+    entry_pages_df = logs_with_diff.filter(pl.col('new_entry')).group_by('unique_session_id').agg([
         pl.col('request_url').first().alias('entry_page')
     ])
     total_entry_page_views = entry_pages_df.shape[0]
 
-    single_access_df = entry_pages_df.group_by('unique_session_id').agg([
-        pl.col('entry_page').n_unique().alias('unique_page_views')
+    single_page_sessions_df = logs_with_diff.filter(pl.col('new_entry')).group_by('unique_session_id').agg([
+        pl.col('request_url').n_unique().alias('page_view_count')
     ])
-    single_access_df = single_access_df.filter(pl.col('unique_page_views') == 1)
-    total_single_access_page_views = single_access_df.shape[0]
+    single_access_views = single_page_sessions_df.filter(pl.col('page_view_count') == 1).shape[0]
 
-    # Using the Slip and Stick formula
-    slip = (total_single_access_page_views / total_entry_page_views
-            if total_entry_page_views > 0 else 0)
+    slip = single_access_views / total_entry_page_views
     stick = 1 - slip
 
-    metrics_df = pl.DataFrame({
-        'total_entry_page_views': [total_entry_page_views],
-        'total_single_access_page_views': [total_single_access_page_views],
-        'slip': [slip],
-        'stick': [stick]
-    })
+    print(f"Slip: {slip}")
+    print(f"Stick: {stick}")
 
-    print("Slip and Stick:")
-    print(metrics_df)
     return {
-        'total_entry_page_views': total_entry_page_views,
-        'total_single_access_page_views': total_single_access_page_views,
         'slip': slip,
         'stick': stick
     }
