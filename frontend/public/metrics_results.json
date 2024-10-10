@@ -1,1 +1,376 @@
-{"error_rate_success_rate": {"success_rate": 99.8199688594784, "error_rate": 0.18003114052160374}, "average_time_spent_on_site": 334.275958, "average_time_spent_per_page": 100.594345, "average_response_time": {"avg_response_time": 264.14887195154927, "max_response_time": 2861.674, "min_response_time": 10.595}, "device_usage": [{"device_type": "other", "device_usage_count": 275}, {"device_type": "desktop", "device_usage_count": 16519}, {"device_type": "mobile", "device_usage_count": 3758}, {"device_type": "tablet", "device_usage_count": 0}], "downloadable_resources_hits": 28, "stick_and_slip_pages": {"total_entry_page_views": 2138, "total_single_access_page_views": 2138, "slip": 1.0, "stick": 0.0}, "count_device_usage": [{"device_type": "other", "device_usage_count": 275}, {"device_type": "desktop", "device_usage_count": 16519}, {"device_type": "mobile", "device_usage_count": 3758}, {"device_type": "tablet", "device_usage_count": 0}], "most_visited_pages": [{"base_url": "/geoserver-vectorial/ideuy/wms", "count": 8474}, {"base_url": "/geoserver-raster/ortofotos/wms", "count": 4047}, {"base_url": "/geoserver-vectorial/ine_no_seguro_clon_ns/wms", "count": 3032}, {"base_url": "/geoserver-raster/gwc/service/wmts", "count": 657}, {"base_url": "/geoserver-vectorial/mgap_diea/wms", "count": 580}, {"base_url": "/ideuy/services/register_action/", "count": 349}, {"base_url": "/ideuy/geocoding/search_candidates/", "count": 229}, {"base_url": "/cgi-bin/relieve", "count": 218}, {"base_url": "/geoserver-raster/et_imagenes_ine/wms", "count": 212}, {"base_url": "/geoserver-vectorial/wms", "count": 201}], "maximum_zoom_reached": 20.0, "maximum_stable_zoom": [{"zoom_level": 15.0, "total_count": 34}, {"zoom_level": 18.0, "total_count": 33}, {"zoom_level": 16.0, "total_count": 33}, {"zoom_level": 17.0, "total_count": 31}, {"zoom_level": 14.0, "total_count": 18}, {"zoom_level": 19.0, "total_count": 17}, {"zoom_level": 13.0, "total_count": 11}, {"zoom_level": 12.0, "total_count": 8}, {"zoom_level": 11.0, "total_count": 6}, {"zoom_level": 10.0, "total_count": 5}], "average_zoom_response_time": 125.31256732026144, "most_repeated_words": [{"text": "mal", "value": 2}, {"text": "cam", "value": 2}, {"text": "colonia del sacramento,colonia", "value": 1}, {"text": "pandu", "value": 1}, {"text": "santa clara", "value": 1}, {"text": "sau", "value": 1}, {"text": "paso de la ar", "value": 1}, {"text": "victo", "value": 1}, {"text": "plaza gom", "value": 1}, {"text": "canel", "value": 1}, {"text": "ciudad de gui", "value": 1}, {"text": "cerro arequita lav", "value": 1}, {"text": "santa teresa,rocha,rocha", "value": 1}, {"text": "chacaru", "value": 1}, {"text": "ignacio n", "value": 1}, {"text": "maldonado,m", "value": 1}, {"text": "la tablada mo", "value": 1}, {"text": "barrio angl", "value": 1}, {"text": "leon", "value": 1}, {"text": "cerro pan de azucar,maldonado,maldonado", "value": 1}], "related_search_parameters": [{"unique_session_id": "179.28.204.159Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0", "search_pair": "general+fructuoso+rivera+143,+fray+bentos,+rio+negro - general+fructuoso+rivera+1438,+fray+bentos,+rio+negro", "jaccard_similarity": 0.78}, {"unique_session_id": "186.55.4.218Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0", "search_pair": "salto+del+penitente - salto+del+penitente+", "jaccard_similarity": 0.75}, {"unique_session_id": "186.55.4.218Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0", "search_pair": "salto+del+penitente - salto+del+penitente+laval", "jaccard_similarity": 0.75}, {"unique_session_id": "179.24.149.254Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0", "search_pair": "cerro+pan+de - cerro+pan+de+a", "jaccard_similarity": 0.75}, {"unique_session_id": "179.24.149.254Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0", "search_pair": "avenida+lussich+y+ruta+39+m - avenida+lussich+y+ruta+39+maldona", "jaccard_similarity": 0.71}, {"unique_session_id": "179.24.149.254Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0", "search_pair": "cerro+pan+de+azucar,+maldonado,+maldonado - cerro+pan+de+azucar,+maldonado,+mal", "jaccard_similarity": 0.71}, {"unique_session_id": "179.26.51.202Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_1", "search_pair": "francisco+rodrigu3055,+montevideo,+montevideo - francisco+rodrigo3055,+montevideo,+montevideo", "jaccard_similarity": 0.6}, {"unique_session_id": "186.53.175.138Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36_0", "search_pair": "centro+hospitalario+del - centro+hospitalario+del++no", "jaccard_similarity": 0.6}, {"unique_session_id": "167.57.71.42Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0", "search_pair": "barrio+nueva+esperanza+ - barrio+nueva+esperanza+maldon", "jaccard_similarity": 0.6}, {"unique_session_id": "186.55.4.218Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0", "search_pair": "salto+del+penitente+ - salto+del+penitente+laval", "jaccard_similarity": 0.6}], "average_pages_viewed": 2.8961160505381374, "new_visitors_vs_all_visitors": 0.1517357222844345, "average_stepbacks": 3.23, "user_profiles": {"user_profile_counts": [{"user_profile": 3, "count": 920, "percentage": 51.51175811870101}, {"user_profile": 1, "count": 340, "percentage": 19.036954087346025}, {"user_profile": 2, "count": 526, "percentage": 29.451287793952968}], "user_categorized_metrics": {"average_time_spent_on_site_per_user_category": [{"user_profile": 3, "avg_time_spent_on_site": 183.567338}, {"user_profile": 1, "avg_time_spent_on_site": 528.256157}, {"user_profile": 2, "avg_time_spent_on_site": 375.204778}], "average_pages_viewed_per_session_per_user_category": [{"user_profile": 2, "avg_pages_viewed": 2.455631399317406}, {"user_profile": 1, "avg_pages_viewed": 5.850574712643678}, {"user_profile": 3, "avg_pages_viewed": 1.2600849256900213}], "average_time_spent_per_page_per_user_category": [{"user_profile": 3, "avg_time_per_user": 68.742723}, {"user_profile": 1, "avg_time_per_user": 37.509963}, {"user_profile": 2, "avg_time_per_user": 43.508148}]}}, "top_pages_node_map": [["https://visualizador.ide.uy/", [["/geoserver-vectorial/ideuy/wms?service=wms&version=1.1.1&request=getmap&format=image%2fpng&transparent=true&layers=ideuy:limites_departamentales_igm_20220211&width=256&height=256&srs=epsg:3857&styles=&bbox=-6261721.357121639,-3757032.814272985,-5948635.289265557,-3443946.746416903", 11], ["/geoserver-vectorial/ideuy/wfs", 11], ["/cgi-bin/relieve?service=wms&version=1.1.1&request=getfeatureinfo&format=image%2fpng&transparent=true&query_layers=mdt_nacional&layers=mdt_nacional&info_format=text%2fhtml&x=26&y=48&width=256&height=256&srs=epsg:3857&styles=&bbox=-6175500.389215959,-3628618.6067538857,-6174888.892989677,-3628007.1105276044", 10], ["/geoserver-vectorial/ideuy/wms?service=wms&version=1.1.1&request=getmap&format=image%2fpng&transparent=true&layers=ideuy:limites_departamentales_igm_20220211&width=256&height=256&srs=epsg:3857&styles=&bbox=-6574807.42497772,-4070118.8821290657,-6261721.357121638,-3757032.814272984", 8], ["/geoserver-vectorial/ideuy/wms?service=wms&version=1.1.1&request=getmap&format=image%2fpng&transparent=true&layers=ideuy:limites_departamentales_igm_20220211&width=256&height=256&srs=epsg:3857&styles=&bbox=-5948635.289265556,-4070118.8821290657,-5635549.2214094745,-3757032.814272984", 8]]], ["https://visualizador.ide.uy/ideuy/core/load_public_project/ideuy/", [["/ideuy/services/register_action/", 284], ["/ideuy/services/get_feature_info/", 58], ["/ideuy/core/project_get_conf/", 38], ["/ideuy/services/get_datatable_data/", 36], ["/ideuy/importfromservice/get_conf/", 35]]]]}
+{
+    "error_rate_success_rate": {
+        "success_rate": 99.8199688594784,
+        "error_rate": 0.18003114052160374
+    },
+    "average_time_spent_on_site": 334.275958,
+    "average_time_spent_per_page": 100.594345,
+    "average_response_time": {
+        "avg_response_time": 264.14887195154927,
+        "max_response_time": 2861.674,
+        "min_response_time": 10.595
+    },
+    "device_usage": [
+        {
+            "device_type": "other",
+            "device_usage_count": 275
+        },
+        {
+            "device_type": "desktop",
+            "device_usage_count": 16519
+        },
+        {
+            "device_type": "mobile",
+            "device_usage_count": 3758
+        },
+        {
+            "device_type": "tablet",
+            "device_usage_count": 0
+        }
+    ],
+    "downloadable_resources_hits": 28,
+    "stick_and_slip_pages": {
+        "total_entry_page_views": 2138,
+        "total_single_access_page_views": 2138,
+        "slip": 1.0,
+        "stick": 0.0
+    },
+    "most_visited_pages": [
+        {
+            "base_url": "/geoserver-vectorial/ideuy/wms",
+            "count": 8474
+        },
+        {
+            "base_url": "/geoserver-raster/ortofotos/wms",
+            "count": 4047
+        },
+        {
+            "base_url": "/geoserver-vectorial/ine_no_seguro_clon_ns/wms",
+            "count": 3032
+        },
+        {
+            "base_url": "/geoserver-raster/gwc/service/wmts",
+            "count": 657
+        },
+        {
+            "base_url": "/geoserver-vectorial/mgap_diea/wms",
+            "count": 580
+        },
+        {
+            "base_url": "/ideuy/services/register_action/",
+            "count": 349
+        },
+        {
+            "base_url": "/ideuy/geocoding/search_candidates/",
+            "count": 229
+        },
+        {
+            "base_url": "/cgi-bin/relieve",
+            "count": 218
+        },
+        {
+            "base_url": "/geoserver-raster/et_imagenes_ine/wms",
+            "count": 212
+        },
+        {
+            "base_url": "/geoserver-vectorial/wms",
+            "count": 201
+        }
+    ],
+    "maximum_zoom_reached": 20.0,
+    "maximum_stable_zoom": [
+        {
+            "zoom_level": 15.0,
+            "total_count": 34
+        },
+        {
+            "zoom_level": 18.0,
+            "total_count": 33
+        },
+        {
+            "zoom_level": 16.0,
+            "total_count": 33
+        },
+        {
+            "zoom_level": 17.0,
+            "total_count": 31
+        },
+        {
+            "zoom_level": 14.0,
+            "total_count": 18
+        },
+        {
+            "zoom_level": 19.0,
+            "total_count": 17
+        },
+        {
+            "zoom_level": 13.0,
+            "total_count": 11
+        },
+        {
+            "zoom_level": 12.0,
+            "total_count": 8
+        },
+        {
+            "zoom_level": 11.0,
+            "total_count": 6
+        },
+        {
+            "zoom_level": 10.0,
+            "total_count": 5
+        }
+    ],
+    "average_zoom_response_time": 125.31256732026144,
+    "most_repeated_words": [
+        {
+            "text": "mal",
+            "value": 2
+        },
+        {
+            "text": "cam",
+            "value": 2
+        },
+        {
+            "text": "colonia del sacramento,colonia",
+            "value": 1
+        },
+        {
+            "text": "pandu",
+            "value": 1
+        },
+        {
+            "text": "santa clara",
+            "value": 1
+        },
+        {
+            "text": "sau",
+            "value": 1
+        },
+        {
+            "text": "paso de la ar",
+            "value": 1
+        },
+        {
+            "text": "victo",
+            "value": 1
+        },
+        {
+            "text": "plaza gom",
+            "value": 1
+        },
+        {
+            "text": "canel",
+            "value": 1
+        },
+        {
+            "text": "ciudad de gui",
+            "value": 1
+        },
+        {
+            "text": "cerro arequita lav",
+            "value": 1
+        },
+        {
+            "text": "santa teresa,rocha,rocha",
+            "value": 1
+        },
+        {
+            "text": "chacaru",
+            "value": 1
+        },
+        {
+            "text": "ignacio n",
+            "value": 1
+        },
+        {
+            "text": "maldonado,m",
+            "value": 1
+        },
+        {
+            "text": "la tablada mo",
+            "value": 1
+        },
+        {
+            "text": "barrio angl",
+            "value": 1
+        },
+        {
+            "text": "leon",
+            "value": 1
+        },
+        {
+            "text": "cerro pan de azucar,maldonado,maldonado",
+            "value": 1
+        }
+    ],
+    "related_search_parameters": [
+        {
+            "unique_session_id": "179.28.204.159Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0",
+            "search_pair": "general+fructuoso+rivera+143,+fray+bentos,+rio+negro - general+fructuoso+rivera+1438,+fray+bentos,+rio+negro",
+            "jaccard_similarity": 0.78
+        },
+        {
+            "unique_session_id": "186.55.4.218Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0",
+            "search_pair": "salto+del+penitente - salto+del+penitente+",
+            "jaccard_similarity": 0.75
+        },
+        {
+            "unique_session_id": "186.55.4.218Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0",
+            "search_pair": "salto+del+penitente - salto+del+penitente+laval",
+            "jaccard_similarity": 0.75
+        },
+        {
+            "unique_session_id": "179.24.149.254Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0",
+            "search_pair": "cerro+pan+de - cerro+pan+de+a",
+            "jaccard_similarity": 0.75
+        },
+        {
+            "unique_session_id": "179.24.149.254Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0",
+            "search_pair": "avenida+lussich+y+ruta+39+m - avenida+lussich+y+ruta+39+maldona",
+            "jaccard_similarity": 0.71
+        },
+        {
+            "unique_session_id": "179.24.149.254Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0",
+            "search_pair": "cerro+pan+de+azucar,+maldonado,+maldonado - cerro+pan+de+azucar,+maldonado,+mal",
+            "jaccard_similarity": 0.71
+        },
+        {
+            "unique_session_id": "179.26.51.202Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_1",
+            "search_pair": "francisco+rodrigu3055,+montevideo,+montevideo - francisco+rodrigo3055,+montevideo,+montevideo",
+            "jaccard_similarity": 0.6
+        },
+        {
+            "unique_session_id": "186.53.175.138Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36_0",
+            "search_pair": "centro+hospitalario+del - centro+hospitalario+del++no",
+            "jaccard_similarity": 0.6
+        },
+        {
+            "unique_session_id": "167.57.71.42Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36_0",
+            "search_pair": "barrio+nueva+esperanza+ - barrio+nueva+esperanza+maldon",
+            "jaccard_similarity": 0.6
+        },
+        {
+            "unique_session_id": "186.55.4.218Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36_0",
+            "search_pair": "salto+del+penitente+ - salto+del+penitente+laval",
+            "jaccard_similarity": 0.6
+        }
+    ],
+    "average_pages_viewed": 2.8961160505381374,
+    "new_visitors_vs_all_visitors": 0.1517357222844345,
+    "average_stepbacks": 3.23,
+    "user_profiles": {
+        "user_profile_counts": [
+            {
+                "user_profile": 3,
+                "count": 920,
+                "percentage": 51.51175811870101
+            },
+            {
+                "user_profile": 1,
+                "count": 340,
+                "percentage": 19.036954087346025
+            },
+            {
+                "user_profile": 2,
+                "count": 526,
+                "percentage": 29.451287793952968
+            }
+        ],
+        "user_categorized_metrics": {
+            "average_time_spent_on_site_per_user_category": [
+                {
+                    "user_profile": 3,
+                    "avg_time_spent_on_site": 183.567338
+                },
+                {
+                    "user_profile": 1,
+                    "avg_time_spent_on_site": 528.256157
+                },
+                {
+                    "user_profile": 2,
+                    "avg_time_spent_on_site": 375.204778
+                }
+            ],
+            "average_pages_viewed_per_session_per_user_category": [
+                {
+                    "user_profile": 2,
+                    "avg_pages_viewed": 2.455631399317406
+                },
+                {
+                    "user_profile": 1,
+                    "avg_pages_viewed": 5.850574712643678
+                },
+                {
+                    "user_profile": 3,
+                    "avg_pages_viewed": 1.2600849256900213
+                }
+            ],
+            "average_time_spent_per_page_per_user_category": [
+                {
+                    "user_profile": 3,
+                    "avg_time_per_user": 68.742723
+                },
+                {
+                    "user_profile": 1,
+                    "avg_time_per_user": 37.509963
+                },
+                {
+                    "user_profile": 2,
+                    "avg_time_per_user": 43.508148
+                }
+            ]
+        }
+    },
+    "top_pages_node_map": [
+        [
+            "https://visualizador.ide.uy/",
+            [
+                [
+                    "/geoserver-vectorial/ideuy/wms?service=wms&version=1.1.1&request=getmap&format=image%2fpng&transparent=true&layers=ideuy:limites_departamentales_igm_20220211&width=256&height=256&srs=epsg:3857&styles=&bbox=-6261721.357121639,-3757032.814272985,-5948635.289265557,-3443946.746416903",
+                    11
+                ],
+                [
+                    "/geoserver-vectorial/ideuy/wfs",
+                    11
+                ],
+                [
+                    "/cgi-bin/relieve?service=wms&version=1.1.1&request=getfeatureinfo&format=image%2fpng&transparent=true&query_layers=mdt_nacional&layers=mdt_nacional&info_format=text%2fhtml&x=26&y=48&width=256&height=256&srs=epsg:3857&styles=&bbox=-6175500.389215959,-3628618.6067538857,-6174888.892989677,-3628007.1105276044",
+                    10
+                ],
+                [
+                    "/geoserver-vectorial/ideuy/wms?service=wms&version=1.1.1&request=getmap&format=image%2fpng&transparent=true&layers=ideuy:limites_departamentales_igm_20220211&width=256&height=256&srs=epsg:3857&styles=&bbox=-6574807.42497772,-4070118.8821290657,-6261721.357121638,-3757032.814272984",
+                    8
+                ],
+                [
+                    "/geoserver-vectorial/ideuy/wms?service=wms&version=1.1.1&request=getmap&format=image%2fpng&transparent=true&layers=ideuy:limites_departamentales_igm_20220211&width=256&height=256&srs=epsg:3857&styles=&bbox=-5948635.289265556,-4070118.8821290657,-5635549.2214094745,-3757032.814272984",
+                    8
+                ]
+            ]
+        ],
+        [
+            "https://visualizador.ide.uy/ideuy/core/load_public_project/ideuy/",
+            [
+                [
+                    "/ideuy/services/register_action/",
+                    284
+                ],
+                [
+                    "/ideuy/services/get_feature_info/",
+                    58
+                ],
+                [
+                    "/ideuy/core/project_get_conf/",
+                    38
+                ],
+                [
+                    "/ideuy/services/get_datatable_data/",
+                    36
+                ],
+                [
+                    "/ideuy/importfromservice/get_conf/",
+                    35
+                ]
+            ]
+        ]
+    ]
+}

@@ -4,12 +4,13 @@ import { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import styles from "./overview.module.css"
 import Card from "@/components/card/card";
-import { ResponsiveContainer, PieChart, Pie, Tooltip } from 'recharts';
+import { ResponsiveContainer, PieChart, Pie, Tooltip, Bar, BarChart, XAxis } from 'recharts';
 import { MetricsContext } from "@/context/MetricsContext";
 import Spinner from "@/components/spinner/spinner";
 import AutoSizeText from "@/components/autosizeText/autosizeText";
 
 export default function Overview() {
+    const [primaryChartColor, setPrimaryChartColor] = useState<string>('');
     const { metrics, loading, error } = useContext(MetricsContext);
 
     const [colors, setColors] = useState({
@@ -35,6 +36,10 @@ export default function Overview() {
     ];
 
     useEffect(() => {
+        const rootStyle = getComputedStyle(document.documentElement);
+        const purpleColor = rootStyle.getPropertyValue('--color-chart-purple').trim();
+        setPrimaryChartColor(purpleColor);
+
         setColors({
             green: getCssVariable('--color-chart-green'),
             red: getCssVariable('--color-chart-red'),
@@ -134,6 +139,18 @@ export default function Overview() {
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.downloadable_resources_hits} hits
                                 </AutoSizeText>
+                            </div>
+                        </Card>
+
+                        <Card title="Devices usage" infoIcon className={`${styles.item7}`}>
+                            <div className={styles.display}>
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart width={60} height={150} data={metrics.device_usage.sort((a, b) => a.device_usage_count - b.device_usage_count)}>
+                                        <XAxis dataKey="device_type" />
+                                        <Tooltip />
+                                        <Bar dataKey="device_usage_count" fill={primaryChartColor} />
+                                    </BarChart>
+                                </ResponsiveContainer>
                             </div>
                         </Card>
                     </div>}

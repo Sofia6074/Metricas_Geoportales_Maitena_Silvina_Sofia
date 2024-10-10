@@ -58,7 +58,6 @@ def run_all_metrics(logs_df):
     results['device_usage'] = count_device_usage(logs_df)
     results['downloadable_resources_hits'] = downloadable_resources_hits(logs_df)
     results['stick_and_slip_pages'] = define_stick_and_slip_pages(logs_df)
-    results['count_device_usage'] = count_device_usage(logs_df)
     results['most_visited_pages'] = calculate_most_visited_pages(logs_df)
 
     print("Maps metrics")

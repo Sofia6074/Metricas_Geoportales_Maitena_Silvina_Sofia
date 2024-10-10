@@ -17,9 +17,10 @@
 .grid {
     display: grid;
     gap: 20px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-areas: "item1 item2 item3"
-        "item4 item5 item6";
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "item1 item7 item7 item6"
+        "item4 item2 item5 item3";
     padding: 20px;
     height: 100%;
 }
@@ -46,4 +47,8 @@
 
 .item6 {
     grid-area: item6;
+}
+
+.item7 {
+    grid-area: item7;
 }

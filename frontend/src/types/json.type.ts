@@ -6,7 +6,6 @@ export interface JsonData {
     device_usage: DeviceUsage[]
     downloadable_resources_hits: number
     stick_and_slip_pages: StickAndSlipPages
-    count_device_usage: CountDeviceUsage[]
     most_visited_pages: MostVisitedPage[]
     maximum_zoom_reached: number
     maximum_stable_zoom: MaximumStableZoom[]
@@ -41,11 +40,6 @@ export interface StickAndSlipPages {
     total_single_access_page_views: number
     slip: number
     stick: number
-}
-
-export interface CountDeviceUsage {
-    device_type: string
-    device_usage_count: number
 }
 
 export interface MostVisitedPage {
