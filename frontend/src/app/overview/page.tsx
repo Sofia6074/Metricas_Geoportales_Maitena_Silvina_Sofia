@@ -4,10 +4,11 @@ import { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/components/breadcrumb/breadcrumb";
 import styles from "./overview.module.css"
 import Card from "@/components/card/card";
-import { ResponsiveContainer, PieChart, Pie, Tooltip, Bar, BarChart, XAxis } from 'recharts';
+import { ResponsiveContainer, PieChart, Pie, Tooltip, Bar, BarChart, XAxis, TooltipProps } from 'recharts';
 import { MetricsContext } from "@/context/MetricsContext";
 import Spinner from "@/components/spinner/spinner";
 import AutoSizeText from "@/components/autosizeText/autosizeText";
+import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 export default function Overview() {
     const [primaryChartColor, setPrimaryChartColor] = useState<string>('');
@@ -34,6 +35,19 @@ export default function Overview() {
         { name: "Stick", value: metrics?.stick_and_slip_pages.stick, fill: colors.purple },
         { name: "Slip", value: metrics?.stick_and_slip_pages.slip, fill: colors.orange },
     ];
+
+    const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <p className={styles.tooltipTitle}>{label}</p>
+                    <p>{`Count: ${payload[0].value}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
 
     useEffect(() => {
         const rootStyle = getComputedStyle(document.documentElement);
@@ -145,9 +159,16 @@ export default function Overview() {
                         <Card title="Devices usage" infoIcon tooltipText="Device classification to count how many times each device type was used." tooltipDirection="right" className={`${styles.item7}`}>
                             <div className={styles.display}>
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart width={60} height={150} data={metrics.device_usage.sort((a, b) => a.device_usage_count - b.device_usage_count)}>
+                                    <BarChart width={60} height={150} data={metrics.device_usage
+                                        .filter(device => device.device_type !== "other")
+                                        .map(device => ({
+                                            ...device,
+                                            device_type: device.device_type.charAt(0).toUpperCase() + device.device_type.slice(1)
+                                        }))
+                                        .sort((a, b) => a.device_usage_count - b.device_usage_count)
+                                    }>
                                         <XAxis dataKey="device_type" />
-                                        <Tooltip />
+                                        <Tooltip content={<CustomTooltip />} />
                                         <Bar dataKey="device_usage_count" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>

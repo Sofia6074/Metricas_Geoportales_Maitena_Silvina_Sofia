@@ -7,7 +7,8 @@ import Card from "@/components/card/card";
 import Spinner from "@/components/spinner/spinner";
 import { MetricsContext } from "@/context/MetricsContext";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { ResponsiveContainer, BarChart, Bar, Tooltip, XAxis } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, Tooltip, XAxis, TooltipProps } from "recharts";
+import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 export default function Users() {
     const [primaryChartColor, setPrimaryChartColor] = useState<string>('');
@@ -80,6 +81,33 @@ export default function Users() {
             })).sort((a, b) => a.user_profile - b.user_profile);;
     }, [metrics]);
 
+    const CustomCountTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <p className={styles.tooltipTitle}>{label}</p>
+                    <p>{`Count: ${payload[0].value}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
+    const CustomSecondsTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+        if (active && payload && payload.length) {
+            const value = payload[0].value ? +payload[0].value : 0
+            return (
+                <div className={styles.customTooltip}>
+                    <p className={styles.tooltipTitle}>{label}</p>
+                    <p>{`Time: ${value.toFixed(2)} s`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     return (
         <div className={styles.flex}>
             <Breadcrumb text={"Users"} />
@@ -114,7 +142,7 @@ export default function Users() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={userProfilesWithNames}>
                                         <XAxis dataKey="name" />
-                                        <Tooltip />
+                                        <Tooltip content={<CustomCountTooltip />} />
                                         <Bar dataKey="count" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -126,7 +154,7 @@ export default function Users() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={averagePagesViewedWithNames}>
                                         <XAxis dataKey="name" />
-                                        <Tooltip />
+                                        <Tooltip content={<CustomCountTooltip />} />
                                         <Bar dataKey="avg_pages_viewed" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -138,7 +166,7 @@ export default function Users() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={averagePageTimeWithNames}>
                                         <XAxis dataKey="name" />
-                                        <Tooltip />
+                                        <Tooltip content={<CustomSecondsTooltip />} />
                                         <Bar dataKey="avg_time_per_user" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -150,7 +178,7 @@ export default function Users() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={averageSiteTimeWithNames}>
                                         <XAxis dataKey="name" />
-                                        <Tooltip />
+                                        <Tooltip content={<CustomSecondsTooltip />} /><Tooltip />
                                         <Bar dataKey="avg_time_spent_on_site" fill={primaryChartColor} />
                                     </BarChart>
                                 </ResponsiveContainer>

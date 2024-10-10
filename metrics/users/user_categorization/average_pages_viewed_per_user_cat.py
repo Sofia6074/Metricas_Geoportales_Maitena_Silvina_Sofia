@@ -45,6 +45,10 @@ def calculate_average_pages_viewed_per_session_per_user_category(logs_df):
         pl.col("pages_viewed").mean().alias("avg_pages_viewed")
     )
 
+    average_pages_viewed_by_profile = average_pages_viewed_by_profile.with_columns(
+        pl.col("avg_pages_viewed").cast(pl.Int32).round(0)
+    )
+
     print("Average pages viewed by profile:")
     print(average_pages_viewed_by_profile)
     return average_pages_viewed_by_profile
