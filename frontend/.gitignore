@@ -71,3 +71,6 @@ pnpm-lock.yaml
 coverage/
 public/assets/
 public/fonts/
+
+#csv
+*.csv
