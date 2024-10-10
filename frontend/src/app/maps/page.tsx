@@ -39,7 +39,7 @@ export default function Maps() {
                 error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
                         {/* Primera Fila */}
-                        <Card title="Average zoom response time" infoIcon className={`${styles.item1}`}>
+                        <Card title="Average zoom response time" infoIcon tooltipText="Average response time when the user zooms." className={`${styles.item1}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.average_zoom_response_time.toFixed(2)}s
@@ -47,7 +47,7 @@ export default function Maps() {
                             </div>
                         </Card>
 
-                        <Card title="Stable zooms" infoIcon className={`${styles.item2}`}>
+                        <Card title="Stable zooms" infoIcon tooltipText="Most repeated value when the user zooms and does not zoom in or out again." tooltipDirection="left" className={`${styles.item2}`}>
                             <div className={styles.chart}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <LineChart width={300} height={100} data={sortedZoomData}>
@@ -59,10 +59,10 @@ export default function Maps() {
                             </div>
                         </Card>
 
-                        <Card title="Maximum zoom reached" infoIcon className={`${styles.item3}`}>
+                        <Card title="Maximum zoom reached" infoIcon tooltipText="Maximum zoom value the users reached." className={`${styles.item3}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
-                                    {metrics.maximum_zoom_reached.toFixed(2)}s
+                                    {metrics.maximum_zoom_reached.toFixed(0)}
                                 </AutoSizeText>
                             </div>
                         </Card>

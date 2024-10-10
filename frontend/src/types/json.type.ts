@@ -6,7 +6,6 @@ export interface JsonData {
     device_usage: DeviceUsage[]
     downloadable_resources_hits: number
     stick_and_slip_pages: StickAndSlipPages
-    count_device_usage: CountDeviceUsage[]
     most_visited_pages: MostVisitedPage[]
     maximum_zoom_reached: number
     maximum_stable_zoom: MaximumStableZoom[]
@@ -17,6 +16,7 @@ export interface JsonData {
     new_visitors_vs_all_visitors: number
     average_stepbacks: number
     user_profiles: UserProfiles
+    top_pages_node_map: [string, [string, number][]][]
 }
 
 export interface ErrorRateSuccessRate {
@@ -36,15 +36,8 @@ export interface DeviceUsage {
 }
 
 export interface StickAndSlipPages {
-    total_entry_page_views: number
-    total_single_access_page_views: number
     slip: number
     stick: number
-}
-
-export interface CountDeviceUsage {
-    device_type: string
-    device_usage_count: number
 }
 
 export interface MostVisitedPage {

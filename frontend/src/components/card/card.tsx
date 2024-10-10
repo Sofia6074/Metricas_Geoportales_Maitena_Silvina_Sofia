@@ -7,17 +7,19 @@ type CardProps = {
     title?: string;
     children: ReactNode;
     infoIcon?: boolean;
+    tooltipText?: string;
+    tooltipDirection?: "top" | "right" | "bottom" | "left";
     className?: string;
 };
 
-export default function Card({ title, children, infoIcon, className }: CardProps) {
+export default function Card({ title, children, infoIcon, tooltipText, tooltipDirection, className }: CardProps) {
     return (
         <div className={`${styles.card} ${className || ''}`}>
             {title && (
                 <div className={styles.header}>
                     <h3 className={styles.title}>{title}</h3>
                     {infoIcon &&
-                        <Tooltip content="This is where we explain what each metric means." direction="right">
+                        <Tooltip content={tooltipText ?? ''} direction={tooltipDirection ?? 'top'}>
                             <Icon iconName={'info-outline'} className={styles.infoIcon}></Icon>
                         </Tooltip>
                     }

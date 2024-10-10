@@ -50,8 +50,9 @@ def calculate_related_search_parameters(logs_df):
         schema=["unique_session_id", "search_pair", "jaccard_similarity"]
     )
 
-    print(results_df)
-    return results_df
+    sorted_results_df = results_df.sort("jaccard_similarity", descending=True)
+    print(sorted_results_df.head(10))
+    return sorted_results_df.head(10)
 
 
 def extract_search_params(map_requests_df):

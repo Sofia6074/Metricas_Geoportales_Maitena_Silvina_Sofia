@@ -8,19 +8,49 @@
 .chart {
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    position: relative;
 }
+
+/* TABLE */
+.table {
+    height: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    border: 1px solid var(--color-border);
+}
+
+.table th {
+    text-align: left;
+    background-color: var(--color-gray);
+}
+
+.table td {
+    text-align: left;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
 
 /* GRID */
 .grid {
     display: grid;
     gap: 20px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-areas: "item1 item2 item3 item4"
-        "item5 item5 item6 item6"
-        "item7 item8 item9 item9";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "item1 item2";
     padding: 20px;
 }
 
@@ -30,32 +60,4 @@
 
 .item2 {
     grid-area: item2;
-}
-
-.item3 {
-    grid-area: item3;
-}
-
-.item4 {
-    grid-area: item4;
-}
-
-.item5 {
-    grid-area: item5;
-}
-
-.item6 {
-    grid-area: item6;
-}
-
-.item7 {
-    grid-area: item7;
-}
-
-.item8 {
-    grid-area: item8;
-}
-
-.item9 {
-    grid-area: item9;
 }

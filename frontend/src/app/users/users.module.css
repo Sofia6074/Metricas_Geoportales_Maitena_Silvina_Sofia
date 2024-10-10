@@ -13,14 +13,31 @@
     justify-content: center;
 }
 
+.customTooltip {
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.tooltipTitle {
+    font-weight: 600;
+}
+
 /* GRID */
 .grid {
     display: grid;
     gap: 20px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-areas: "item1 item2 item3 item3"
-        "item4 item5 item3 item3";
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+    grid-template-areas: "item1 item4 item4 item5 item5"
+        "item1 item4 item4 item5 item5"
+        "item2 item4 item4 item5 item5"
+        "item2 item6 item6 item7 item7"
+        "item3 item6 item6 item7 item7"
+        "item3 item6 item6 item7 item7";
     padding: 20px;
+    height: 100%;
 }
 
 .item1 {

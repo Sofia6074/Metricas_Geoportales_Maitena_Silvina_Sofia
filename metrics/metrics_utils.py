@@ -94,4 +94,3 @@ def custom_serializer(obj):
     raise TypeError(
         f"Object of type {obj.__class__.__name__} is not JSON serializable"
     )
-

@@ -3,6 +3,7 @@
     --color-secondary: #6c757d;
     --color-background: #5182cb2b;
     --color-text: #171717;
+    --color-gray: #f1f1f1;
     --color-light-gray: #f8f9fa;
     --color-border: #ccc;
     --color-success: #28a745;
@@ -38,7 +39,7 @@
     flex-direction: column;
     min-height: 100vh;
     color: var(--color-foreground);
-    background: var(--color-background);
+    background: var(--color-gray);
     font-family: Arial, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

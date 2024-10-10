@@ -66,7 +66,7 @@ export default function Search() {
             {loading ? <Spinner /> :
                 error ? <p>Error: {error}</p> : metrics &&
                     <div className={styles.grid}>
-                        <Card title="Related ratio of consecutive search parameters" infoIcon className={`${styles.item1}`}>
+                        <Card title="Related ratio of consecutive search parameters" infoIcon tooltipText="Ratio of related search parameters in consecutive manner." tooltipDirection="left" className={`${styles.item1}`}>
                             <div className={styles.chart}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart
@@ -90,7 +90,7 @@ export default function Search() {
                             </div>
                         </Card>
 
-                        <Card title="Repeated words in consecutive searches" infoIcon className={`${styles.item2}`}>
+                        <Card title="Repeated words in consecutive searches" infoIcon tooltipText="Most repeated words in consecutive searches." tooltipDirection="left" className={`${styles.item2}`}>
                             <div className={styles.chart}>
                                 <Wordcloud
                                     words={metrics.most_repeated_words}

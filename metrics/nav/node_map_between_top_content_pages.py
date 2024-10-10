@@ -1,7 +1,7 @@
 from collections import Counter
 import networkx as nx
 import polars as pl
-from scripts_py.common.log_cleaner import convert_timestamp
+from Utils.log_cleaner import convert_timestamp
 
 
 def node_map_between_top_content_pages(logs_df):
@@ -9,9 +9,6 @@ def node_map_between_top_content_pages(logs_df):
     Creates a node map that shows transitions between the home page and the
     most visited pages on the website.
     """
-
-    logs_df = convert_timestamp(logs_df)
-
     data = logs_df.select([
         pl.col('ip'),
         pl.col('timestamp'),
