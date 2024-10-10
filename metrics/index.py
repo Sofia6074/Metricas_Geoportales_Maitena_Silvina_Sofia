@@ -16,7 +16,7 @@ from metrics.general.downloading_hits_ratio import downloadable_resources_hits
 from metrics.general.error_rate_success_rate import (
     calculate_error_rate_success_rate
 )
-from metrics.general.most_visited_pages import calculate_most_visited_pages
+
 from metrics.general.stick_and_slip_pages import define_stick_and_slip_pages
 from metrics.maps.average_zoom_response_time import (
     calculate_average_response_time_during_zoom
@@ -24,6 +24,7 @@ from metrics.maps.average_zoom_response_time import (
 from metrics.maps.maximum_stable_value_zoom import (
     calculate_maximum_stable_value_zoom)
 from metrics.maps.maximum_zoom_value import calculate_maximum_zoom
+from metrics.nav.most_visited_pages import calculate_nav_most_visited_pages
 from metrics.nav.node_map_between_top_content_pages import node_map_between_top_content_pages
 from metrics.search.most_repeated_words_in_consecutive_searches import (
     calculate_most_repeated_words_filtered)
@@ -49,7 +50,6 @@ def run_all_metrics(logs_df):
     results = {}
     print("Running all metrics...")
 
-
     print("General metrics")
     results['error_rate_success_rate'] = calculate_error_rate_success_rate(logs_df)
     results['average_time_spent_on_site'] = calculate_average_time_spent_on_site(logs_df)
@@ -58,7 +58,7 @@ def run_all_metrics(logs_df):
     results['device_usage'] = count_device_usage(logs_df)
     results['downloadable_resources_hits'] = downloadable_resources_hits(logs_df)
     results['stick_and_slip_pages'] = define_stick_and_slip_pages(logs_df)
-    results['most_visited_pages'] = calculate_most_visited_pages(logs_df)
+    results['most_visited_pages'] = calculate_nav_most_visited_pages(logs_df)
 
     print("Maps metrics")
     results['maximum_zoom_reached'] = calculate_maximum_zoom(logs_df)
