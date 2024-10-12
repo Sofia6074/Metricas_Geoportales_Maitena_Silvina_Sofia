@@ -35,6 +35,7 @@ export default function Sidebar() {
 			<div className={styles.upload}>
 				<input type="file" id="file" disabled className={styles.inputFile} />
 				<label htmlFor="file" className={styles.fileLabel}>
+					<Icon iconName="lock-closed" size={20} />
 					geo-web-server-logs.csv
 				</label>
 			</div>
