@@ -1,0 +1,85 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    padding: 20px;
+    position: fixed;
+    box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.05);
+    color: var(--color-text);
+
+    /* Glassmorphism */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(248, 249, 250, 0.29);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo h1 {
+    color: var(--color-vibrant-primary);
+    font-size: 30px;
+}
+
+.upload {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.inputFile {
+    display: none;
+}
+
+.fileLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 5px;
+    color: var(--color-secondary);
+    background-color: var(--color-border);
+}
+
+.fileLabel img {
+    margin: 0;
+}
+
+.menu p {
+    padding: 10px 0;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--color-prim);
+}
+
+.menu ul {
+    margin-top: 14px;
+    list-style-type: none;
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s;
+    border-radius: 8px;
+}
+
+.menuItem:hover {
+    background-color: var(--color-background);
+}
+
+.menuItem.active {
+    color: white;
+    background-color: var(--color-primary) !important;
+    -webkit-box-shadow: 0px 0px 10px 1px rgba(90, 143, 223, 0.6);
+    -moz-box-shadow: 0px 0px 10px 1px rgba(90, 143, 223, 0.6);
+    box-shadow: 0px 0px 10px 1px rgba(90, 143, 223, 0.6);
+}

@@ -14,8 +14,13 @@ Este proyecto está enfocado en la lectura, limpieza y análisis de archivos de 
 
 - Python 3.8 o superior
 - Bibliotecas Python: Polars, CSV
+- PySpark
+- Java
 
 Para instalar las bibliotecas necesarias para correr este proyecto, pueden usar:
 
 ```bash
 pip install polars
+pip install kaggle
+pip install pyspark
+pip install boto3

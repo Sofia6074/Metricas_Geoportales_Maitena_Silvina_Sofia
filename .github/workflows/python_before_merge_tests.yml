@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint with flake8
+    name: Lint with pylint
     runs-on: ubuntu-latest
     steps:
     - name: Check out the code
@@ -19,13 +19,13 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install flake8
+    - name: Install pylint
       run: |
-        pip install flake8
+        pip install pylint
 
-    - name: Run flake8
+    - name: Run pylint
       run: |
-        flake8 .
+        pylint **/*.py --rcfile=.pylintrc
 
   complexity:
     name: Calculate Cyclomatic Complexity
@@ -103,4 +103,3 @@ jobs:
       run: |
         pip-audit
       continue-on-error: true
-
