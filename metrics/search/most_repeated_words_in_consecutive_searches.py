@@ -11,6 +11,7 @@ def calculate_most_repeated_words_filtered(logs_df):
     by commas, and finally counts the occurrences
     of each unique term.
     """
+    stopwords = ["de", "la", "y", "el", "o", "a", "en", "por", "con", "que", "los", "las", "del", "al"]
 
     df_search = logs_df.filter(pl.col('request_url').str.contains(r'q='))
 
@@ -63,21 +64,21 @@ def calculate_most_repeated_words_filtered(logs_df):
         pl.col('search_term').str.len_chars().alias('search_term_length')
     ])
 
-    df_search_filtered = df_search_filtered.group_by(['unique_session_id', 'search_group']).agg([
-        pl.col('search_term').filter(pl.col('search_term_length') == pl.col('search_term_length').max()).first().alias(
-            'longest_search_term')
-    ])
-
     df_search_filtered = df_search_filtered.with_columns([
-        pl.col('longest_search_term').str.strip_chars().str.to_lowercase().alias('cleaned_longest_search_term')
+        pl.col('search_term').str.strip_chars().str.to_lowercase().alias('cleaned_search_term')
     ])
 
     df_search_filtered = df_search_filtered.unique(
-        subset=['unique_session_id', 'cleaned_longest_search_term'])
+        subset=['unique_session_id', 'cleaned_search_term'])
 
-    all_search_terms = df_search_filtered['cleaned_longest_search_term']
+    df_search_filtered = df_search_filtered.with_columns(
+        df_search_filtered["cleaned_search_term"].str.split(by=" ").alias("splitted_search_terms")
+    )
+    all_search_terms = df_search_filtered["splitted_search_terms"].to_list()
+    flattened_search_terms = [word for sublist in all_search_terms for word in sublist]
+    filtered_search_terms = [word for word in flattened_search_terms if word.lower() not in stopwords]
 
-    word_counts = Counter(all_search_terms)
+    word_counts = Counter(filtered_search_terms)
 
     word_counts_df = pl.DataFrame({
         'text': list(word_counts.keys()),
