@@ -146,24 +146,20 @@ def count_filters_robots(data_frame: pl.DataFrame):
     percentile_agesic_crawler = (entries_agesic_crawler / total_entries) * 100
 
     print(
-        "Googlebot records: %d (%.2f%%)" % (
-            entries_googlebot, percentile_googlebot
-        )
+        f"Googlebot records: {entries_googlebot} "
+        f"({percentile_googlebot:.2f}%)"
     )
     print(
-        "Baiduspider records: %d (%.2f%%)" % (
-            entries_baiduspider, percentile_baiduspider
-        )
+        f"Baiduspider records: {entries_baiduspider} "
+        f"({percentile_baiduspider:.2f}%)"
     )
     print(
-        "SemrushBot records: %d (%.2f%%)" % (
-            entries_semrushbot, percentile_semrushbot
-        )
+        f"SemrushBot records: {entries_semrushbot} "
+        f"({percentile_semrushbot:.2f}%)"
     )
     print(
-        "agesic-crawler records: %d (%.2f%%)" % (
-            entries_agesic_crawler, percentile_agesic_crawler
-        )
+        f"agesic-crawler records: {entries_agesic_crawler} "
+        f"({percentile_agesic_crawler:.2f}%)"
     )
 
 
@@ -220,20 +216,37 @@ def preview_logs(data_frame: pl.DataFrame, num=5):
 
 
 def filter_invalid_ips(data_frame: pl.DataFrame) -> pl.DataFrame:
-    print("Filtrando IPs malformadas o sospechosas")
+    """
+    Filters out malformed or suspicious IP addresses from the DataFrame.
+
+    Removes IPs that belong to private or invalid ranges, such as:
+    - 0.* (invalid IPs)
+    - 192.168.* (private IPs)
+    - 10.* (private IPs)
+    - 172.16.* to 172.31.* (private IPs)
+    """
+
+    print("Filtering malformed or suspicious IPs")
+
     invalid_ip_patterns = [
-        r'^0\.',  # Direcciones IP inválidas
-        r'^192\.168\.',  # Rango de IPs privadas
-        r'^10\.',  # Otro rango privado
-        r'^172\.(1[6-9]|2[0-9]|3[0-1])\.'  # Rango privado adicional
+        r'^0\.',
+        r'^192\.168\.',
+        r'^10\.',
+        r'^172\.(1[6-9]|2[0-9]|3[0-1])\.'
     ]
+
     for pattern in invalid_ip_patterns:
         data_frame = data_frame.filter(~pl.col("ip").str.contains(pattern))
     return data_frame
 
 
 def filter_invalid_user_agents(data_frame: pl.DataFrame) -> pl.DataFrame:
-    print("Filtrando User Agents inválidos")
+    """
+    Filters out invalid User Agents from the DataFrame.
+    """
+
+    print("Filtering invalid User Agents")
+
     data_frame = data_frame.filter(
         pl.col("user_agent").str.contains(r'.{6,}')
     )
@@ -241,7 +254,13 @@ def filter_invalid_user_agents(data_frame: pl.DataFrame) -> pl.DataFrame:
 
 
 def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
-    print("Filtrando duraciones sospechosas")
+    """
+    Filters out suspicious response durations from the DataFrame.
+    Keeps only responses with durations between 10ms and 1 hour.
+    """
+
+    print("Filtering suspicious durations")
+    
     data_frame = data_frame.filter(
         (pl.col("response_time") > timedelta(milliseconds=10)) &
         (pl.col("response_time") < timedelta(hours=1))
@@ -250,7 +269,13 @@ def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
 
 
 def filter_invalid_status_codes(data_frame: pl.DataFrame) -> pl.DataFrame:
-    print("Filtrando códigos de estado HTTP inválidos")
+    """
+    Filters out invalid HTTP status codes from the DataFrame.
+    Keeps only status codes between 100 and 599.
+    """
+
+    print("Filtering invalid HTTP status codes")
+
     data_frame = data_frame.filter(
         (pl.col("status_code") >= 100) & (pl.col("status_code") <= 599)
     )
@@ -258,14 +283,31 @@ def filter_invalid_status_codes(data_frame: pl.DataFrame) -> pl.DataFrame:
 
 
 def filter_invalid_referers(data_frame: pl.DataFrame) -> pl.DataFrame:
-    print("Filtrando referers inválidos")
+    """
+    Filters out invalid referers from the DataFrame.
+    Keeps only referers that start with 'http://' or 'https://'.
+    """
+
+    print("Filtering invalid referers")
+
     data_frame = data_frame.filter(
         pl.col("referer").str.contains(r'^https?://')
     )
     return data_frame
 
 
-def filter_outliers(data_frame):
+def filter_outliers(data_frame: pl.DataFrame) -> pl.DataFrame:
+    """
+    Filters out outliers based on time spent and time difference columns.
+
+    Keeps only records where:
+    - 'time_spent' and 'time_diff' are not null
+    - Values are greater than 0
+    - Values lie between the 1st and 99th percentiles
+    """
+
+    print("Filtering outliers")
+    
     data_frame = data_frame.filter(
         (pl.col("time_spent").is_not_null()) &
         (pl.col("time_diff").is_not_null()) &
