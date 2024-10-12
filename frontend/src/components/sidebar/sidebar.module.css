@@ -34,14 +34,20 @@
 }
 
 .fileLabel {
-    display: block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     cursor: pointer;
     font-size: 14px;
     padding: 10px;
     border-radius: 5px;
     color: var(--color-secondary);
     background-color: var(--color-border);
+}
+
+.fileLabel img {
+    margin: 0;
 }
 
 .menu p {
