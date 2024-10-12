@@ -86,9 +86,9 @@ def handle_null_values(data_frame: pl.DataFrame) -> pl.DataFrame:
 
     return data_frame.drop_nulls(
         subset=[
-            "ip", 
-            "timestamp", 
-            "request_method", 
+            "ip",
+            "timestamp",
+            "request_method",
             "request_url"
         ]
     )
@@ -260,7 +260,7 @@ def filter_suspicious_durations(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
 
     print("Filtering suspicious durations")
-    
+
     data_frame = data_frame.filter(
         (pl.col("response_time") > timedelta(milliseconds=10)) &
         (pl.col("response_time") < timedelta(hours=1))
@@ -307,7 +307,7 @@ def filter_outliers(data_frame: pl.DataFrame) -> pl.DataFrame:
     """
 
     print("Filtering outliers")
-    
+
     data_frame = data_frame.filter(
         (pl.col("time_spent").is_not_null()) &
         (pl.col("time_diff").is_not_null()) &
