@@ -63,14 +63,20 @@ def classify_device_type(logs_df):
     )
 
     logs_df = logs_df.with_columns(
-        pl.when(pl.col("user_agent").str.contains(desktop_patterns))
+        pl.when(
+            (pl.col("user_agent").str.contains(desktop_patterns)) &
+            (pl.col("device_type") == "other")
+        )
         .then(pl.lit("desktop"))
         .otherwise(pl.col("device_type"))
         .alias("device_type")
     )
 
     logs_df = logs_df.with_columns(
-        pl.when(pl.col("user_agent").str.contains(mobile_patterns))
+        pl.when(
+            (pl.col("user_agent").str.contains(mobile_patterns)) &
+            (pl.col("device_type") == "other")
+        )
         .then(pl.lit("mobile"))
         .otherwise(pl.col("device_type"))
         .alias("device_type")
