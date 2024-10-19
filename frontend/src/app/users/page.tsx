@@ -137,7 +137,7 @@ export default function Users() {
                             </AutoSizeText>
                         </Card>
 
-                        <Card title="User categories" infoIcon tooltipText="User categorize based on the amount of times the user visits and the amount of time the user spends on the website." className={`${styles.item4}`}>
+                        <Card title="User profiles" infoIcon tooltipText="User profile based on the amount of times the user visits and the amount of time the user spends on the website." className={`${styles.item4}`}>
                             <div className={styles.chart}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={userProfilesWithNames}>
@@ -149,7 +149,7 @@ export default function Users() {
                             </div>
                         </Card>
 
-                        <Card title="Average pages viewed" infoIcon tooltipText="Average pages viewed per each user category." tooltipDirection="left" className={`${styles.item5}`}>
+                        <Card title="Average pages viewed per profile" infoIcon tooltipText="Average pages viewed per each user profile." tooltipDirection="left" className={`${styles.item5}`}>
                             <div className={styles.chart}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={averagePagesViewedWithNames}>
@@ -161,7 +161,7 @@ export default function Users() {
                             </div>
                         </Card>
 
-                        <Card title="Average time spent per page" infoIcon tooltipText="Average time each user category spents on each page." className={`${styles.item6}`}>
+                        <Card title="Average time spent per page per profile" infoIcon tooltipText="Average time each user profile spents on each page." className={`${styles.item6}`}>
                             <div className={styles.chart}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={averagePageTimeWithNames}>
@@ -173,7 +173,7 @@ export default function Users() {
                             </div>
                         </Card>
 
-                        <Card title="Average time spent on site" infoIcon tooltipText="Average time each user category spents on the site." tooltipDirection="left" className={`${styles.item7}`}>
+                        <Card title="Average time spent on site per profile" infoIcon tooltipText="Average time each user profile spents on the site." tooltipDirection="left" className={`${styles.item7}`}>
                             <div className={styles.chart}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart width={60} height={150} data={averageSiteTimeWithNames}>

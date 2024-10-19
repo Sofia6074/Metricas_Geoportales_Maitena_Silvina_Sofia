@@ -57,6 +57,9 @@ export default function Sidebar() {
 					))}
 				</ul>
 			</nav>
+			<p className={styles.disclaimer}>
+				Important: This website is a prototype and may contain errors
+			</p>
 		</div>
 	);
 }
