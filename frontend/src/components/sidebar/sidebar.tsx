@@ -57,6 +57,13 @@ export default function Sidebar() {
 					))}
 				</ul>
 			</nav>
+			<div className={styles.disclaimer}>
+				<p>Important: This website is a prototype and may contain errors</p>
+				<a className={styles.userManual} href='/manual_de_usuario.pdf' download='user_manual.pdf'>
+					<Icon iconName='download-outline' color='black' size={20} />
+					Download user manual
+				</a>
+			</div>
 		</div>
 	);
 }

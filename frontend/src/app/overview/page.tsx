@@ -150,7 +150,7 @@ export default function Overview() {
                             </div>
                         </Card>
 
-                        <Card title="Downloading hits ratio" infoIcon tooltipText="Amount of times downloadable resources are downloaded." tooltipDirection="left" className={`${styles.item6}`}>
+                        <Card title="Downloading hits" infoIcon tooltipText="Amount of times downloadable resources are downloaded." tooltipDirection="left" className={`${styles.item6}`}>
                             <div className={styles.display}>
                                 <AutoSizeText maxSize="40px" colorVar="color-text" textAlign="center">
                                     {metrics.downloadable_resources_hits} hits
